@@ -1,0 +1,42 @@
+name: Build - PR
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-pr:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.103
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --configuration Release --no-restore --no-build
+
+    - name: Test Coverage SoloX.BlazorLayout.UTest
+      id: coverage-utest
+      run: |
+        dotnet test ./src/tests/SoloX.BlazorLayout.UTest --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+        echo "::set-output name=FILE::$(find ./src/tests/SoloX.BlazorLayout.UTest -name 'coverage.info' -print)"
+    - name: Send to coverals
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: ${{ steps.coverage-utest.outputs.FILE }}
+        flag-name: coverage-utest
+        parallel: true
+
+    - name: Finish coverals
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true
