@@ -1,0 +1,41 @@
+﻿@inherits LayoutComponentBase
+
+<ResponsiveMainPage NavigationClass="sidebar" MaxProportion="20" EnableContentScroll="true">
+    <Header>
+        <div style="background-color:cadetblue;">
+
+        header
+        So far we’ve created components that generate 100% of their rendered output based on parameters, but components aren’t always that simple. Sometimes we need to create components that mix consumer-supplied mark-up with their own rendered output.
+
+        It would be very messy (not to mention unmanageable) to pass content to a component as an HTML encoded string parameter:
+
+        </div>
+    </Header>
+    <NavigationHeader>
+        <div class="top-row pl-4 navbar navbar-dark">
+            <a class="navbar-brand" href="">SoloX. BlazorLayout. Examples</a>
+        </div>
+    </NavigationHeader>
+    <Navigation>
+        <NavMenu />
+    </Navigation>
+    <Outline>
+        <div style="background-color:forestgreen; height:100%;">
+            outline
+            So far we’ve created components that generate 100% of their rendered output based on parameters, but components aren’t always that simple. Sometimes we need to create components that mix consumer-supplied mark-up with their own rendered output.
+
+            It would be very messy (not to mention unmanageable) to pass content to a component as an HTML encoded string parameter:
+        </div>
+    </Outline>
+    <Footer>
+        <div style="background-color:lightslategrey;">
+            footer
+            So far we’ve created components that generate 100% of their rendered output based on parameters, but components aren’t always that simple. Sometimes we need to create components that mix consumer-supplied mark-up with their own rendered output.
+
+            It would be very messy (not to mention unmanageable) to pass content to a component as an HTML encoded string parameter:
+        </div>
+    </Footer>
+    <ChildContent>
+        @Body
+    </ChildContent>
+</ResponsiveMainPage>

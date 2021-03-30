@@ -1,0 +1,25 @@
+﻿
+
+<div class="full-size main grid-template grid-layout" style="--proportion: @MaxProportion%;">
+    <div class="dock-left @NavigationClass">
+        <div class="dock-left-header">
+            @NavigationHeader
+        </div>
+        <div class="dock-left-body">
+            @Navigation
+        </div>
+    </div>
+    <div class="dock-top">
+        @Header
+    </div>
+    <div class="dock-right @ClassContentOverflow">
+        @Outline
+    </div>
+    <div class="main-content @ClassContentOverflow">
+        @ChildContent
+    </div>
+    <div class="dock-bottom">
+        @Footer
+    </div>
+</div>
+

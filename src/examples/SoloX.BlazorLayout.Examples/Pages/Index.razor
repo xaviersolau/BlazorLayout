@@ -1,0 +1,120 @@
+﻿@page "/"
+
+@inject IResizeObserverService sizeObserverService
+
+@implements IResizeCallBack
+@implements IAsyncDisposable
+
+<GridContainer Fill="Fill.Full"
+               Class="color-10"
+               ColumnSizing="Sizing.Proportion"
+               RowSizing="Sizing.Proportion">
+
+    <Column Sizing="Sizing.Content" />
+    <Column Name="main" Sizing="Sizing.Fill" />
+    <Column Size="33" />
+
+    <Row Size="50" Repeat="2" />
+
+    <Cell Class="color-01" Row="0" Column="0">
+        <ResizeContainer @ref="ResizeContainerReference" Fill="Fill.Vertical">
+
+            Some @width x @height
+
+        </ResizeContainer>
+
+    </Cell>
+
+    <Cell Class="color-02" Row="0" Column="main" ColumnEnd="2">
+        Some
+
+    </Cell>
+
+    <Cell Class="color-03" Row="1" Column="2">
+        Some
+
+    </Cell>
+
+
+</GridContainer>
+
+
+@code
+{
+    private ResizeContainer ResizeContainerReference { get; set; }
+
+    private int width;
+    private int height;
+
+    private IAsyncDisposable callBackDisposable;
+    private IAsyncDisposable observerDisposable;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            observerDisposable = await sizeObserverService.RegisterMutationObserverAsync(ResizeContainerReference.ElementReference);
+
+            callBackDisposable = await sizeObserverService.RegisterResizeCallBackAsync(this, ResizeContainerReference.ElementReference);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public ValueTask ResizeAsync(int width, int height)
+    {
+        this.height = height;
+        this.width = width;
+
+        this.StateHasChanged();
+
+        return ValueTask.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (this.observerDisposable != null)
+        {
+            await this.observerDisposable.DisposeAsync();
+            this.observerDisposable = null;
+        }
+
+        if (this.callBackDisposable != null)
+        {
+            await callBackDisposable.DisposeAsync();
+            this.callBackDisposable = null;
+        }
+    }
+}
+
+<!--<InlineContainer Fill="FillMode.Content" Class="color-1">
+
+    <div style="width:150px; height:100px; background-color:aqua;">
+        Hello, world!
+
+    </div>
+
+    <div style="width:300px; height:150px; background-color:aqua;">Welcome to your new app.</div>-->
+@*
+        <div style="width:300px; height:60px; background-color:blue;">Some</div>
+
+
+    <div style="width:100px; height:100px; background-color:red;">Some</div>
+
+
+    <div style="width:300px; height:100px; background-color:aquamarine;">
+        <div style="width:30px; height:15px; background-color:coral;">
+            1
+        </div>
+        <div style="width:30px; height:15px; background-color:blueviolet;">
+            2
+        </div>
+        <div style="width:30px; height:15px; background-color:crimson;">
+            3
+        </div>
+
+    </div>
+*@
+
+
+<!--</InlineContainer>-->

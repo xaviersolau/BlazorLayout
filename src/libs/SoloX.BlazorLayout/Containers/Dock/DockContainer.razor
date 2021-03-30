@@ -1,0 +1,12 @@
+﻿
+@inherits AContainer
+
+<div
+     @ref="ElementReference"
+     class="@FillClass @Class"
+     style="grid-template-columns: @ColumnsStyle; grid-template-rows: @RowsStyle;"
+     id="@Id">
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+</div>

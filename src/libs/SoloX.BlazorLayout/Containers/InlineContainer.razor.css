@@ -1,0 +1,35 @@
+﻿
+.inline-container {
+    display: table;
+    text-align: right;
+}
+
+    .inline-container ::deep > * {
+        display: inline-block;
+        text-align: initial;
+        vertical-align: middle;
+    }
+
+.container-size-100 {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.container-height-100 {
+    overflow-y: auto;
+    height: 100%;
+    width: fit-content;
+}
+
+.container-width-100 {
+    overflow-x: auto;
+    width: 100%;
+    height: fit-content;
+}
+
+.container-size-content {
+    width: fit-content;
+    height: fit-content;
+}
+
