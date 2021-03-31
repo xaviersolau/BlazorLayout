@@ -19,19 +19,35 @@ namespace SoloX.BlazorLayout.Containers.Dock
     public partial class DockContainer : AContainer
     {
         private readonly List<DockPanel> docks = new List<DockPanel>();
+        private bool initialized;
 
         internal void Add(DockPanel dock)
         {
             this.docks.Add(dock);
 
-            this.StateHasChanged();
+            DockChangedHandler();
         }
 
         internal void Remove(DockPanel dock)
         {
             this.docks.Remove(dock);
 
-            this.StateHasChanged();
+            DockChangedHandler();
+        }
+
+        ///<inheritdoc/>
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            this.initialized = true;
+        }
+
+        private void DockChangedHandler()
+        {
+            if (this.initialized)
+            {
+                this.StateHasChanged();
+            }
         }
 
         private string ColumnsStyle =>
