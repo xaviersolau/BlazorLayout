@@ -28,18 +28,18 @@ jobs:
         dotnet test ./src/tests/SoloX.BlazorLayout.UTest --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
         echo "::set-output name=FILE::$(find ./src/tests/SoloX.BlazorLayout.UTest -name 'coverage.info' -print)"
     - name: Send to coverals
-      uses: coverallsapp/github-action@master
+      uses: coverallsapp/github-action@v1.1.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ${{ steps.coverage-utest.outputs.FILE }}
-        #flag-name: coverage-utest
-        #parallel: true
+        flag-name: coverage-utest
+        parallel: true
 
-    #- name: Finish coverals
-    #  uses: coverallsapp/github-action@master
-    #  with:
-    #    github-token: ${{ secrets.GITHUB_TOKEN }}
-    #    parallel-finished: true
+    - name: Finish coverals
+      uses: coverallsapp/github-action@v1.1.2
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true
       
     - name: Pack
       run: dotnet pack --configuration Release --no-restore --no-build
