@@ -53,7 +53,7 @@ namespace SoloX.BlazorLayout.Containers.Grid
                 }
                 if (Column == null)
                 {
-                    return "1";
+                    return string.Empty;
                 }
 
                 return string.IsNullOrEmpty(ColumnEnd)
@@ -72,7 +72,7 @@ namespace SoloX.BlazorLayout.Containers.Grid
                 }
                 if (Row == null)
                 {
-                    return "1";
+                    return string.Empty;
                 }
 
                 return string.IsNullOrEmpty(RowEnd)

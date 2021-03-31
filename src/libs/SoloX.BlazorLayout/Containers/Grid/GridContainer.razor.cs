@@ -20,14 +20,15 @@ namespace SoloX.BlazorLayout.Containers.Grid
     {
         private readonly DimensionSet<Column> columns;
         private readonly DimensionSet<Row> rows;
+        private bool initialized;
 
         /// <summary>
         /// Setup the grid container.
         /// </summary>
         public GridContainer()
         {
-            this.columns = new DimensionSet<Column>(this.StateHasChanged);
-            this.rows = new DimensionSet<Row>(this.StateHasChanged);
+            this.columns = new DimensionSet<Column>(DimensionChangedHandler);
+            this.rows = new DimensionSet<Row>(DimensionChangedHandler);
         }
 
         /// <summary>
@@ -41,6 +42,21 @@ namespace SoloX.BlazorLayout.Containers.Grid
         /// </summary>
         [Parameter]
         public Sizing RowSizing { get; set; }
+
+        ///<inheritdoc/>
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            this.initialized = true;
+        }
+
+        private void DimensionChangedHandler()
+        {
+            if (this.initialized)
+            {
+                this.StateHasChanged();
+            }
+        }
 
         internal void Add(Column column) =>
             this.columns.Add(column);
