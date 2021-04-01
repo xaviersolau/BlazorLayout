@@ -6,14 +6,12 @@
 // </copyright>
 // ----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using AngleSharp.Dom;
 using Bunit;
 using FluentAssertions;
 using SoloX.BlazorLayout.Containers.Grid;
 using SoloX.BlazorLayout.UTest.Core;
+using SoloX.BlazorLayout.UTest.Helpers;
 using Xunit;
 
 namespace SoloX.BlazorLayout.UTest.Containers.Grid
@@ -69,7 +67,7 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
         }
 
         [Fact]
-        public void ItShouldRenderCellsAtTheRightPosition()
+        public void ItShouldRenderCellsOnTheRightLocation()
         {
             var cellId1 = "cell-id1";
             var cellId2 = "cell-id2";
@@ -106,41 +104,15 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
 
             var cellElt1 = cut.Find($"#{cellId1}");
 
-            var attrStyle1 = cellElt1.GetAttribute("style");
-
-            var style1 = ComputeCurrentStyle(attrStyle1);
+            var style1 = StyleHelper.LoadStyleAttribute(cellElt1);
             style1.Should().ContainSingle(x => x.Name == "grid-column" && x.Value == "1");
             style1.Should().ContainSingle(x => x.Name == "grid-row" && x.Value == "1");
 
             var cellElt2 = cut.Find($"#{cellId2}");
-            var attrStyle2 = cellElt2.GetAttribute("style");
 
-            var style2 = ComputeCurrentStyle(attrStyle2);
-
+            var style2 = StyleHelper.LoadStyleAttribute(cellElt2);
             style2.Should().ContainSingle(x => x.Name == "grid-column" && x.Value == "2");
             style2.Should().ContainSingle(x => x.Name == "grid-row" && x.Value == "2");
-        }
-
-        internal class CssProperty
-        {
-            public CssProperty(string name, string value)
-            {
-                Name = name;
-                Value = value;
-            }
-
-            public string Name { get; }
-            public string Value { get; }
-        }
-
-        internal static IEnumerable<CssProperty> ComputeCurrentStyle(string style)
-        {
-            return style.Split(';', StringSplitOptions.RemoveEmptyEntries).Select(e =>
-            {
-                var words = e.Split(':');
-
-                return new CssProperty(words[0].Trim(), words[1].Trim());
-            });
         }
     }
 }
