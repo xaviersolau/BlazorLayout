@@ -7,7 +7,7 @@
 // ----------------------------------------------------------------------
 
 using SoloX.BlazorLayout.Containers.Grid;
-using SoloX.BlazorLayout.UTest.Core;
+using SoloX.BlazorLayout.UTest.Helpers;
 using Xunit;
 
 namespace SoloX.BlazorLayout.UTest.Containers.Grid

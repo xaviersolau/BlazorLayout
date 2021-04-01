@@ -7,7 +7,7 @@
 // ----------------------------------------------------------------------
 
 using SoloX.BlazorLayout.Containers.Dock;
-using SoloX.BlazorLayout.UTest.Core;
+using SoloX.BlazorLayout.UTest.Helpers;
 using Xunit;
 
 namespace SoloX.BlazorLayout.UTest.Containers.Dock

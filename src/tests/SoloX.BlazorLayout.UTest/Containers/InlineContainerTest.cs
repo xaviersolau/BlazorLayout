@@ -7,7 +7,8 @@
 // ----------------------------------------------------------------------
 
 using SoloX.BlazorLayout.Containers;
-using SoloX.BlazorLayout.UTest.Core;
+using SoloX.BlazorLayout.Core;
+using SoloX.BlazorLayout.UTest.Helpers;
 using Xunit;
 
 namespace SoloX.BlazorLayout.UTest.Containers
@@ -32,5 +33,14 @@ namespace SoloX.BlazorLayout.UTest.Containers
             PanelHelpers.AssertElementReferenceIsProperlySet<InlineContainer>();
         }
 
+        [Theory]
+        [InlineData(Fill.Full)]
+        [InlineData(Fill.None)]
+        [InlineData(Fill.Vertical)]
+        [InlineData(Fill.Horizontal)]
+        public void ItShouldFillParentSpaceAccordinglyToFillParameter(Fill fill)
+        {
+            ContainerHelper.AssertIdIsProperlyRendered<InlineContainer>(fill);
+        }
     }
 }

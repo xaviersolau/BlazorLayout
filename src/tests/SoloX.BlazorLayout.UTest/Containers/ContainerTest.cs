@@ -11,7 +11,8 @@ using AngleSharp.Dom;
 using FluentAssertions;
 using SoloX.BlazorLayout.Containers;
 using Xunit;
-using SoloX.BlazorLayout.UTest.Core;
+using SoloX.BlazorLayout.UTest.Helpers;
+using SoloX.BlazorLayout.Core;
 
 namespace SoloX.BlazorLayout.UTest.Containers
 {
@@ -33,6 +34,16 @@ namespace SoloX.BlazorLayout.UTest.Containers
         public void ItShouldInitializeElementReference()
         {
             PanelHelpers.AssertElementReferenceIsProperlySet<Container>();
+        }
+
+        [Theory]
+        [InlineData(Fill.Full)]
+        [InlineData(Fill.None)]
+        [InlineData(Fill.Vertical)]
+        [InlineData(Fill.Horizontal)]
+        public void ItShouldFillParentSpaceAccordinglyToFillParameter(Fill fill)
+        {
+            ContainerHelper.AssertIdIsProperlyRendered<Container>(fill);
         }
 
         [Fact]
