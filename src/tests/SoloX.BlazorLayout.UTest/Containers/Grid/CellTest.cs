@@ -37,5 +37,18 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
                     builder.AddCascadingValue(grid);
                 });
         }
+
+        [Fact]
+        public void ItShouldInitializeElementReference()
+        {
+            var grid = new GridContainer();
+
+            PanelHelpers.AssertElementReferenceIsProperlySet<Cell>(
+                builder =>
+                {
+                    builder.AddCascadingValue(grid);
+                });
+        }
+
     }
 }

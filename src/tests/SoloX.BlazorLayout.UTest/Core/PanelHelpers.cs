@@ -40,6 +40,24 @@ namespace SoloX.BlazorLayout.UTest.Core
             rootElement.Id.Should().Be(id);
         }
 
+        public static void AssertElementReferenceIsProperlySet<TPanel>(
+            Action<ComponentParameterCollectionBuilder<TPanel>>? setup = null)
+            where TPanel : APanel
+        {
+            // Arrange
+            using var ctx = new TestContext();
+
+            // Act
+            var cut = ctx.RenderComponent<TPanel>(
+                builder =>
+                {
+                    setup?.Invoke(builder);
+                });
+
+            // Assert
+            cut.Instance.ElementReference.Id.Should().NotBeNullOrEmpty();
+        }
+
         public static void AssertClassIsProperlyRendered<TPanel>(
             Action<ComponentParameterCollectionBuilder<TPanel>>? setup = null)
             where TPanel : APanel

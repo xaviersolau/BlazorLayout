@@ -33,6 +33,12 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
         }
 
         [Fact]
+        public void ItShouldInitializeElementReference()
+        {
+            PanelHelpers.AssertElementReferenceIsProperlySet<GridContainer>();
+        }
+
+        [Fact]
         public void ItShouldRenderWithAGridDisplay()
         {
             // Arrange

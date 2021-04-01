@@ -37,5 +37,17 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
                     builder.AddCascadingValue<DockContainer>(dock);
                 });
         }
+
+        [Fact]
+        public void ItShouldInitializeElementReference()
+        {
+            var dock = new DockContainer();
+
+            PanelHelpers.AssertElementReferenceIsProperlySet<DockPanel>(
+                builder =>
+                {
+                    builder.AddCascadingValue<DockContainer>(dock);
+                });
+        }
     }
 }

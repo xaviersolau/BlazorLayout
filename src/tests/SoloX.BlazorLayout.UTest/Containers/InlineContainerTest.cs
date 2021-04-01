@@ -25,5 +25,12 @@ namespace SoloX.BlazorLayout.UTest.Containers
         {
             PanelHelpers.AssertClassIsProperlyRendered<InlineContainer>();
         }
+
+        [Fact]
+        public void ItShouldInitializeElementReference()
+        {
+            PanelHelpers.AssertElementReferenceIsProperlySet<InlineContainer>();
+        }
+
     }
 }
