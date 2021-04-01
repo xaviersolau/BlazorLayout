@@ -13,7 +13,7 @@ using SoloX.BlazorLayout.Containers;
 using Xunit;
 using SoloX.BlazorLayout.UTest.Core;
 
-namespace SoloX.BlazorLayout.UTest
+namespace SoloX.BlazorLayout.UTest.Containers
 {
     public class ContainerTest
     {
@@ -27,6 +27,12 @@ namespace SoloX.BlazorLayout.UTest
         public void ItShouldRenderWithTheGivenClass()
         {
             PanelHelpers.AssertClassIsProperlyRendered<Container>();
+        }
+
+        [Fact]
+        public void ItShouldInitializeElementReference()
+        {
+            PanelHelpers.AssertElementReferenceIsProperlySet<Container>();
         }
 
         [Fact]

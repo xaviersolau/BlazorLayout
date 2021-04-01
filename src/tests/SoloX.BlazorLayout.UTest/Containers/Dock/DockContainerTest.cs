@@ -25,5 +25,11 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
         {
             PanelHelpers.AssertClassIsProperlyRendered<DockContainer>();
         }
+
+        [Fact]
+        public void ItShouldInitializeElementReference()
+        {
+            PanelHelpers.AssertElementReferenceIsProperlySet<DockContainer>();
+        }
     }
 }
