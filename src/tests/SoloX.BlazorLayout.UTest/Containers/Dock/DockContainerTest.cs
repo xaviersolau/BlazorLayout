@@ -11,7 +11,6 @@ using Bunit;
 using FluentAssertions;
 using SoloX.BlazorLayout.Containers.Dock;
 using SoloX.BlazorLayout.Core;
-using SoloX.BlazorLayout.UTest.Core;
 using SoloX.BlazorLayout.UTest.Helpers;
 using Xunit;
 
@@ -58,6 +57,16 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
 
             style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == "1fr");
             style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == "1fr");
+        }
+
+        [Theory]
+        [InlineData(Fill.Full)]
+        [InlineData(Fill.None)]
+        [InlineData(Fill.Vertical)]
+        [InlineData(Fill.Horizontal)]
+        public void ItShouldFillParentSpaceAccordinglyToFillParameter(Fill fill)
+        {
+            ContainerHelper.AssertIdIsProperlyRendered<DockContainer>(fill);
         }
 
         [Theory]
