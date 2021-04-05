@@ -21,6 +21,15 @@ namespace SoloX.BlazorLayout.Services.Impl
     /// </summary>
     public class ResizeObserverService : IResizeObserverService, IAsyncDisposable
     {
+        internal const string RegisterResizeCallBack = "resizeManager.registerResizeCallBack";
+        internal const string UnregisterResizeCallBack = "resizeManager.unregisterResizeCallBack";
+        internal const string RegisterMutationObserver = "resizeManager.registerMutationObserver";
+        internal const string UnregisterMutationObserver = "resizeManager.unregisterMutationObserver";
+        internal const string ProcessCallbackReferences = "resizeManager.processCallbackReferences";
+        internal const string Ping = "resizeManager.ping";
+        internal const string Import = "import";
+        internal const string SizeObserverJsInteropFile = "./_content/SoloX.BlazorLayout/sizeObserverJsInterop.js";
+
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
 
         private readonly Dictionary<string, AsyncDisposable> disposables =
@@ -37,7 +46,7 @@ namespace SoloX.BlazorLayout.Services.Impl
         {
             // Setup lazy loading of the JS size observer module.
             this.moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-               "import", "./_content/SoloX.BlazorLayout/sizeObserverJsInterop.js").AsTask());
+               Import, SizeObserverJsInteropFile).AsTask());
 
             this.logger = logger;
         }
@@ -50,7 +59,7 @@ namespace SoloX.BlazorLayout.Services.Impl
 
             var objectRef = DotNetObjectReference.Create(new SizeCallBackProxy(sizeCallBack));
 
-            await module.InvokeVoidAsync("resizeManager.registerResizeCallBack",
+            await module.InvokeVoidAsync(RegisterResizeCallBack,
                 objectRef, elementReference.Id, elementReference).ConfigureAwait(false);
 
             var id = $"{nameof(RegisterResizeCallBackAsync)}-{elementReference.Id}";
@@ -63,7 +72,7 @@ namespace SoloX.BlazorLayout.Services.Impl
 
                     try
                     {
-                        await module.InvokeVoidAsync("resizeManager.unregisterResizeCallBack",
+                        await module.InvokeVoidAsync(UnregisterResizeCallBack,
                             TimeSpan.FromMilliseconds(500),
                             elementReference.Id).ConfigureAwait(false);
                     }
@@ -85,7 +94,7 @@ namespace SoloX.BlazorLayout.Services.Impl
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
-            await module.InvokeVoidAsync("resizeManager.registerMutationObserver",
+            await module.InvokeVoidAsync(RegisterMutationObserver,
                 elementReference.Id, elementReference).ConfigureAwait(false);
 
             var id = $"{nameof(RegisterMutationObserverAsync)}-{elementReference.Id}";
@@ -98,7 +107,7 @@ namespace SoloX.BlazorLayout.Services.Impl
 
                     try
                     {
-                        await module.InvokeVoidAsync("resizeManager.unregisterMutationObserver",
+                        await module.InvokeVoidAsync(UnregisterMutationObserver,
                             TimeSpan.FromMilliseconds(500),
                             elementReference.Id).ConfigureAwait(false);
                     }
@@ -117,7 +126,7 @@ namespace SoloX.BlazorLayout.Services.Impl
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
-            await module.InvokeVoidAsync("resizeManager.processCallbackReferences").ConfigureAwait(false);
+            await module.InvokeVoidAsync(ProcessCallbackReferences).ConfigureAwait(false);
         }
 
         ///<inheritdoc/>
@@ -135,7 +144,7 @@ namespace SoloX.BlazorLayout.Services.Impl
                 try
                 {
                     // make sure JS runtime is steel responding otherwise disposing the module may block forever.
-                    await module.InvokeVoidAsync("resizeManager.ping",
+                    await module.InvokeVoidAsync(Ping,
                         TimeSpan.FromMilliseconds(500)).ConfigureAwait(false);
 
                     await module.DisposeAsync().ConfigureAwait(false);
@@ -147,19 +156,19 @@ namespace SoloX.BlazorLayout.Services.Impl
             }
         }
 
-        private class SizeCallBackProxy : IResizeCallBack
+        internal class SizeCallBackProxy : IResizeCallBack
         {
-            private readonly IResizeCallBack sizeCallBack;
+            internal IResizeCallBack SizeCallBack { get; }
 
             public SizeCallBackProxy(IResizeCallBack sizeCallBack)
             {
-                this.sizeCallBack = sizeCallBack;
+                SizeCallBack = sizeCallBack;
             }
 
             [JSInvokable]
             public ValueTask ResizeAsync(int width, int height)
             {
-                return this.sizeCallBack.ResizeAsync(width, height);
+                return SizeCallBack.ResizeAsync(width, height);
             }
         }
 
