@@ -5,12 +5,12 @@
 }
 
 .main {
-    display: grid;
-    overflow: auto;
+  display: grid;
+  overflow: overlay;
 }
 
 .content-overflow {
-    overflow: auto;
+  overflow: overlay;
 }
 
 .grid-template {
@@ -35,30 +35,36 @@
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-columns: 1fr;
-    z-index: 2;
+    z-index: 8;
+}
+
+.dock-left-header {
+  z-index: 9;
 }
 
 .dock-left-body {
-    min-width: fit-content;
-    overflow-y: auto;
-    overflow-x: hidden;
+  min-width: fit-content;
+  overflow-y: overlay;
+  overflow-x: hidden;
 }
 
 .dock-top {
-    grid-area: top;
+  grid-area: top;
+  z-index: 5;
 }
 
 .dock-right {
-    grid-area: right;
-    max-height: 100vh;
-    position: sticky;
-    top: 0;
-    right: 0;
+  grid-area: right;
+  max-height: 100vh;
+  position: sticky;
+  top: 0;
+  right: 0;
+  z-index: 5;
 }
 
 .dock-bottom {
-    grid-area: bottom;
-    z-index: 1;
+  grid-area: bottom;
+  z-index: 6;
 }
 
 .main-content {

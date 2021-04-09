@@ -11,21 +11,21 @@
     }
 
 .container-size-100 {
-    overflow: auto;
-    width: 100%;
-    height: 100%;
+  overflow: overlay;
+  width: 100%;
+  height: 100%;
 }
 
 .container-height-100 {
-    overflow-y: auto;
-    height: 100%;
-    width: fit-content;
+  overflow-y: overlay;
+  height: 100%;
+  width: fit-content;
 }
 
 .container-width-100 {
-    overflow-x: auto;
-    width: 100%;
-    height: fit-content;
+  overflow-x: overlay;
+  width: 100%;
+  height: fit-content;
 }
 
 .container-size-content {
