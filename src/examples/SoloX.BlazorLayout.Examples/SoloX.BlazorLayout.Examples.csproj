@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MatBlazor" Version="2.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\libs\SoloX.BlazorLayout\SoloX.BlazorLayout.csproj" />
   </ItemGroup>
 

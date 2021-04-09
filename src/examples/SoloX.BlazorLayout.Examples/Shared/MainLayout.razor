@@ -1,41 +1,66 @@
 ﻿@inherits LayoutComponentBase
 
-<ResponsiveMainPage NavigationClass="sidebar" MaxProportion="20" EnableContentScroll="true">
-    <Header>
-        <div style="background-color:cadetblue;">
+    <ResponsiveMainPage NavigationClass="@Theme.GetClass("mat-elevation-z8 mdc-theme--secondary-bg")" MaxProportion="20" EnableContentScroll="true">
+        <Header>
+            <MatPaper Class="mdc-theme--primary-bg" Elevation="6">
+                <div class="card-content">
+                    <MatHeadline6 Class="mdc-theme--on-primary" Style="margin:0px;">
+                        Header
+                    </MatHeadline6>
 
-        header
-        So far we’ve created components that generate 100% of their rendered output based on parameters, but components aren’t always that simple. Sometimes we need to create components that mix consumer-supplied mark-up with their own rendered output.
+                    <MatBody1 Class="mdc-theme--on-primary"  Style="margin:0px;">
+                        Here is a demo of the BlazorLayout project.
+                    </MatBody1>
+                </div>
 
-        It would be very messy (not to mention unmanageable) to pass content to a component as an HTML encoded string parameter:
+            </MatPaper>
+        </Header>
+        <NavigationHeader>
+            <MatCard Class="mdc-theme--secondary-bg mdc-theme--on-secondary">
+                <MatCardActions>
+                    <MatCardActionButtons>
+                        <MatButtonLink Class="mdc-theme--on-secondary" Href="">BlazorLayout Examples</MatButtonLink>
+                    </MatCardActionButtons>
 
-        </div>
-    </Header>
-    <NavigationHeader>
-        <div class="top-row pl-4 navbar navbar-dark">
-            <a class="navbar-brand" href="">SoloX. BlazorLayout. Examples</a>
-        </div>
-    </NavigationHeader>
-    <Navigation>
-        <NavMenu />
-    </Navigation>
-    <Outline>
-        <div style="background-color:forestgreen; height:100%;">
-            outline
-            So far we’ve created components that generate 100% of their rendered output based on parameters, but components aren’t always that simple. Sometimes we need to create components that mix consumer-supplied mark-up with their own rendered output.
+                    <MatCardActionIcons>
+                        <MatIconButton Icon="@MatIconNames.Favorite"></MatIconButton>
+                    </MatCardActionIcons>
+                </MatCardActions>
+            </MatCard>
+        </NavigationHeader>
+        <Navigation>
+            <MatPaper Class="height-100 overflow-auto" Elevation="4">
+                <NavMenu />
+            </MatPaper>
+        </Navigation>
+        <Outline>
+            <MatPaper Class="mdc-theme--secondary-bg height-100 overflow-auto" Elevation="6">
+                <div class="card-content">
+                    <MatHeadline6 Class="mdc-theme--on-primary" Style="margin:0px;">
+                        Outline
+                    </MatHeadline6>
 
-            It would be very messy (not to mention unmanageable) to pass content to a component as an HTML encoded string parameter:
-        </div>
-    </Outline>
-    <Footer>
-        <div style="background-color:lightslategrey;">
-            footer
-            So far we’ve created components that generate 100% of their rendered output based on parameters, but components aren’t always that simple. Sometimes we need to create components that mix consumer-supplied mark-up with their own rendered output.
+                    <MatBody1 Class="mdc-theme--on-primary" Style="margin:0px;">
+                        Here is the Outline of the demo.
+                    </MatBody1>
+                    <MatBody1 Class="mdc-theme--on-primary" Style="margin:0px;">
+                        It will hide itself if the display size is too small.
+                    </MatBody1>
+                </div>
 
-            It would be very messy (not to mention unmanageable) to pass content to a component as an HTML encoded string parameter:
-        </div>
-    </Footer>
-    <ChildContent>
-        @Body
-    </ChildContent>
-</ResponsiveMainPage>
+            </MatPaper>
+        </Outline>
+        <Footer>
+            <MatPaper Class="height-100 overflow-auto" Elevation="6">
+                <div class="card-content">
+                    <MatBody1 Style="margin:0px;">
+                        Footer : Thanks to MatBlazor we can use Material Design.
+                    </MatBody1>
+                </div>
+
+            </MatPaper>
+        </Footer>
+        <ChildContent>
+            @Body
+        </ChildContent>
+    </ResponsiveMainPage>
