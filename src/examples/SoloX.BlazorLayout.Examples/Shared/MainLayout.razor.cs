@@ -11,5 +11,8 @@ namespace SoloX.BlazorLayout.Examples.Shared
     {
         [CascadingParameter]
         public MatTheme Theme { get; set; }
+
+        [Parameter]
+        public bool MatchDisplaySize { get; set; }
     }
 }

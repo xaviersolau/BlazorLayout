@@ -1,7 +1,6 @@
 ﻿@page "/Grid"
 
 <GridContainer Fill="Fill.Full"
-               Class="color-10"
                ColumnSizing="Sizing.Proportion"
                RowSizing="Sizing.Proportion">
 
@@ -9,29 +8,40 @@
 
     <Row Size="50" Repeat="2" />
 
-    <Cell Class="color-01">
-        Some 1
-    </Cell>
+    @for (var i = 1; i < 6; i++)
+    {
+        var num = i;
 
-    <Cell Class="color-02">
-        Some 2
-
-    </Cell>
-
-    <Cell Class="color-03">
-        Some 3
-
-    </Cell>
-
-    <Cell Class="color-04">
-        Some 4
-
-    </Cell>
-
-    <Cell Class="color-05">
-        Some 5
-
-    </Cell>
-
+        <Cell>
+            <MatCard Class="height-100 width-100" Style="@GetBackgroundColor(num)">
+                <div class="card-content">
+                    <MatHeadline6 Style="margin:0px;">
+                        Cell @num!
+                    </MatHeadline6>
+                    <MatBody1 Style="margin:0px;">
+                        Using auto flow placement...
+                    </MatBody1>
+                </div>
+            </MatCard>
+        </Cell>
+    }
 
 </GridContainer>
+
+@code
+{
+    private static string GetBackgroundColor(int num)
+    {
+        return "background-color: "
+            + num switch
+            {
+                1 => "chocolate",
+                2 => "silver",
+                3 => "burlywood",
+                4 => "cadetblue",
+                5 => "darkseagreen",
+                _ => "olive"
+            }
+            + ";";
+    }
+}

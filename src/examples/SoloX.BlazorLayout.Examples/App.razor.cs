@@ -10,7 +10,6 @@ namespace SoloX.BlazorLayout.Examples
     {
         private MatTheme Theme { get; } = new MatTheme()
         {
-            //Secondary = MatThemeColors.Red._600.Value,
             Surface = MatThemeColors.LightBlue._100.Value,
         };
     }
