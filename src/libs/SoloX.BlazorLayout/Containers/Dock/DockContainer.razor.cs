@@ -46,7 +46,20 @@ namespace SoloX.BlazorLayout.Containers.Dock
         {
             if (this.initialized)
             {
-                this.StateHasChanged();
+                try
+                {
+
+                    this.StateHasChanged();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Looks like the parent is also disposed.
+                }
+                catch (InvalidOperationException)
+                {
+                    // Looks like we are in a threading issue.
+                }
+
             }
         }
 

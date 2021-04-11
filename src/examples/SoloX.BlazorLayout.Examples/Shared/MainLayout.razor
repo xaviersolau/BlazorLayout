@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-    <ResponsiveMainPage NavigationClass="@Theme.GetClass("mat-elevation-z8 mdc-theme--secondary-bg")" MaxProportion="20" EnableContentScroll="true">
+    <ResponsiveMainPage NavigationClass="@Theme.GetClass("mat-elevation-z8 mdc-theme--secondary-bg")" MaxProportion="20" EnableContentScroll="@MatchDisplaySize">
         <Header>
             <MatPaper Class="mdc-theme--primary-bg" Elevation="6">
                 <div class="card-content">
@@ -16,7 +16,7 @@
             </MatPaper>
         </Header>
         <NavigationHeader>
-            <MatCard Class="mdc-theme--secondary-bg mdc-theme--on-secondary">
+            <MatCard Class="@Theme.GetClass("mdc-theme--secondary-bg mdc-theme--on-secondary")">
                 <MatCardActions>
                     <MatCardActionButtons>
                         <MatButtonLink Class="mdc-theme--on-secondary" Href="">BlazorLayout Examples</MatButtonLink>
@@ -46,8 +46,12 @@
                     <MatBody1 Class="mdc-theme--on-primary" Style="margin:0px;">
                         It will hide itself if the display size is too small.
                     </MatBody1>
-                </div>
 
+                    <MatBody1 Class="mdc-theme--on-primary" Style="margin-top: 1rem;">
+                        Main mage locked to display size.
+                        <MatSlideToggle @bind-Value="@MatchDisplaySize" Style="--mdc-theme-secondary: var(--mdc-theme-primary);"></MatSlideToggle>
+                    </MatBody1>
+                </div>
             </MatPaper>
         </Outline>
         <Footer>
