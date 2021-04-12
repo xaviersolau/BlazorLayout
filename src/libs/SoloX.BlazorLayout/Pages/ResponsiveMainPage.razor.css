@@ -73,10 +73,27 @@
 
 @media (max-width: 800px) {
 
-    .dock-right {
-        display: none;
+  .dock-right {
+    z-index: 9;
+    position: fixed;
+    transform: translateX(100%) translateX(-2rem) translateY(-100%) translateY(2rem);
+    height: 100%;
+    max-width: 80%;
+    opacity: 0.75;
+    transition: all 0.3s ease-out;
+    border-radius: 0 0 0 30px;
+  }
+
+    .dock-right ::deep > div {
+      border-radius: inherit;
     }
-}
+
+    .dock-right:hover {
+      position: fixed;
+      transform: translateX(0%);
+      opacity: 1;
+    }
+
 
 @media (max-width: 600px) {
 

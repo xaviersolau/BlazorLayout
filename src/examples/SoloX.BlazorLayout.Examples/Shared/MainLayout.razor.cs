@@ -14,5 +14,13 @@ namespace SoloX.BlazorLayout.Examples.Shared
 
         [Parameter]
         public bool MatchDisplaySize { get; set; }
+
+        [Parameter]
+        public bool SmallNav { get; set; }
+
+        private void ToggleNav()
+        {
+            SmallNav = !SmallNav;
+        }
     }
 }

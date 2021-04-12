@@ -1,26 +1,65 @@
 ﻿
-    <ul class="nav">
-        <li>
-            <NavLink href="" Match="NavLinkMatch.All">
-                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Home"></MatButton>
-            </NavLink>
-        </li>
-        <li>
-            <NavLink href="Dock">
-                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Dense="true" Label="Dock Demo">
+<ul class="nav" style="@(SmallNav ? "text-align: center;" : string.Empty)">
+    <li>
+        <NavLink href="" Match="NavLinkMatch.All">
+            @if (SmallNav)
+            {
+            <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" />
+            }
+            else
+            {
+            <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Home" />
+            }
+        </NavLink>
+    </li>
+    <li>
+        <NavLink href="Dock">
+            @if (SmallNav)
+            {
+                <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" Dense="true" />
+            }
+            else
+            {
+                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Dense="true" Label="Dock Demo" />
+            }
 
-                </MatButton>
-             </NavLink>
-        </li>
-        <li>
-            <NavLink href="Grid">
-                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Grid Demo"></MatButton>
-            </NavLink>
-        </li>
-        <li>
-            <NavLink href="Resize">
-                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Resize"></MatButton>
-            </NavLink>
-        </li>
-    </ul>
+        </NavLink>
+    </li>
+    <li>
+        <NavLink href="GridAuto">
+            @if (SmallNav)
+            {
+                <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" />
+            }
+            else
+            {
+                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Grid Auto Demo" />
+            }
+        </NavLink>
+    </li>
+    <li>
+        <NavLink href="GridPosition">
+            @if (SmallNav)
+            {
+                <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" />
+            }
+            else
+            {
+                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Grid Position Demo" />
+            }
+        </NavLink>
+    </li>
+    <li>
+        <NavLink href="Resize">
+            @if (SmallNav)
+            {
+                <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" />
+            }
+            else
+            {
+                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Resize" />
+            }
+        </NavLink>
+    </li>
+</ul>
 
