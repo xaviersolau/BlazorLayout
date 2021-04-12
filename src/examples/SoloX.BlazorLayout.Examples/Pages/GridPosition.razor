@@ -1,0 +1,48 @@
+﻿@page "/GridPosition"
+
+<GridContainer Fill="Fill.Full"
+               ColumnSizing="Sizing.Fill"
+               RowSizing="Sizing.Fill">
+
+    <Column Repeat="3" />
+
+    <Row Repeat="2" />
+
+    @for (var i = 1; i < 4; i++)
+    {
+        var col = i - 1;
+        var row = col % 2;
+
+        <Cell Column="@col.ToString()" Row="@row.ToString()">
+            <MatCard Class="height-100 width-100" Style="@GetBackgroundColor(col)">
+                <div class="card-content">
+                    <MatHeadline6 Style="margin:0px;">
+                        Cell at Column @col Row @row !
+                    </MatHeadline6>
+                    <MatBody1 Style="margin:0px;">
+                        Using auto explicit placement...
+                    </MatBody1>
+                </div>
+            </MatCard>
+        </Cell>
+    }
+
+</GridContainer>
+
+@code
+{
+    private static string GetBackgroundColor(int num)
+    {
+        return "background-color: "
+            + num switch
+            {
+                1 => "chocolate",
+                2 => "silver",
+                3 => "burlywood",
+                4 => "cadetblue",
+                5 => "darkseagreen",
+                _ => "olive"
+            }
+            + ";";
+    }
+}

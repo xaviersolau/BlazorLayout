@@ -18,19 +18,22 @@
         <NavigationHeader>
             <MatCard Class="@Theme.GetClass("mdc-theme--secondary-bg mdc-theme--on-secondary")">
                 <MatCardActions>
-                    <MatCardActionButtons>
-                        <MatButtonLink Class="mdc-theme--on-secondary" Href="">BlazorLayout Examples</MatButtonLink>
-                    </MatCardActionButtons>
+                    @if (!SmallNav)
+                    {
+                        <MatCardActionButtons>
+                            <MatButtonLink Class="mdc-theme--on-secondary" Href="">BlazorLayout Examples</MatButtonLink>
+                        </MatCardActionButtons>
+                    }
 
                     <MatCardActionIcons>
-                        <MatIconButton Icon="@MatIconNames.Favorite"></MatIconButton>
+                        <MatIconButton Icon="@MatIconNames.Favorite" @onclick="ToggleNav"></MatIconButton>
                     </MatCardActionIcons>
                 </MatCardActions>
             </MatCard>
         </NavigationHeader>
         <Navigation>
             <MatPaper Class="height-100 overflow-auto" Elevation="4">
-                <NavMenu />
+                <NavMenu SmallNav="@SmallNav" />
             </MatPaper>
         </Navigation>
         <Outline>
