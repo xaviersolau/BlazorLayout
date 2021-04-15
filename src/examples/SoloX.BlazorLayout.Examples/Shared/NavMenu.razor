@@ -1,65 +1,36 @@
 ﻿
 <ul class="nav" style="@(SmallNav ? "text-align: center;" : string.Empty)">
-    <li>
-        <NavLink href="" Match="NavLinkMatch.All">
-            @if (SmallNav)
-            {
-            <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" />
-            }
-            else
-            {
-            <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Home" />
-            }
-        </NavLink>
-    </li>
-    <li>
-        <NavLink href="Dock">
-            @if (SmallNav)
-            {
-                <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" Dense="true" />
-            }
-            else
-            {
-                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Dense="true" Label="Dock Demo" />
-            }
 
-        </NavLink>
-    </li>
-    <li>
-        <NavLink href="GridAuto">
-            @if (SmallNav)
-            {
-                <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" />
-            }
-            else
-            {
-                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Grid Auto Demo" />
-            }
-        </NavLink>
-    </li>
-    <li>
-        <NavLink href="GridPosition">
-            @if (SmallNav)
-            {
-                <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" />
-            }
-            else
-            {
-                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Grid Position Demo" />
-            }
-        </NavLink>
-    </li>
-    <li>
-        <NavLink href="Resize">
-            @if (SmallNav)
-            {
-                <MatIconButton Class="width-100 mdc-theme--secondary" Icon="favorite" />
-            }
-            else
-            {
-                <MatButton Class="width-100 mdc-theme--secondary" Icon="favorite" Label="Resize" />
-            }
-        </NavLink>
-    </li>
+    @AddNavItem("", "home", "Home", NavLinkMatch.All)
+
+    @AddNavItem("Dock", "view_quilt", "Dock")
+
+    @AddNavItem("GridAuto", "view_module", "Grid Auto")
+
+    @AddNavItem("GridManual", "build", "Grid Manual")
+
+    @AddNavItem("Resize", "aspect_ratio", "Resize")
+
 </ul>
 
+@code
+{
+    private RenderFragment AddNavItem(string href, string icon, string label, NavLinkMatch navLinkMatch = NavLinkMatch.Prefix)
+    {
+        return __builder =>
+        {
+            <li>
+                <NavLink href="@href" Match="@(navLinkMatch)">
+                    @if (SmallNav)
+                    {
+                        <MatIconButton Class="width-100 mdc-theme--secondary" Icon="@icon" />
+                    }
+                    else
+                    {
+                        <MatButton Class="width-100 mdc-theme--secondary" Icon="@icon" Label="@label" />
+                    }
+                </NavLink>
+            </li>
+        };
+    }
+}

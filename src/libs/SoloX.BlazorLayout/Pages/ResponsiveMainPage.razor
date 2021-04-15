@@ -12,9 +12,12 @@
     <div class="dock-top">
         @Header
     </div>
-    <div class="dock-right @ClassContentOverflow">
-        @Outline
-    </div>
+    @if (EnableOutline)
+    {
+        <div class="dock-right @ClassContentOverflow">
+            @Outline
+        </div>
+    }
     <div class="main-content @ClassContentOverflow">
         @ChildContent
     </div>
