@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-    <ResponsiveMainPage NavigationClass="@Theme.GetClass("mat-elevation-z8 mdc-theme--secondary-bg")" MaxProportion="20" EnableContentScroll="@MatchDisplaySize">
+    <ResponsiveMainPage NavigationClass="@Theme.GetClass("mat-elevation-z8 mdc-theme--secondary-bg")" MaxProportion="20" EnableContentScroll="@MatchDisplaySize" EnableOutline="true" >
         <Header>
             <MatPaper Class="mdc-theme--primary-bg" Elevation="6">
                 <div class="card-content">
@@ -26,7 +26,7 @@
                     }
 
                     <MatCardActionIcons>
-                        <MatIconButton Icon="@MatIconNames.Favorite" @onclick="ToggleNav"></MatIconButton>
+                        <MatIconButton Class="mdc-theme--on-secondary" Icon="@MatIconNames.Menu" @onclick="ToggleNav"></MatIconButton>
                     </MatCardActionIcons>
                 </MatCardActions>
             </MatCard>

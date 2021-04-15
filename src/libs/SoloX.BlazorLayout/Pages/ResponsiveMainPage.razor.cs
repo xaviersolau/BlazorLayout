@@ -74,6 +74,12 @@ namespace SoloX.BlazorLayout.Pages
         [Parameter]
         public bool EnableContentScroll { get; set; }
 
+        /// <summary>
+        /// Disable Outline (default is true).
+        /// </summary>
+        [Parameter]
+        public bool EnableOutline { get; set; }
+
         private string ClassContentOverflow
             => EnableContentScroll ? "content-overflow" : string.Empty;
     }
