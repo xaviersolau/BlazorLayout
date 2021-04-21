@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="ResponsiveMainPage.razor.cs" company="Xavier Solau">
+// <copyright file="ResponsiveLayout.razor.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -8,12 +8,12 @@
 
 using Microsoft.AspNetCore.Components;
 
-namespace SoloX.BlazorLayout.Pages
+namespace SoloX.BlazorLayout.Layouts
 {
     /// <summary>
     /// Responsive main page implementation.
     /// </summary>
-    public partial class ResponsiveMainPage
+    public partial class ResponsiveLayout
     {
         /// <summary>
         /// Max proportion of the page side elements.
@@ -37,7 +37,25 @@ namespace SoloX.BlazorLayout.Pages
         /// Navigation panel body.
         /// </summary>
         [Parameter]
-        public RenderFragment? Navigation { get; set; }
+        public RenderFragment? NavigationMenu { get; set; }
+
+        /// <summary>
+        /// Small navigation panel header.
+        /// </summary>
+        [Parameter]
+        public RenderFragment? SmallNavigationHeader { get; set; }
+
+        /// <summary>
+        /// Small navigation panel body.
+        /// </summary>
+        [Parameter]
+        public RenderFragment? SmallNavigationMenu { get; set; }
+
+        /// <summary>
+        /// Use Small navigation.
+        /// </summary>
+        [Parameter]
+        public bool UseSmallNavigation { get; set; }
 
         /// <summary>
         /// Header child.

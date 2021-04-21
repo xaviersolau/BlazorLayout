@@ -1,0 +1,14 @@
+﻿<li>
+    <NavLink href="@Href" Match="@NavLinkMatch">
+        @if (SmallNav)
+        {
+            <MatCardActionIcons Style="justify-content: center;">
+                <MatIconButton Class="width-100 mdc-theme--secondary" Icon="@Icon" />
+            </MatCardActionIcons>
+        }
+        else
+        {
+            <MatButton Class="width-100 mdc-theme--secondary" Icon="@Icon" Label="@Label" />
+        }
+    </NavLink>
+</li>
