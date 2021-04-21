@@ -3,10 +3,16 @@
 <div class="full-size main grid-template grid-layout" style="--proportion: @MaxProportion%;">
     <div class="dock-left @NavigationClass">
         <div class="dock-left-header">
-            @NavigationHeader
+            @(UseSmallNavigation && SmallNavigationHeader != null ? SmallNavigationHeader : NavigationHeader)
         </div>
         <div class="dock-left-body">
-            @Navigation
+            @(UseSmallNavigation && SmallNavigationMenu != null ? SmallNavigationMenu : NavigationMenu)
+        </div>
+        <div class="dock-left-header-small">
+            @(SmallNavigationHeader ?? NavigationHeader)
+        </div>
+        <div class="dock-left-body-small">
+            @(SmallNavigationMenu ?? NavigationMenu)
         </div>
     </div>
     <div class="dock-top">
