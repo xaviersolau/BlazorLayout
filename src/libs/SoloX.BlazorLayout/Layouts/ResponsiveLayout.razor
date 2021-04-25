@@ -1,7 +1,7 @@
 ﻿
 
 <div class="full-size main grid-template grid-layout" style="--proportion: @MaxProportion%;">
-    <div class="dock-left @NavigationClass">
+    <div id="@NavigationPanelId" class="dock-left @NavigationClass" style="@NavigationStyle">
         <div class="dock-left-header">
             @(UseSmallNavigation && SmallNavigationHeader != null ? SmallNavigationHeader : NavigationHeader)
         </div>
@@ -15,19 +15,19 @@
             @(SmallNavigationMenu ?? NavigationMenu)
         </div>
     </div>
-    <div class="dock-top">
+    <div id="@HeaderPanelId" class="dock-top">
         @Header
     </div>
     @if (EnableOutline)
     {
-        <div class="dock-right @ClassContentOverflow">
+        <div id="@OutlinePanelId" class="dock-right @ClassContentOverflow">
             @Outline
         </div>
     }
-    <div class="main-content @ClassContentOverflow">
+    <div id="@ChildContentPanelId" class="main-content @ClassContentOverflow">
         @ChildContent
     </div>
-    <div class="dock-bottom">
+    <div id="@FooterPanelId" class="dock-bottom">
         @Footer
     </div>
 </div>
