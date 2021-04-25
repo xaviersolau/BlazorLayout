@@ -15,6 +15,12 @@ namespace SoloX.BlazorLayout.Layouts
     /// </summary>
     public partial class ResponsiveLayout
     {
+        internal const string NavigationPanelId = "navigation-panel-id";
+        internal const string HeaderPanelId = "header-panel-id";
+        internal const string OutlinePanelId = "outline-panel-id";
+        internal const string ChildContentPanelId = "child-content-panel-id";
+        internal const string FooterPanelId = "footer-panel-id";
+
         /// <summary>
         /// Max proportion of the page side elements.
         /// </summary>
@@ -26,6 +32,12 @@ namespace SoloX.BlazorLayout.Layouts
         /// </summary>
         [Parameter]
         public string? NavigationClass { get; set; }
+
+        /// <summary>
+        /// Style to use in the navigation panel.
+        /// </summary>
+        [Parameter]
+        public string? NavigationStyle { get; set; }
 
         /// <summary>
         /// Navigation panel header.
