@@ -4,7 +4,7 @@
 <div
      @ref="ElementReference"
      class="@FillClass @Class"
-     style="grid-template-columns: @ColumnsStyle; grid-template-rows: @RowsStyle;"
+     style="@ComputeStyle()"
      id="@Id">
     <CascadingValue Value="this">
         @ChildContent

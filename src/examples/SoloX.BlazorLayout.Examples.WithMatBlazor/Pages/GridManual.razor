@@ -1,29 +1,30 @@
-﻿@page "/GridAuto"
+﻿@page "/GridManual"
 
 <GridContainer Fill="Fill.Full"
-               ColumnSizing="Sizing.Proportion"
-               RowSizing="Sizing.Proportion">
+               ColumnSizing="Sizing.Fill"
+               RowSizing="Sizing.Fill">
 
-    <Column Size="25" Repeat="4" />
+    <GridColumn Repeat="3" />
 
-    <Row Size="50" Repeat="2" />
+    <GridRow Repeat="2" />
 
-    @for (var i = 1; i < 6; i++)
+    @for (var i = 1; i < 4; i++)
     {
-        var num = i;
+        var col = i - 1;
+        var row = col % 2;
 
-        <Cell>
-            <MatCard Class="height-100 width-100" Style="@GetBackgroundColor(num)">
+        <GridCell Column="@col.ToString()" Row="@row.ToString()">
+            <MatCard Class="height-100 width-100" Style="@GetBackgroundColor(col)">
                 <div class="card-content">
                     <MatHeadline6 Style="margin:0px;">
-                        Cell @num!
+                        Cell at Column @col Row @row !
                     </MatHeadline6>
                     <MatBody1 Style="margin:0px;">
-                        Using auto flow placement...
+                        Using auto explicit placement...
                     </MatBody1>
                 </div>
             </MatCard>
-        </Cell>
+        </GridCell>
     }
 
 </GridContainer>

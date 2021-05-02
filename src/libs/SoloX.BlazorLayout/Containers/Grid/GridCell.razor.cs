@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="Cell.razor.cs" company="Xavier Solau">
+// <copyright file="GridCell.razor.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -14,7 +14,7 @@ namespace SoloX.BlazorLayout.Containers.Grid
     /// <summary>
     /// A Grid Cell panel.
     /// </summary>
-    public partial class Cell
+    public partial class GridCell
     {
         [CascadingParameter]
         private GridContainer? Parent { get; set; }
@@ -79,6 +79,11 @@ namespace SoloX.BlazorLayout.Containers.Grid
                     ? $"{Parent.GetRowIndex(Row) + 1}"
                     : $"{Parent.GetRowIndex(Row) + 1}/{Parent.GetRowIndex(RowEnd) + 2}";
             }
+        }
+
+        private string ComputeStyle()
+        {
+            return $"grid-column: {ColumnStyle}; grid-row: {RowStyle}; {Style}";
         }
 
         ///<inheritdoc/>

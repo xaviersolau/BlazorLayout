@@ -31,6 +31,12 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
         }
 
         [Fact]
+        public void ItShouldRenderWithTheGivenStyle()
+        {
+            PanelHelpers.AssertStyleIsProperlyRendered<DockContainer>();
+        }
+
+        [Fact]
         public void ItShouldInitializeElementReference()
         {
             PanelHelpers.AssertElementReferenceIsProperlySet<DockContainer>();
@@ -98,7 +104,7 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
 
             var rootElement = cut.Nodes[0].As<IElement>();
 
-            var style = rootElement.ComputeCurrentStyle();
+            var style = StyleHelper.LoadStyleAttribute(rootElement);
             style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == expectedGridColumns);
             style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == expectedGridRows);
 

@@ -18,8 +18,8 @@ namespace SoloX.BlazorLayout.Containers.Grid
     /// </summary>
     public partial class GridContainer : AContainer
     {
-        private readonly DimensionSet<Column> columns;
-        private readonly DimensionSet<Row> rows;
+        private readonly GridDimensionSet<GridColumn> columns;
+        private readonly GridDimensionSet<GridRow> rows;
         private bool initialized;
 
         /// <summary>
@@ -27,8 +27,8 @@ namespace SoloX.BlazorLayout.Containers.Grid
         /// </summary>
         public GridContainer()
         {
-            this.columns = new DimensionSet<Column>(DimensionChangedHandler);
-            this.rows = new DimensionSet<Row>(DimensionChangedHandler);
+            this.columns = new GridDimensionSet<GridColumn>(DimensionChangedHandler);
+            this.rows = new GridDimensionSet<GridRow>(DimensionChangedHandler);
         }
 
         /// <summary>
@@ -58,16 +58,16 @@ namespace SoloX.BlazorLayout.Containers.Grid
             }
         }
 
-        internal void Add(Column column) =>
+        internal void Add(GridColumn column) =>
             this.columns.Add(column);
 
-        internal void Add(Row row) =>
+        internal void Add(GridRow row) =>
             this.rows.Add(row);
 
-        internal void Remove(Column column) =>
+        internal void Remove(GridColumn column) =>
             this.columns.Remove(column);
 
-        internal void Remove(Row row) =>
+        internal void Remove(GridRow row) =>
             this.rows.Remove(row);
 
         internal int GetColumnIndex(string nameOrIndex) =>
@@ -80,6 +80,11 @@ namespace SoloX.BlazorLayout.Containers.Grid
 
         private string RowsStyle =>
             this.rows.ComputeDimensionsStyle(RowSizing);
+
+        private string ComputeStyle()
+        {
+            return $"grid-template-columns: {ColumnsStyle}; grid-template-rows: {RowsStyle}; {Style}";
+        }
 
         private string FillClass =>
             "grid-container " +

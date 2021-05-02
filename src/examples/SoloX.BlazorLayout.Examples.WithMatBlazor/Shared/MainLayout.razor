@@ -8,13 +8,13 @@
     <NavigationHeader>
         <MatCard Class="@Theme.GetClass("mdc-theme--secondary-bg mdc-theme--on-secondary")">
             <MatCardActions>
-                <MatCardActionButtons>
-                    <MatButtonLink Class="mdc-theme--on-secondary" Href="">BlazorLayout Examples</MatButtonLink>
-                </MatCardActionButtons>
-
                 <MatCardActionIcons>
                     <MatIconButton Class="mdc-theme--on-secondary" Icon="@MatIconNames.Menu" @onclick="ToggleNav" />
                 </MatCardActionIcons>
+
+                <MatCardActionButtons>
+                    <MatButtonLink Class="mdc-theme--on-secondary" Href="">BlazorLayout Examples</MatButtonLink>
+                </MatCardActionButtons>
             </MatCardActions>
         </MatCard>
     </NavigationHeader>
@@ -38,13 +38,13 @@
         </MatPaper>
     </SmallNavigationMenu>
     <Header>
-        <MatPaper Class="mdc-theme--primary-bg" Elevation="6">
+        <MatPaper Class="mdc-theme--primary-bg mdc-theme--on-primary" Elevation="6">
             <div class="card-content">
-                <MatHeadline6 Class="mdc-theme--on-primary" Style="margin:0px;">
+                <MatHeadline6 Style="margin:0px;">
                     Header
                 </MatHeadline6>
 
-                <MatBody1 Class="mdc-theme--on-primary" Style="margin:0px;">
+                <MatBody1 Style="margin:0px;">
                     Here is a demo of the BlazorLayout project.
                 </MatBody1>
             </div>
@@ -52,20 +52,20 @@
         </MatPaper>
     </Header>
     <Outline>
-        <MatPaper Class="mdc-theme--secondary-bg height-100 overflow-auto" Elevation="6">
+        <MatPaper Class="mdc-theme--secondary-bg mdc-theme--on-secondary height-100 overflow-auto" Elevation="6">
             <div class="card-content">
-                <MatHeadline6 Class="mdc-theme--on-primary" Style="margin:0px;">
+                <MatHeadline6 Style="margin:0px;">
                     Outline
                 </MatHeadline6>
 
-                <MatBody1 Class="mdc-theme--on-primary" Style="margin:0px;">
+                <MatBody1 Style="margin:0px;">
                     Here is the Outline of the demo.
                 </MatBody1>
-                <MatBody1 Class="mdc-theme--on-primary" Style="margin:0px;">
+                <MatBody1 Style="margin:0px;">
                     It will hide itself if the display size is too small.
                 </MatBody1>
 
-                <MatBody1 Class="mdc-theme--on-primary" Style="margin-top: 1rem;">
+                <MatBody1 Style="margin-top: 1rem;">
                     Main mage locked to display size.
                     <MatSlideToggle @bind-Value="@MatchDisplaySize" Style="--mdc-theme-secondary: var(--mdc-theme-primary);"></MatSlideToggle>
                 </MatBody1>
@@ -73,7 +73,7 @@
         </MatPaper>
     </Outline>
     <Footer>
-        <MatPaper Class="height-100 overflow-auto" Elevation="6">
+        <MatPaper Class="height-100 mdc-theme--secondary-bg mdc-theme--on-secondary overflow-auto" Elevation="6">
             <div class="card-content">
                 <MatBody1 Style="margin:0px;">
                     Footer : Thanks to MatBlazor we can use Material Design.

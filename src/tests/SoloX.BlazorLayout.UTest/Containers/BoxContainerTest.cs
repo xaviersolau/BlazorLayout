@@ -1,5 +1,5 @@
 // ----------------------------------------------------------------------
-// <copyright file="ContainerTest.cs" company="Xavier Solau">
+// <copyright file="BoxContainerTest.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -16,24 +16,30 @@ using SoloX.BlazorLayout.Core;
 
 namespace SoloX.BlazorLayout.UTest.Containers
 {
-    public class ContainerTest
+    public class BoxContainerTest
     {
         [Fact]
         public void ItShouldRenderWithTheGivenId()
         {
-            PanelHelpers.AssertIdIsProperlyRendered<Container>();
+            PanelHelpers.AssertIdIsProperlyRendered<BoxContainer>();
         }
 
         [Fact]
         public void ItShouldRenderWithTheGivenClass()
         {
-            PanelHelpers.AssertClassIsProperlyRendered<Container>();
+            PanelHelpers.AssertClassIsProperlyRendered<BoxContainer>();
+        }
+
+        [Fact]
+        public void ItShouldRenderWithTheGivenStyle()
+        {
+            PanelHelpers.AssertStyleIsProperlyRendered<BoxContainer>();
         }
 
         [Fact]
         public void ItShouldInitializeElementReference()
         {
-            PanelHelpers.AssertElementReferenceIsProperlySet<Container>();
+            PanelHelpers.AssertElementReferenceIsProperlySet<BoxContainer>();
         }
 
         [Theory]
@@ -43,7 +49,7 @@ namespace SoloX.BlazorLayout.UTest.Containers
         [InlineData(Fill.Horizontal)]
         public void ItShouldFillParentSpaceAccordinglyToFillParameter(Fill fill)
         {
-            ContainerHelper.AssertIdIsProperlyRendered<Container>(fill);
+            ContainerHelper.AssertIdIsProperlyRendered<BoxContainer>(fill);
         }
 
         [Fact]
@@ -55,7 +61,7 @@ namespace SoloX.BlazorLayout.UTest.Containers
             using var ctx = new TestContext();
 
             // Act
-            var cut = ctx.RenderComponent<Container>(
+            var cut = ctx.RenderComponent<BoxContainer>(
                 builder =>
                 {
                     builder.AddChildContent(childContent);

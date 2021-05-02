@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SoloX.BlazorLayout.Examples": {
+    "SoloX.BlazorLayout.Examples.WithMatBlazor": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

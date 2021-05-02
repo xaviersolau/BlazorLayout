@@ -29,6 +29,13 @@ namespace SoloX.BlazorLayout.Core
         public string? Class { get; set; }
 
         /// <summary>
+        /// Gets/Sets Panel Style that is mapped to the associated HTML element
+        /// style (in addition of the current panel implementation styles if any).
+        /// </summary>
+        [Parameter]
+        public string? Style { get; set; }
+
+        /// <summary>
         /// Gets/Sets Panel Child Content.
         /// </summary>
         [Parameter]

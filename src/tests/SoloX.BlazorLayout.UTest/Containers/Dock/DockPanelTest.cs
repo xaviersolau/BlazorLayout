@@ -39,6 +39,18 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
         }
 
         [Fact]
+        public void ItShouldRenderWithTheGivenStyle()
+        {
+            var dock = new DockContainer();
+
+            PanelHelpers.AssertStyleIsProperlyRendered<DockPanel>(
+                builder =>
+                {
+                    builder.AddCascadingValue<DockContainer>(dock);
+                });
+        }
+
+        [Fact]
         public void ItShouldInitializeElementReference()
         {
             var dock = new DockContainer();

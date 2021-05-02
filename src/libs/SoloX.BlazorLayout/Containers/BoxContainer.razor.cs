@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="Container.razor.cs" company="Xavier Solau">
+// <copyright file="BoxContainer.razor.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -14,7 +14,7 @@ namespace SoloX.BlazorLayout.Containers
     /// <summary>
     /// Simple container component.
     /// </summary>
-    public partial class Container
+    public partial class BoxContainer
     {
         private string FillClass =>
             Fill switch
