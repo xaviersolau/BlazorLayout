@@ -1,0 +1,68 @@
+﻿@page "/Resize"
+
+
+@inject IResizeObserverService sizeObserverService
+
+@implements IResizeCallBack
+@implements IAsyncDisposable
+
+<ResizeContainer @ref="ResizeContainerReference" Fill="Fill.None">
+    <BoxContainer Fill="Fill.Full" Class="bg-light panel-container">
+        <Heading Style="margin:0px;">
+            This card is re-sizable!
+        </Heading>
+        <Paragraph Style="margin:0px;">
+            Its size is @width x @height
+        </Paragraph>
+    </BoxContainer>
+
+</ResizeContainer>
+
+
+@code
+{
+    private ResizeContainer ResizeContainerReference { get; set; }
+
+    private int width;
+    private int height;
+
+    private IAsyncDisposable callBackDisposable;
+    private IAsyncDisposable observerDisposable;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            observerDisposable = await sizeObserverService.RegisterMutationObserverAsync(ResizeContainerReference.ElementReference);
+
+            callBackDisposable = await sizeObserverService.RegisterResizeCallBackAsync(this, ResizeContainerReference.ElementReference);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public ValueTask ResizeAsync(int width, int height)
+    {
+        this.height = height;
+        this.width = width;
+
+        this.StateHasChanged();
+
+        return ValueTask.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (this.observerDisposable != null)
+        {
+            await this.observerDisposable.DisposeAsync();
+            this.observerDisposable = null;
+        }
+
+        if (this.callBackDisposable != null)
+        {
+            await callBackDisposable.DisposeAsync();
+            this.callBackDisposable = null;
+        }
+    }
+}

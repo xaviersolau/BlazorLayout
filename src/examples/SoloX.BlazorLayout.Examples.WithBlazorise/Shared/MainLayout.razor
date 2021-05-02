@@ -1,0 +1,87 @@
+﻿@inherits LayoutComponentBase
+
+<ResponsiveLayout NavigationClass="bg-secondary nav-container"
+                  MaxProportion="20"
+                  EnableContentScroll="@MatchDisplaySize"
+                  EnableOutline="true"
+                  UseSmallNavigation="@SmallNav">
+
+    <NavigationHeader>
+
+        <DockContainer Class="bg-secondary-dark">
+            <DockPanel Side="Core.Side.Left">
+                <Button Class="btn-icon" Style="min-height: 100%;" Color="Color.None" @onclick="ToggleNav">
+                    <Blazorise.Icon Class="text-white-secondary" Name="MaterialIcons.Menu" />
+                </Button>
+            </DockPanel>
+            <BoxContainer Style="align-self: center;">
+                <DisplayHeading Size="DisplayHeadingSize.Is4" Alignment="TextAlignment.Center" Style="margin-block: 0; font-size: 1.75rem;">
+                    <Link Class="text-white-secondary" To="">BlazorLayout Examples</Link>
+                </DisplayHeading>
+            </BoxContainer>
+        </DockContainer>
+
+    </NavigationHeader>
+
+    <NavigationMenu>
+        <NavMenu />
+    </NavigationMenu>
+
+    <SmallNavigationHeader>
+        <Button Class="btn-icon bg-secondary-dark" Style="justify-content: center;" Color="Color.None" @onclick="ToggleNav">
+            <Blazorise.Icon Class="text-white-secondary" Name="MaterialIcons.Menu" />
+        </Button>
+    </SmallNavigationHeader>
+
+    <SmallNavigationMenu>
+        <NavMenu SmallNav="true" />
+    </SmallNavigationMenu>
+
+    <Header>
+        <BoxContainer Class="bg-primary text-white-primary page-container" Fill="Fill.Full">
+            <div class="card-content">
+                <Heading Style="margin:0px;" Size="HeadingSize.Is4">
+                    Header
+                </Heading>
+
+                <Paragraph Style="margin:0px;">
+                    Here is a demo of the BlazorLayout project.
+                </Paragraph>
+            </div>
+
+        </BoxContainer>
+    </Header>
+    <Outline>
+        <BoxContainer Class="bg-secondary-dark text-white-secondary page-container" Fill="Fill.Full">
+            <div class="card-content">
+                <Heading Style="margin:0px;" Size="HeadingSize.Is4">
+                    Outline
+                </Heading>
+
+                <Paragraph Style="margin:0px;">
+                    Here is the Outline of the demo.
+                </Paragraph>
+                <Paragraph Style="margin:0px;">
+                    It will hide itself if the display size is too small.
+                </Paragraph>
+
+                <Paragraph Style="margin-top: 1rem;">
+                    Main mage locked to display size.
+                    <Switch @bind-Checked="@MatchDisplaySize" ></Switch>
+                </Paragraph>
+            </div>
+        </BoxContainer>
+    </Outline>
+    <Footer>
+        <BoxContainer Class="bg-secondary-dark text-white-secondary page-container" Fill="Fill.Full">
+            <Paragraph Style="margin:0px;">
+                Footer : Thanks to MatBlazor we can use Material Design.
+            </Paragraph>
+        </BoxContainer>
+    </Footer>
+
+    <ChildContent>
+        @Body
+    </ChildContent>
+
+</ResponsiveLayout>

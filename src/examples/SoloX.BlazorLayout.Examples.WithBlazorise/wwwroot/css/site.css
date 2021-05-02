@@ -1,0 +1,82 @@
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    z-index: 10;
+    background: rgb(100 100 100 / 0,34);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px gray;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 10px darkgray;
+    border-radius: 10px;
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        box-shadow: inset 0 0 15px darkgray;
+    }
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
+    }
+
+.width-100 {
+    width: 100%;
+}
+
+.height-100 {
+    height: 100%;
+}
+
+.overflow-auto {
+    overflow: overlay;
+}
+
+.nav-container {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.75);
+}
+
+.page-container {
+    padding: 1rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.75);
+}
+
+.panel-container {
+    padding: 1rem;
+}
+
