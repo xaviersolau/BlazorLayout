@@ -1,0 +1,19 @@
+﻿
+
+
+
+.nav {
+    display: block;
+    list-style-type: none;
+    padding-inline-start: 0px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+
+    .nav ::deep a {
+        text-decoration: none;
+    }
+
+    .nav ::deep button {
+        justify-content: inherit;
+    }

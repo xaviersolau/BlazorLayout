@@ -1,0 +1,45 @@
+﻿@page "/GridAuto"
+
+<GridContainer Fill="Fill.Full"
+               ColumnSizing="Sizing.Proportion"
+               RowSizing="Sizing.Proportion">
+
+    <GridColumn Size="25" Repeat="4" />
+
+    <GridRow Size="50" Repeat="2" />
+
+    @for (var i = 1; i < 6; i++)
+    {
+        var num = i;
+
+        <GridCell>
+            <BoxContainer Fill="Fill.Full" Style="@GetBackgroundColor(num)" Class="panel-container">
+                <Heading Style="margin:0px;">
+                    Cell @num!
+                </Heading>
+                <Paragraph Style="margin:0px;">
+                    Using auto flow placement...
+                </Paragraph>
+            </BoxContainer>
+        </GridCell>
+    }
+
+</GridContainer>
+
+@code
+{
+    private static string GetBackgroundColor(int num)
+    {
+        return "background-color: "
+            + num switch
+            {
+                1 => "chocolate",
+                2 => "silver",
+                3 => "burlywood",
+                4 => "cadetblue",
+                5 => "darkseagreen",
+                _ => "olive"
+            }
+            + ";";
+    }
+}

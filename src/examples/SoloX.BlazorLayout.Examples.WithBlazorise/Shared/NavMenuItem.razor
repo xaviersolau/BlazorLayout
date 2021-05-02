@@ -1,0 +1,17 @@
+﻿<li>
+    <NavLink href="@Href" Match="@NavLinkMatch">
+        @if (SmallNav)
+        {
+            <Button Class="btn-icon" Style="justify-content: center;" Color="Color.None">
+                <Blazorise.Icon Class="text-black-secondary" Name="@Icon" />
+            </Button>
+        }
+        else
+        {
+            <Button Class="width-100 text-black-secondary " Color="Color.Link">
+                <Blazorise.Icon Name="@Icon" />
+                @Label
+            </Button>
+        }
+    </NavLink>
+</li>
