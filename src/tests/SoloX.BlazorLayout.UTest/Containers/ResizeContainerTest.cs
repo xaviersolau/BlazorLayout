@@ -28,6 +28,12 @@ namespace SoloX.BlazorLayout.UTest.Containers
         }
 
         [Fact]
+        public void ItShouldRenderWithTheGivenStyle()
+        {
+            PanelHelpers.AssertStyleIsProperlyRendered<ResizeContainer>();
+        }
+
+        [Fact]
         public void ItShouldInitializeElementReference()
         {
             PanelHelpers.AssertElementReferenceIsProperlySet<ResizeContainer>();

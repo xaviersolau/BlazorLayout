@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="ADimension.cs" company="Xavier Solau">
+// <copyright file="AGridDimension.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -15,7 +15,7 @@ namespace SoloX.BlazorLayout.Containers.Grid
     /// <summary>
     /// Abstract Grid Dimension.
     /// </summary>
-    public abstract class ADimension : ComponentBase
+    public abstract class AGridDimension : ComponentBase
     {
         /// <summary>
         /// Gets/Sets the parent Grid container.

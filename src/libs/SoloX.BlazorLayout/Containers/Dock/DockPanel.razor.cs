@@ -53,6 +53,11 @@ namespace SoloX.BlazorLayout.Containers.Dock
             GC.SuppressFinalize(this);
         }
 
+        private string ComputeStyle()
+        {
+            return $"grid-column: {ColumnStyle}; grid-row: {RowStyle}; {Style}";
+        }
+
         /// <summary>
         /// Virtual dispose base method.
         /// </summary>

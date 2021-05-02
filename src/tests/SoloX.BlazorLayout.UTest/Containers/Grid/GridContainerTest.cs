@@ -31,6 +31,12 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
         }
 
         [Fact]
+        public void ItShouldRenderWithTheGivenStyle()
+        {
+            PanelHelpers.AssertStyleIsProperlyRendered<GridContainer>();
+        }
+
+        [Fact]
         public void ItShouldInitializeElementReference()
         {
             PanelHelpers.AssertElementReferenceIsProperlySet<GridContainer>();
@@ -46,10 +52,10 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
             var cut = ctx.RenderComponent<GridContainer>(
                 builder =>
                 {
-                    builder.AddChildContent<Column>();
-                    builder.AddChildContent<Column>();
-                    builder.AddChildContent<Row>();
-                    builder.AddChildContent<Row>();
+                    builder.AddChildContent<GridColumn>();
+                    builder.AddChildContent<GridColumn>();
+                    builder.AddChildContent<GridRow>();
+                    builder.AddChildContent<GridRow>();
                 });
 
             // Assert
@@ -89,18 +95,18 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
             var cut = ctx.RenderComponent<GridContainer>(
                 builder =>
                 {
-                    builder.AddChildContent<Column>();
-                    builder.AddChildContent<Column>();
-                    builder.AddChildContent<Row>();
-                    builder.AddChildContent<Row>();
-                    builder.AddChildContent<Cell>(
+                    builder.AddChildContent<GridColumn>();
+                    builder.AddChildContent<GridColumn>();
+                    builder.AddChildContent<GridRow>();
+                    builder.AddChildContent<GridRow>();
+                    builder.AddChildContent<GridCell>(
                         cellBuilder =>
                         {
                             cellBuilder.Add(c => c.Column, "0");
                             cellBuilder.Add(c => c.Row, "0");
                             cellBuilder.Add(c => c.Id, cellId1);
                         });
-                    builder.AddChildContent<Cell>(
+                    builder.AddChildContent<GridCell>(
                         cellBuilder =>
                         {
                             cellBuilder.Add(c => c.Column, "1");

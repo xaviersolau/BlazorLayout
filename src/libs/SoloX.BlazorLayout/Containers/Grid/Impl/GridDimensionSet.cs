@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="DimensionSet.cs" company="Xavier Solau">
+// <copyright file="GridDimensionSet.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -17,7 +17,7 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
     /// <summary>
     /// Set of a Grid dimensions that can be Rows or Columns.
     /// </summary>
-    public class DimensionSet<TDimension> where TDimension : ADimension
+    public class GridDimensionSet<TDimension> where TDimension : AGridDimension
     {
         private readonly List<TDimension> dimensions = new List<TDimension>();
         private readonly Dictionary<string, int> dimensionMap = new Dictionary<string, int>();
@@ -27,7 +27,7 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
         /// Setup the Dimension Set with a Grid notifier handler.
         /// </summary>
         /// <param name="gridNotifyHandler">The Grid notifier handler.</param>
-        public DimensionSet(Action gridNotifyHandler)
+        public GridDimensionSet(Action gridNotifyHandler)
         {
             this.gridNotifyHandler = gridNotifyHandler;
         }
@@ -103,7 +103,7 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
             string.Join(" ",
                 this.dimensions.Select(c => ComputeDimensionStyle(c, defaultSizingMode)));
 
-        private static string ComputeDimensionStyle(ADimension frame, Sizing defaultSizing) =>
+        private static string ComputeDimensionStyle(AGridDimension frame, Sizing defaultSizing) =>
             frame.Sizing.HasValue
             ? ComputeDimensionStyle(frame.Sizing.Value, frame.Size)
             : ComputeDimensionStyle(defaultSizing, frame.Size);

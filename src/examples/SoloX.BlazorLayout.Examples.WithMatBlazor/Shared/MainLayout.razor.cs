@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SoloX.BlazorLayout.Examples.Shared
+namespace SoloX.BlazorLayout.Examples.WithMatBlazor.Shared
 {
     public partial class MainLayout
     {

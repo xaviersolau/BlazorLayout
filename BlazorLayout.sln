@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{16999F06-D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoloX.BlazorLayout", "src\libs\SoloX.BlazorLayout\SoloX.BlazorLayout.csproj", "{C350D493-D7F2-4521-A309-B318617304BF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoloX.BlazorLayout.Examples", "src\examples\SoloX.BlazorLayout.Examples\SoloX.BlazorLayout.Examples.csproj", "{51F09D6E-8E31-4688-A881-8E6154BF799C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoloX.BlazorLayout.Examples.WithMatBlazor", "src\examples\SoloX.BlazorLayout.Examples.WithMatBlazor\SoloX.BlazorLayout.Examples.WithMatBlazor.csproj", "{51F09D6E-8E31-4688-A881-8E6154BF799C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{50BC6485-276F-4CEF-9604-0C6F000E201A}"
 EndProject
@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{4EAF62FF
 		.github\workflows\build-pr.yml = .github\workflows\build-pr.yml
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoloX.BlazorLayout.Examples.WithBlazorise", "src\examples\SoloX.BlazorLayout.Examples.WithBlazorise\SoloX.BlazorLayout.Examples.WithBlazorise.csproj", "{B3F22C7F-7BCD-45B3-8D56-E2435A2560CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{06FCD8B0-E9D5-4EC0-BFA4-FF7F99E0604E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06FCD8B0-E9D5-4EC0-BFA4-FF7F99E0604E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06FCD8B0-E9D5-4EC0-BFA4-FF7F99E0604E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3F22C7F-7BCD-45B3-8D56-E2435A2560CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3F22C7F-7BCD-45B3-8D56-E2435A2560CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3F22C7F-7BCD-45B3-8D56-E2435A2560CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3F22C7F-7BCD-45B3-8D56-E2435A2560CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{C350D493-D7F2-4521-A309-B318617304BF} = {16999F06-D4E3-421B-ACAC-FF0285EA14C4}
 		{51F09D6E-8E31-4688-A881-8E6154BF799C} = {1AC39ACF-C5F1-4AE4-B4A2-A3CBDAC8B66C}
 		{06FCD8B0-E9D5-4EC0-BFA4-FF7F99E0604E} = {50BC6485-276F-4CEF-9604-0C6F000E201A}
+		{B3F22C7F-7BCD-45B3-8D56-E2435A2560CD} = {1AC39ACF-C5F1-4AE4-B4A2-A3CBDAC8B66C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C4A09E6-0A38-446C-A6F1-11F8032C38A6}

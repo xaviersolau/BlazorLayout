@@ -34,12 +34,14 @@ namespace SoloX.BlazorLayout.UTest.Helpers
         {
             var style = element.GetAttribute("style");
 
-            return style.Split(';', StringSplitOptions.RemoveEmptyEntries).Select(e =>
-            {
-                var words = e.Split(':');
+            return style.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                .Where(e => !string.IsNullOrWhiteSpace(e))
+                .Select(e =>
+                {
+                    var words = e.Split(':');
 
-                return new CssProperty(words[0].Trim(), words[1].Trim());
-            });
+                    return new CssProperty(words[0].Trim(), words[1].Trim());
+                });
         }
     }
 }

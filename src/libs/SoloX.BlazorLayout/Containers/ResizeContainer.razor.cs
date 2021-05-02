@@ -41,6 +41,11 @@ namespace SoloX.BlazorLayout.Containers
         [Parameter]
         public string? MaxHeight { get; set; }
 
+        private string ComputeStyle()
+        {
+            return $"{StyleMinMaxSize} {Style}";
+        }
+
         private string FillClass =>
             Fill switch
             {

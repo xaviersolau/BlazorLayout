@@ -141,6 +141,11 @@ namespace SoloX.BlazorLayout.Containers.Dock
             throw new KeyNotFoundException();
         }
 
+        private string ComputeStyle()
+        {
+            return $"grid-template-columns: {ColumnsStyle}; grid-template-rows: {RowsStyle}; {Style}";
+        }
+
         private string FillClass =>
             "dock-container " +
             Fill switch

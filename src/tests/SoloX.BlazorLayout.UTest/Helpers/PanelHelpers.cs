@@ -81,5 +81,30 @@ namespace SoloX.BlazorLayout.UTest.Helpers
 
             rootElement.ClassList.Should().Contain(x => x == classToAdd);
         }
+
+        public static void AssertStyleIsProperlyRendered<TPanel>(
+            Action<ComponentParameterCollectionBuilder<TPanel>>? setup = null)
+            where TPanel : APanel
+        {
+            var styleToAdd = "style-to-add: value;";
+            // Arrange
+            using var ctx = new TestContext();
+
+            // Act
+            var cut = ctx.RenderComponent<TPanel>(
+                builder =>
+                {
+                    builder.Add(x => x.Style, styleToAdd);
+
+                    setup?.Invoke(builder);
+                });
+
+            // Assert
+            cut.Nodes.Length.Should().Be(1);
+            var rootElement = cut.Nodes[0].As<IElement>();
+
+            var styles = StyleHelper.LoadStyleAttribute(rootElement);
+            styles.Should().Contain(x => x.Name == "style-to-add");
+        }
     }
 }

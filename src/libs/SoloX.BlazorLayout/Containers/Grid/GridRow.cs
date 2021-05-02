@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="Column.cs" company="Xavier Solau">
+// <copyright file="GridRow.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -11,9 +11,9 @@ using System;
 namespace SoloX.BlazorLayout.Containers.Grid
 {
     /// <summary>
-    /// A Column grid dimension.
+    /// A Row grid dimension.
     /// </summary>
-    public class Column : ADimension
+    public class GridRow : AGridDimension
     {
         ///<inheritdoc/>
         protected override void AddToGrid(GridContainer gridContainer)

@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="CellTest.cs" company="Xavier Solau">
+// <copyright file="GridCellTest.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -12,14 +12,14 @@ using Xunit;
 
 namespace SoloX.BlazorLayout.UTest.Containers.Grid
 {
-    public class CellTest
+    public class GridCellTest
     {
         [Fact]
         public void ItShouldRenderWithTheGivenId()
         {
             var grid = new GridContainer();
 
-            PanelHelpers.AssertIdIsProperlyRendered<Cell>(
+            PanelHelpers.AssertIdIsProperlyRendered<GridCell>(
                 builder =>
                 {
                     builder.AddCascadingValue(grid);
@@ -31,7 +31,19 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
         {
             var grid = new GridContainer();
 
-            PanelHelpers.AssertClassIsProperlyRendered<Cell>(
+            PanelHelpers.AssertClassIsProperlyRendered<GridCell>(
+                builder =>
+                {
+                    builder.AddCascadingValue(grid);
+                });
+        }
+
+        [Fact]
+        public void ItShouldRenderWithTheGivenStyle()
+        {
+            var grid = new GridContainer();
+
+            PanelHelpers.AssertStyleIsProperlyRendered<GridCell>(
                 builder =>
                 {
                     builder.AddCascadingValue(grid);
@@ -43,7 +55,7 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
         {
             var grid = new GridContainer();
 
-            PanelHelpers.AssertElementReferenceIsProperlySet<Cell>(
+            PanelHelpers.AssertElementReferenceIsProperlySet<GridCell>(
                 builder =>
                 {
                     builder.AddCascadingValue(grid);
