@@ -6,7 +6,19 @@
         Welcome to the BlazorLayout Demo.
     </DisplayHeading>
     <Paragraph>
-        It gives you an idea of what we can do with the BlazorLayout layout compnents.
+        It gives you an idea of what we can do with the BlazorLayout layout components.
     </Paragraph>
+
+    <Heading>Colors...</Heading>
+    <Paragraph>
+        <Label>Primary: </Label> <ColorEdit @bind-Color="Theme.BackgroundOptions.Primary" />
+        <Label>Secondary: </Label> <ColorEdit @bind-Color="Theme.BackgroundOptions.Secondary" />
+        <Label>Dark: </Label> <ColorEdit @bind-Color="Theme.BackgroundOptions.Dark" />
+        <Label>Light: </Label> <ColorEdit @bind-Color="Theme.BackgroundOptions.Light" />
+        <Label>Body: </Label> <ColorEdit @bind-Color="Theme.BackgroundOptions.Body" />
+    </Paragraph>
+
+    <Button Color="Color.Primary" @onclick="UpdateTheme">Update theme!</Button>
+
 </BoxContainer>
 

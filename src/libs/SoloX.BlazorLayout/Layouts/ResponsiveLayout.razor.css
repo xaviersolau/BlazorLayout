@@ -62,7 +62,7 @@
 
 .dock-top {
   grid-area: top;
-  z-index: 5;
+  z-index: 6;
 }
 
 .dock-right {
