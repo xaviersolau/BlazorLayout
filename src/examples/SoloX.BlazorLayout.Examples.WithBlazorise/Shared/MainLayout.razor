@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<ResponsiveLayout NavigationClass="bg-secondary nav-container"
+<ResponsiveLayout NavigationClass="bg-light nav-container"
                   MaxProportion="20"
                   EnableContentScroll="@MatchDisplaySize"
                   EnableOutline="true"
@@ -8,7 +8,7 @@
 
     <NavigationHeader>
 
-        <DockContainer Class="bg-secondary-dark">
+        <DockContainer Class="bg-secondary">
             <DockPanel Side="Core.Side.Left">
                 <Button Class="btn-icon" Style="min-height: 100%;" Color="Color.None" @onclick="ToggleNav">
                     <Blazorise.Icon Class="text-white-secondary" Name="MaterialIcons.Menu" />
@@ -28,7 +28,7 @@
     </NavigationMenu>
 
     <SmallNavigationHeader>
-        <Button Class="btn-icon bg-secondary-dark" Style="justify-content: center;" Color="Color.None" @onclick="ToggleNav">
+        <Button Class="btn-icon bg-secondary" Style="justify-content: center;" Color="Color.None" @onclick="ToggleNav">
             <Blazorise.Icon Class="text-white-secondary" Name="MaterialIcons.Menu" />
         </Button>
     </SmallNavigationHeader>
@@ -52,7 +52,7 @@
         </BoxContainer>
     </Header>
     <Outline>
-        <BoxContainer Class="bg-secondary-dark text-white-secondary page-container" Fill="Fill.Full">
+        <BoxContainer Class="bg-secondary text-white-secondary page-container" Fill="Fill.Full">
             <div class="card-content">
                 <Heading Style="margin:0px;" Size="HeadingSize.Is4">
                     Outline
@@ -67,15 +67,15 @@
 
                 <Paragraph Style="margin-top: 1rem;">
                     Main mage locked to display size.
-                    <Switch @bind-Checked="@MatchDisplaySize" ></Switch>
+                    <Switch @bind-Checked="@MatchDisplaySize" Color="Color.Primary" ></Switch>
                 </Paragraph>
             </div>
         </BoxContainer>
     </Outline>
     <Footer>
-        <BoxContainer Class="bg-secondary-dark text-white-secondary page-container" Fill="Fill.Full">
+        <BoxContainer Class="bg-secondary text-white-secondary page-container" Fill="Fill.Full">
             <Paragraph Style="margin:0px;">
-                Footer : Thanks to MatBlazor we can use Material Design.
+                Footer : Thanks to Blazorise we can use Material Design.
             </Paragraph>
         </BoxContainer>
     </Footer>

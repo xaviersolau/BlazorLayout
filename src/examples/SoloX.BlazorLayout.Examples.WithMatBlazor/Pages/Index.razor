@@ -7,8 +7,17 @@
             Welcome to the BlazorLayout Demo.
         </MatHeadline6>
         <MatBody1 Style="margin:0px;">
-            It gives you an idea of what we can do with the BlazorLayout layout compnents.
+            It gives you an idea of what we can do with the BlazorLayout layout components.
         </MatBody1>
+
+        <MatHeadline6>Colors...</MatHeadline6>
+        <MatBody1>
+            <p>Primary: </p> <input type="color" @bind-value="Theme.Primary" />
+            <p>Secondary: </p> <input type="color" @bind-value="Theme.Secondary" />
+            <p>Surface: </p> <input type="color" @bind-value="Theme.Surface" />
+        </MatBody1>
+
+        <MatButton Raised="true" @onclick="UpdateTheme">Update theme!</MatButton>
     </div>
 
 </MatCard>
