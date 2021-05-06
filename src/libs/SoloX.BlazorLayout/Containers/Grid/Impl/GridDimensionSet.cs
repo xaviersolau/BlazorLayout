@@ -9,8 +9,8 @@
 using SoloX.BlazorLayout.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Globalization;
+using System.Linq;
 
 namespace SoloX.BlazorLayout.Containers.Grid.Impl
 {
@@ -82,16 +82,34 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
         /// </summary>
         /// <param name="nameOrIndex">Name or index of the dimension to match.</param>
         /// <returns></returns>
-        public int GetDimensionIndex(string nameOrIndex)
+        public int GetDimensionIndex(object nameOrIndex)
         {
-            if (string.IsNullOrEmpty(nameOrIndex))
+            if (nameOrIndex == null)
             {
-                return 0;
+                throw new ArgumentNullException(nameof(nameOrIndex));
             }
 
-            return this.dimensionMap.TryGetValue(nameOrIndex, out var index)
-                ? index
-                : int.Parse(nameOrIndex, CultureInfo.InvariantCulture);
+            if (nameOrIndex is string name)
+            {
+                if (this.dimensionMap.TryGetValue(name, out var index))
+                {
+                    return index;
+                }
+                else if (int.TryParse(name, NumberStyles.Integer, CultureInfo.InvariantCulture, out var value))
+                {
+                    return value;
+                }
+
+                throw new ArgumentOutOfRangeException(nameof(nameOrIndex));
+            }
+            else if (nameOrIndex is int index)
+            {
+                return index;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(nameOrIndex));
+            }
         }
 
         /// <summary>

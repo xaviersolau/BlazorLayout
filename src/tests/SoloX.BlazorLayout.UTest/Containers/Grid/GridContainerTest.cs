@@ -102,15 +102,15 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
                     builder.AddChildContent<GridCell>(
                         cellBuilder =>
                         {
-                            cellBuilder.Add(c => c.Column, "0");
-                            cellBuilder.Add(c => c.Row, "0");
+                            cellBuilder.Add(c => c.Column, 0);
+                            cellBuilder.Add(c => c.Row, 0);
                             cellBuilder.Add(c => c.Id, cellId1);
                         });
                     builder.AddChildContent<GridCell>(
                         cellBuilder =>
                         {
-                            cellBuilder.Add(c => c.Column, "1");
-                            cellBuilder.Add(c => c.Row, "1");
+                            cellBuilder.Add(c => c.Column, 1);
+                            cellBuilder.Add(c => c.Row, 1);
                             cellBuilder.Add(c => c.Id, cellId2);
                         });
                 });
