@@ -13,7 +13,7 @@
         var col = i - 1;
         var row = col % 2;
 
-        <GridCell Column="@col.ToString()" Row="@row.ToString()">
+        <GridCell Column="@col" Row="@row">
             <MatCard Class="height-100 width-100" Style="@GetBackgroundColor(col)">
                 <div class="card-content">
                     <MatHeadline6 Style="margin:0px;">

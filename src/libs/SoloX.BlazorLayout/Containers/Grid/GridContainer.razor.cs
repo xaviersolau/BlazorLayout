@@ -70,10 +70,10 @@ namespace SoloX.BlazorLayout.Containers.Grid
         internal void Remove(GridRow row) =>
             this.rows.Remove(row);
 
-        internal int GetColumnIndex(string nameOrIndex) =>
+        internal int GetColumnIndex(object nameOrIndex) =>
             this.columns.GetDimensionIndex(nameOrIndex);
 
-        internal int GetRowIndex(string nameOrIndex) =>
+        internal int GetRowIndex(object nameOrIndex) =>
             this.rows.GetDimensionIndex(nameOrIndex);
         private string ColumnsStyle =>
             this.columns.ComputeDimensionsStyle(ColumnSizing);

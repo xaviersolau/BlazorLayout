@@ -23,25 +23,25 @@ namespace SoloX.BlazorLayout.Containers.Grid
         /// Cell column location.
         /// </summary>
         [Parameter]
-        public string? Column { get; set; }
+        public object? Column { get; set; }
 
         /// <summary>
         /// Optional Cell column location end.
         /// </summary>
         [Parameter]
-        public string? ColumnEnd { get; set; }
+        public object? ColumnEnd { get; set; }
 
         /// <summary>
         /// Cell row location.
         /// </summary>
         [Parameter]
-        public string? Row { get; set; }
+        public object? Row { get; set; }
 
         /// <summary>
         /// Optional Cell row location end.
         /// </summary>
         [Parameter]
-        public string? RowEnd { get; set; }
+        public object? RowEnd { get; set; }
 
         private string ColumnStyle
         {
@@ -56,7 +56,7 @@ namespace SoloX.BlazorLayout.Containers.Grid
                     return string.Empty;
                 }
 
-                return string.IsNullOrEmpty(ColumnEnd)
+                return ColumnEnd == null
                     ? $"{Parent.GetColumnIndex(Column) + 1}"
                     : $"{Parent.GetColumnIndex(Column) + 1}/{Parent.GetColumnIndex(ColumnEnd) + 2}";
             }
@@ -75,7 +75,7 @@ namespace SoloX.BlazorLayout.Containers.Grid
                     return string.Empty;
                 }
 
-                return string.IsNullOrEmpty(RowEnd)
+                return RowEnd == null
                     ? $"{Parent.GetRowIndex(Row) + 1}"
                     : $"{Parent.GetRowIndex(Row) + 1}/{Parent.GetRowIndex(RowEnd) + 2}";
             }
