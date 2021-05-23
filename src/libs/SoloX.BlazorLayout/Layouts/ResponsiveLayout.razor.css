@@ -38,6 +38,11 @@
   z-index: 8;
 }
 
+  .dock-left ::deep li {
+    width: 100%;
+  }
+
+
 .dock-left-header {
   z-index: 9;
 }
@@ -131,6 +136,10 @@
 
     .dock-left ::deep li {
       float: left;
+    }
+
+    .dock-left ::deep li {
+      width: unset;
     }
 
   .dock-left-header-small {
