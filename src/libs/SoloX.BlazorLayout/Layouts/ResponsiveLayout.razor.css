@@ -88,7 +88,7 @@
   grid-area: content;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
 
   .dock-right {
     z-index: 9;
@@ -112,7 +112,7 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
 
   .grid-template {
     grid-template-columns: 1fr;
