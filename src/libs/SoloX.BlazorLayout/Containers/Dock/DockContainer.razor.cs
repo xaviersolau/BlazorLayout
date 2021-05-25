@@ -35,6 +35,11 @@ namespace SoloX.BlazorLayout.Containers.Dock
             DockChangedHandler();
         }
 
+        internal void DockPanelChanged()
+        {
+            DockChangedHandler();
+        }
+
         ///<inheritdoc/>
         protected override void OnInitialized()
         {
@@ -48,7 +53,6 @@ namespace SoloX.BlazorLayout.Containers.Dock
             {
                 try
                 {
-
                     this.StateHasChanged();
                 }
                 catch (ObjectDisposedException)

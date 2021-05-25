@@ -9,6 +9,7 @@
 using Microsoft.AspNetCore.Components;
 using SoloX.BlazorLayout.Core;
 using System;
+using System.Threading.Tasks;
 
 namespace SoloX.BlazorLayout.Containers.Dock
 {
@@ -17,6 +18,8 @@ namespace SoloX.BlazorLayout.Containers.Dock
     /// </summary>
     public partial class DockPanel : IDisposable
     {
+        private bool preventFromRecursiveSetParameters;
+
         [CascadingParameter]
         private DockContainer? Parent { get; set; }
 
@@ -43,6 +46,33 @@ namespace SoloX.BlazorLayout.Containers.Dock
             Parent.Add(this);
 
             base.OnInitialized();
+        }
+
+        ///<inheritdoc/>
+        public override async Task SetParametersAsync(ParameterView parameters)
+        {
+            var oldSide = Side;
+
+            // Make sure we won't SetParameters recursively (through the Parent.DockPanelChanged call).
+            if (this.preventFromRecursiveSetParameters)
+            {
+                return;
+            }
+
+            // first set parameters
+            await base.SetParametersAsync(parameters).ConfigureAwait(false);
+
+            if (Parent != null)
+            {
+                var match = parameters.TryGetValue<Side>(nameof(Side), out var newSide);
+
+                if (match && newSide != oldSide)
+                {
+                    this.preventFromRecursiveSetParameters = true;
+                    Parent.DockPanelChanged();
+                    this.preventFromRecursiveSetParameters = false;
+                }
+            }
         }
 
         ///<inheritdoc/>
