@@ -25,17 +25,17 @@ You can checkout this Github repository or you can use the NuGet packages:
 
 **Install using the command line from the Package Manager:**
 ```bash
-Install-Package SoloX.BlazorLayout -version 1.0.0-alpha.4
+Install-Package SoloX.BlazorLayout -version 1.0.0-alpha.5
 ```
 
 **Install using the .Net CLI:**
 ```bash
-dotnet add package SoloX.BlazorLayout --version 1.0.0-alpha.4
+dotnet add package SoloX.BlazorLayout --version 1.0.0-alpha.5
 ```
 
 **Install editing your project file (csproj):**
 ```xml
-<PackageReference Include="SoloX.BlazorLayout" Version="1.0.0-alpha.4" />
+<PackageReference Include="SoloX.BlazorLayout" Version="1.0.0-alpha.5" />
 ```
 
 ## How to use it
