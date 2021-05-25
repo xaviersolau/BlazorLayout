@@ -115,5 +115,63 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
             dockPanelStyle.Should().ContainSingle(x => x.Name == "grid-column" && x.Value == expectedColumn);
             dockPanelStyle.Should().ContainSingle(x => x.Name == "grid-row" && x.Value == expectedRow);
         }
+
+        [Theory]
+        [InlineData(Side.Left, "auto 1fr", "1fr", "1 / 2", "1 / 2", Side.Right, "1fr auto", "1fr", "2 / 3", "1 / 2")]
+        public void ItShouldRenderAndUpdateTheDockPanelLocation(Side side1, string expectedGridColumns1, string expectedGridRows1, string expectedColumn1, string expectedRow1,
+            Side side2, string expectedGridColumns2, string expectedGridRows2, string expectedColumn2, string expectedRow2)
+        {
+
+            var dockPanelId = "dock-panel-id";
+
+            // Arrange
+            using var ctx = new TestContext();
+
+            // Act
+            var cut = ctx.RenderComponent<DockContainer>(
+                builder =>
+                {
+                    builder.AddChildContent<DockPanel>(
+                        dockPanelBuilder =>
+                        {
+                            dockPanelBuilder.Add(d => d.Side, side1);
+                            dockPanelBuilder.Add(d => d.Id, dockPanelId);
+                        });
+                });
+
+            var dockPanel = cut.FindComponent<DockPanel>();
+
+            // Assert
+            cut.Nodes.Length.Should().Be(1);
+
+            var rootElement = cut.Nodes[0].As<IElement>();
+
+            var dockPanelElt = cut.Find($"#{dockPanelId}");
+            dockPanelElt.Should().NotBeNull();
+
+            var style1 = StyleHelper.LoadStyleAttribute(rootElement);
+            style1.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == expectedGridColumns1);
+            style1.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == expectedGridRows1);
+
+            var dockPanelStyle1 = StyleHelper.LoadStyleAttribute(dockPanelElt);
+            dockPanelStyle1.Should().ContainSingle(x => x.Name == "grid-column" && x.Value == expectedColumn1);
+            dockPanelStyle1.Should().ContainSingle(x => x.Name == "grid-row" && x.Value == expectedRow1);
+
+            dockPanel.SetParametersAndRender(
+                builder =>
+                {
+                    builder.Add(d => d.Side, side2);
+                });
+
+            rootElement = cut.Nodes[0].As<IElement>();
+
+            var style2 = StyleHelper.LoadStyleAttribute(rootElement);
+            style2.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == expectedGridColumns2);
+            style2.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == expectedGridRows2);
+
+            var dockPanelStyle2 = StyleHelper.LoadStyleAttribute(dockPanelElt);
+            dockPanelStyle2.Should().ContainSingle(x => x.Name == "grid-column" && x.Value == expectedColumn2);
+            dockPanelStyle2.Should().ContainSingle(x => x.Name == "grid-row" && x.Value == expectedRow2);
+        }
     }
 }
