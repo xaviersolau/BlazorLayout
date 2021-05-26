@@ -116,6 +116,51 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
             dockPanelStyle.Should().ContainSingle(x => x.Name == "grid-row" && x.Value == expectedRow);
         }
 
+
+        [Theory]
+        [InlineData(Side.Left, "var(--dock-container-panel-proportion) 1fr", "1fr", 20, false)]
+        [InlineData(Side.Right, "1fr var(--dock-container-panel-proportion)", "1fr", 10, false)]
+        [InlineData(Side.Top, "1fr", "var(--dock-container-panel-proportion) 1fr", 33, false)]
+        [InlineData(Side.Bottom, "1fr", "1fr var(--dock-container-panel-proportion)", 25, false)]
+        [InlineData(Side.Left, "fit-content(var(--dock-container-panel-proportion)) 1fr", "1fr", 20, true)]
+        [InlineData(Side.Right, "1fr fit-content(var(--dock-container-panel-proportion))", "1fr", 10, true)]
+        [InlineData(Side.Top, "1fr", "fit-content(var(--dock-container-panel-proportion)) 1fr", 33, true)]
+        [InlineData(Side.Bottom, "1fr", "1fr fit-content(var(--dock-container-panel-proportion))", 25, true)]
+        public void ItShouldRenderWithAGivenProportion(Side side, string expectedGridColumns, string expectedGridRows, int proportion, bool isMax)
+        {
+            // Arrange
+            using var ctx = new TestContext();
+
+            // Act
+            var cut = ctx.RenderComponent<DockContainer>(
+                builder =>
+                {
+                    if (isMax)
+                    {
+                        builder.Add(c => c.MaxProportion, proportion);
+                    }
+                    else
+                    {
+                        builder.Add(c => c.Proportion, proportion);
+                    }
+                    builder.AddChildContent<DockPanel>(
+                        dockPanelBuilder =>
+                        {
+                            dockPanelBuilder.Add(d => d.Side, side);
+                        });
+                });
+
+            // Assert
+            cut.Nodes.Length.Should().Be(1);
+
+            var rootElement = cut.Nodes[0].As<IElement>();
+
+            var style = StyleHelper.LoadStyleAttribute(rootElement);
+            style.Should().ContainSingle(x => x.Name == "--dock-container-panel-proportion" && x.Value == $"{proportion}%");
+            style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == expectedGridColumns);
+            style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == expectedGridRows);
+        }
+
         [Theory]
         [InlineData(Side.Left, "auto 1fr", "1fr", "1 / 2", "1 / 2", Side.Right, "1fr auto", "1fr", "2 / 3", "1 / 2")]
         public void ItShouldRenderAndUpdateTheDockPanelLocation(Side side1, string expectedGridColumns1, string expectedGridRows1, string expectedColumn1, string expectedRow1,

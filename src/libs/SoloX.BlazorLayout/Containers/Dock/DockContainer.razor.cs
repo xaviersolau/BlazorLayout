@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Components;
 using SoloX.BlazorLayout.Core;
 
 namespace SoloX.BlazorLayout.Containers.Dock
@@ -20,6 +21,20 @@ namespace SoloX.BlazorLayout.Containers.Dock
     {
         private readonly List<DockPanel> docks = new List<DockPanel>();
         private bool initialized;
+
+        private const string ProportionName = "--dock-container-panel-proportion";
+
+        /// <summary>
+        /// Max proportion of the dock side elements.
+        /// </summary>
+        [Parameter]
+        public int? MaxProportion { get; set; }
+
+        /// <summary>
+        /// Proportion of the page side elements.
+        /// </summary>
+        [Parameter]
+        public int? Proportion { get; set; }
 
         internal void Add(DockPanel dock)
         {
@@ -80,7 +95,11 @@ namespace SoloX.BlazorLayout.Containers.Dock
 
         private string ComputeFramesPartialStyle(Side side)
         {
-            return string.Join(" ", this.docks.Where(d => d.Side == side).Select(d => "auto"));
+            var size = Proportion.HasValue
+                ? $"var({ProportionName})"
+                : MaxProportion.HasValue ? $"fit-content(var({ProportionName}))" : "auto";
+
+            return string.Join(" ", this.docks.Where(d => d.Side == side).Select(d => size));
         }
 
         internal string GetColumnStyle(DockPanel dock)
@@ -147,7 +166,13 @@ namespace SoloX.BlazorLayout.Containers.Dock
 
         private string ComputeStyle()
         {
-            return $"grid-template-columns: {ColumnsStyle}; grid-template-rows: {RowsStyle}; {Style}";
+            var proportion = Proportion.HasValue
+                ? $"{ProportionName}: {Proportion}%;"
+                : MaxProportion.HasValue
+                    ? $"{ProportionName}: {MaxProportion}%;"
+                    : string.Empty;
+
+            return $"grid-template-columns: {ColumnsStyle}; grid-template-rows: {RowsStyle}; {proportion} {Style}";
         }
 
         private string FillClass =>
