@@ -1,0 +1,60 @@
+﻿@page "/ResizeCallBack"
+
+
+@inject IResizeObserverService sizeObserverService
+
+@implements IResizeCallBack
+@implements IAsyncDisposable
+
+<BoxContainer @ref="ContainerReference" Fill="Fill.Full">
+    <BoxContainer Fill="Fill.Full" Class="bg-light panel-container">
+        <Heading Style="margin:0px;">
+            Let's register a resize callback!
+        </Heading>
+        <Paragraph Style="margin:0px;">
+            Its size is @width x @height
+        </Paragraph>
+    </BoxContainer>
+
+</BoxContainer>
+
+
+@code
+{
+    private BoxContainer ContainerReference { get; set; }
+
+    private int width;
+    private int height;
+
+    private IAsyncDisposable callBackDisposable;
+    private IAsyncDisposable observerDisposable;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            callBackDisposable = await sizeObserverService.RegisterResizeCallBackAsync(this, ContainerReference.ElementReference);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public ValueTask ResizeAsync(int width, int height)
+    {
+        this.height = height;
+        this.width = width;
+
+        this.StateHasChanged();
+
+        return ValueTask.CompletedTask;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (this.callBackDisposable != null)
+        {
+            await callBackDisposable.DisposeAsync();
+            this.callBackDisposable = null;
+        }
+    }
+}

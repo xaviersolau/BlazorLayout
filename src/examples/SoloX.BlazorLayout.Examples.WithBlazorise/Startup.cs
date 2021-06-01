@@ -33,7 +33,7 @@ namespace SoloX.BlazorLayout.Examples.WithBlazorise
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddScoped<IResizeObserverService, ResizeObserverService>();
+            services.AddBlazorLayout();
 
             services
                 .AddBlazorise(options =>
