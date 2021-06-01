@@ -31,7 +31,7 @@ namespace SoloX.BlazorLayout.Examples.WithMatBlazor
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddScoped<IResizeObserverService, ResizeObserverService>();
+            services.AddBlazorLayout();
 
             services.AddMatBlazor();
         }
