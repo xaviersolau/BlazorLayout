@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazorise.Material" Version="0.9.3.6" />
-    <PackageReference Include="Blazorise.Icons.Material" Version="0.9.3.6" />
+    <PackageReference Include="Blazorise.Material" Version="0.9.4.6" />
+    <PackageReference Include="Blazorise.Icons.Material" Version="0.9.4.6" />
   </ItemGroup>
 
   <ItemGroup>

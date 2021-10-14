@@ -154,6 +154,10 @@ namespace SoloX.BlazorLayout.Services.Impl
                     this.logger.LogDebug(e.Message);
                 }
             }
+
+#pragma warning disable CA1816 // Les méthodes Dispose doivent appeler SuppressFinalize
+            GC.SuppressFinalize(this);
+#pragma warning restore CA1816 // Les méthodes Dispose doivent appeler SuppressFinalize
         }
 
         internal class SizeCallBackProxy : IResizeCallBack
