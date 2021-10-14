@@ -12,7 +12,7 @@ using Microsoft.JSInterop;
 using Moq;
 using SoloX.BlazorLayout.Services;
 using SoloX.BlazorLayout.Services.Impl;
-using SoloX.CodeQuality.Test.Helpers.Logger;
+using SoloX.CodeQuality.Test.Helpers.XUnit.Logger;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
