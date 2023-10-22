@@ -68,9 +68,10 @@ namespace SoloX.BlazorLayout.Containers.Dock
 
                 if (match && newSide != oldSide)
                 {
+                    // Disable SetParameters handling until the end of the rendering triggered by the call of "Parent.DockPanelChanged".
                     this.preventFromRecursiveSetParameters = true;
+
                     Parent.DockPanelChanged();
-                    this.preventFromRecursiveSetParameters = false;
                 }
             }
         }
@@ -105,6 +106,15 @@ namespace SoloX.BlazorLayout.Containers.Dock
                     // Looks like the parent is also disposed.
                 }
             }
+        }
+
+        ///<inheritdoc/>
+        protected override void OnAfterRender(bool firstRender)
+        {
+            base.OnAfterRender(firstRender);
+
+            // Enable the SetParameters handling.
+            this.preventFromRecursiveSetParameters = false;
         }
     }
 }

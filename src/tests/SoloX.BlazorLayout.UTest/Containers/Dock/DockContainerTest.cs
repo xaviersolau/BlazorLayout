@@ -162,8 +162,11 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
         }
 
         [Theory]
-        [InlineData(Side.Left, "auto 1fr", "1fr", "1 / 2", "1 / 2", Side.Right, "1fr auto", "1fr", "2 / 3", "1 / 2")]
-        public void ItShouldRenderAndUpdateTheDockPanelLocation(Side side1, string expectedGridColumns1, string expectedGridRows1, string expectedColumn1, string expectedRow1,
+        [InlineData(
+            Side.Left, "auto 1fr", "1fr", "1 / 2", "1 / 2",
+            Side.Right, "1fr auto", "1fr", "2 / 3", "1 / 2")]
+        public void ItShouldRenderAndUpdateTheDockPanelLocation(
+            Side side1, string expectedGridColumns1, string expectedGridRows1, string expectedColumn1, string expectedRow1,
             Side side2, string expectedGridColumns2, string expectedGridRows2, string expectedColumn2, string expectedRow2)
         {
 
@@ -189,10 +192,10 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
             // Assert
             cut.Nodes.Length.Should().Be(1);
 
-            var rootElement = cut.Nodes[0].As<IElement>();
-
             var dockPanelElt = cut.Find($"#{dockPanelId}");
             dockPanelElt.Should().NotBeNull();
+
+            var rootElement = cut.Nodes[0].As<IElement>();
 
             var style1 = StyleHelper.LoadStyleAttribute(rootElement);
             style1.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == expectedGridColumns1);

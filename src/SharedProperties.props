@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <Version>1.0.0-alpha.7</Version>
+    <Version>1.0.0-alpha.8</Version>
     <Authors>Xavier Solau</Authors>
     <Copyright>Copyright © 2021 Xavier Solau</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -15,8 +15,11 @@
     <CodeQualityHeaderLicenseFile>LICENSE</CodeQualityHeaderLicenseFile>
 
     <CodeQualityUpdateGitIgnore>true</CodeQualityUpdateGitIgnore>
+    <CodeQualityLoggerUseDisabled>true</CodeQualityLoggerUseDisabled>
 
     <Nullable>enable</Nullable>
+
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
 
   </PropertyGroup>
 
