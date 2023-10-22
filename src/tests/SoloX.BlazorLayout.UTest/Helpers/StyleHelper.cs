@@ -18,7 +18,7 @@ namespace SoloX.BlazorLayout.UTest.Helpers
     /// </summary>
     public static class StyleHelper
     {
-        internal class CssProperty
+        internal sealed class CssProperty
         {
             public CssProperty(string name, string value)
             {

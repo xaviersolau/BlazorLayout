@@ -78,7 +78,7 @@ namespace SoloX.BlazorLayout.Services.Impl
                     }
                     catch (TaskCanceledException e)
                     {
-                        this.logger.LogDebug(e.Message);
+                        this.logger.LogDebug(e, e.Message);
                     }
 
                     objectRef.Dispose();

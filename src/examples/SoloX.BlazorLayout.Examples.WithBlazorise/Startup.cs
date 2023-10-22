@@ -38,7 +38,7 @@ namespace SoloX.BlazorLayout.Examples.WithBlazorise
             services
                 .AddBlazorise(options =>
                 {
-                    options.ChangeTextOnKeyPress = true; // optional
+                    //options.ChangeTextOnKeyPress = true; // optional
                 })
                 .AddMaterialProviders()
                 .AddMaterialIcons();

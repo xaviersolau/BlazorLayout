@@ -35,7 +35,8 @@ namespace SoloX.BlazorLayout.UTest.Services
         {
             var callbackMock = new Mock<IResizeCallBack>();
 
-            await using var service = SetupResizeObserverService(out var jsObjectReferenceMock);
+            var service = SetupResizeObserverService(out var jsObjectReferenceMock);
+            await using var _ = service.ConfigureAwait(false);
 
             var eltRef = new ElementReference("id");
 
@@ -65,7 +66,8 @@ namespace SoloX.BlazorLayout.UTest.Services
         [Fact]
         public async Task ItShouldCallJSObjectReferenceRegisterAndUnRegisterMutationObserverAsync()
         {
-            await using var service = SetupResizeObserverService(out var jsObjectReferenceMock);
+            var service = SetupResizeObserverService(out var jsObjectReferenceMock);
+            await using var _ = service.ConfigureAwait(false);
 
             var eltRef = new ElementReference("id");
 
@@ -95,7 +97,8 @@ namespace SoloX.BlazorLayout.UTest.Services
         [Fact]
         public async Task ItShouldCallJSObjectReferenceProcessCallBackAsync()
         {
-            await using var service = SetupResizeObserverService(out var jsObjectReferenceMock);
+            var service = SetupResizeObserverService(out var jsObjectReferenceMock);
+            await using var _ = service.ConfigureAwait(false);
 
             await service.TriggerCallBackAsync().ConfigureAwait(false);
 
