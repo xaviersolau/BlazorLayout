@@ -33,17 +33,17 @@ You can checkout this Github repository or you can use the NuGet packages:
 
 **Install using the command line from the Package Manager:**
 ```bash
-Install-Package SoloX.BlazorLayout -version 1.0.0-alpha.8
+Install-Package SoloX.BlazorLayout -version 1.0.0-alpha.9
 ```
 
 **Install using the .Net CLI:**
 ```bash
-dotnet add package SoloX.BlazorLayout --version 1.0.0-alpha.8
+dotnet add package SoloX.BlazorLayout --version 1.0.0-alpha.9
 ```
 
 **Install editing your project file (csproj):**
 ```xml
-<PackageReference Include="SoloX.BlazorLayout" Version="1.0.0-alpha.8" />
+<PackageReference Include="SoloX.BlazorLayout" Version="1.0.0-alpha.9" />
 ```
 
 Once the package is referenced, you can add in you project **_Imports.razor** file all using directives to
