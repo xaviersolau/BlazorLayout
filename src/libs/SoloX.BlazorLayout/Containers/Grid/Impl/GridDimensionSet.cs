@@ -19,8 +19,24 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
     /// </summary>
     public class GridDimensionSet<TDimension> where TDimension : AGridDimension
     {
-        private readonly List<TDimension> dimensions = new List<TDimension>();
+        private record CacheData
+        {
+            public CacheData(int repeat, string? name)
+            {
+                Repeat = repeat;
+                Name = name;
+            }
+
+            public string? Name { get; }
+
+            public int Repeat { get; }
+        }
+
+        private readonly SortedDictionary<TDimension, CacheData> dimensions = new SortedDictionary<TDimension, CacheData>();
+
+        private readonly List<TDimension> expendedDimensions = new List<TDimension>();
         private readonly Dictionary<string, int> dimensionMap = new Dictionary<string, int>();
+
         private readonly Action gridNotifyHandler;
 
         /// <summary>
@@ -43,15 +59,42 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
                 throw new ArgumentNullException(nameof(dimension));
             }
 
-            if (!string.IsNullOrEmpty(dimension.Name))
+            if (this.dimensions.ContainsKey(dimension))
             {
-                this.dimensionMap.Add(dimension.Name, this.dimensions.Count);
+                throw new NotSupportedException($"Dimension already added.");
             }
 
-            for (var i = 0; i < dimension.Repeat; i++)
+            this.dimensions.Add(dimension, new CacheData(dimension.Repeat, dimension.Name));
+
+            ExpendDimensionsAndBuildMap();
+
+            this.gridNotifyHandler();
+        }
+
+        /// <summary>
+        /// Update dimension entry in the Set.
+        /// </summary>
+        /// <param name="dimension">The dimension entry to update.</param>
+        public void Update(TDimension dimension)
+        {
+            if (dimension == null)
             {
-                this.dimensions.Add(dimension);
+                throw new ArgumentNullException(nameof(dimension));
             }
+
+            if (!this.dimensions.TryGetValue(dimension, out var cache))
+            {
+                throw new NotSupportedException($"Unknown dimension to be updated.");
+            }
+
+            if (cache.Name == dimension.Name && cache.Repeat == dimension.Repeat)
+            {
+                return;
+            }
+
+            this.dimensions[dimension] = new CacheData(dimension.Repeat, dimension.Name);
+
+            ExpendDimensionsAndBuildMap();
 
             this.gridNotifyHandler();
         }
@@ -62,19 +105,34 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
         /// <param name="dimension"></param>
         public void Remove(TDimension dimension)
         {
-            throw new NotImplementedException();
-            // TODO Adjust indexies
-            //if (!string.IsNullOrEmpty(frame.Name))
-            //{
-            //    frameMap.Remove(frame.Name, this.frames.Count);
-            //}
+            if (!this.dimensions.Remove(dimension))
+            {
+                throw new NotSupportedException($"Unknown dimension to be removed.");
+            }
 
-            //for (int i = 0; i < frame.Repeat; i++)
-            //{
-            //    frames.Add(frame);
-            //}
+            ExpendDimensionsAndBuildMap();
 
-            //gridNotifyHandler();
+            this.gridNotifyHandler();
+        }
+
+        private void ExpendDimensionsAndBuildMap()
+        {
+            this.dimensionMap.Clear();
+            this.expendedDimensions.Clear();
+
+            foreach (var dimensionItem in this.dimensions)
+            {
+                var dimension = dimensionItem.Key;
+                if (!string.IsNullOrEmpty(dimension.Name))
+                {
+                    this.dimensionMap.Add(dimension.Name, this.expendedDimensions.Count);
+                }
+
+                for (var i = 0; i < dimension.Repeat; i++)
+                {
+                    this.expendedDimensions.Add(dimension);
+                }
+            }
         }
 
         /// <summary>
@@ -119,7 +177,7 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
         /// <returns>The computed style.</returns>
         public string ComputeDimensionsStyle(Sizing defaultSizingMode) =>
             string.Join(" ",
-                this.dimensions.Select(c => ComputeDimensionStyle(c, defaultSizingMode)));
+                this.expendedDimensions.Select(c => ComputeDimensionStyle(c, defaultSizingMode)));
 
         private static string ComputeDimensionStyle(AGridDimension frame, Sizing defaultSizing) =>
             frame.Sizing.HasValue

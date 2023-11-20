@@ -64,6 +64,12 @@ namespace SoloX.BlazorLayout.Containers.Grid
         internal void Add(GridRow row) =>
             this.rows.Add(row);
 
+        internal void Update(GridColumn column) =>
+            this.columns.Update(column);
+
+        internal void Update(GridRow row) =>
+            this.rows.Update(row);
+
         internal void Remove(GridColumn column) =>
             this.columns.Remove(column);
 
