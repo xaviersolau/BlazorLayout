@@ -21,6 +21,8 @@
 
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
 
+    <NoWarn>$(NoWarn);CA1510</NoWarn>
+
   </PropertyGroup>
 
 </Project>

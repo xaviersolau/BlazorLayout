@@ -15,8 +15,10 @@ namespace SoloX.BlazorLayout.Containers.Grid
     /// <summary>
     /// Abstract Grid Dimension.
     /// </summary>
-    public abstract class AGridDimension : ComponentBase
+    public abstract class AGridDimension : ComponentBase, IDisposable
     {
+        private bool disposedValue;
+
         /// <summary>
         /// Gets/Sets the parent Grid container.
         /// </summary>
@@ -60,10 +62,64 @@ namespace SoloX.BlazorLayout.Containers.Grid
             base.OnInitialized();
         }
 
+        ///<inheritdoc/>
+        protected override void OnParametersSet()
+        {
+            if (Parent == null)
+            {
+                throw new ArgumentNullException(nameof(Parent), "Column and Row must exist within a GridContainer");
+            }
+
+            UpdateGrid(Parent);
+
+            base.OnParametersSet();
+        }
+
         /// <summary>
         /// Add the current Grid Dimension to its parent Grid container.
         /// </summary>
         /// <param name="gridContainer">The Grid container the current Dimension must be added.</param>
         protected abstract void AddToGrid(GridContainer gridContainer);
+
+        /// <summary>
+        /// Update the current Grid Dimension in its parent Grid container.
+        /// </summary>
+        /// <param name="gridContainer">The Grid container the current Dimension must be updated.</param>
+        protected abstract void UpdateGrid(GridContainer gridContainer);
+
+        /// <summary>
+        /// Remove from the current Grid Dimension in its parent Grid container.
+        /// </summary>
+        /// <param name="gridContainer">The Grid container the current Dimension must be removed.</param>
+        protected abstract void RemoveFromGrid(GridContainer gridContainer);
+
+        /// <summary>
+        /// Dispose method for inherited classes.
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposedValue)
+            {
+                if (disposing)
+                {
+                    if (Parent != null)
+                    {
+                        RemoveFromGrid(Parent);
+                    }
+                }
+
+                this.disposedValue = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose object resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

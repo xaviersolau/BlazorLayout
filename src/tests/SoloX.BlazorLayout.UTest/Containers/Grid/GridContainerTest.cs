@@ -72,6 +72,58 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
             style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == "1fr 1fr");
         }
 
+        [Fact]
+        public void ItShouldChangeTheGridDisplayDependingOnTheColumnRowParameters()
+        {
+            // Arrange
+            using var ctx = new TestContext();
+
+            // Act
+            var cut = ctx.RenderComponent<GridContainer>(
+                builder =>
+                {
+                    builder.AddChildContent<GridColumn>(cb =>
+                    {
+                        cb.Add(c => c.Repeat, 2);
+                    });
+                    builder.AddChildContent<GridRow>(cr =>
+                    {
+                        cr.Add(c => c.Repeat, 2);
+                    });
+                });
+
+            // Assert
+            cut.Nodes.Length.Should().Be(1);
+            var rootElement = cut.Nodes[0].As<IElement>();
+
+            rootElement.LocalName.Should().Be(TagNames.Div);
+
+            rootElement.ClassName.Should().Contain("grid-container");
+
+            var style = rootElement.ComputeCurrentStyle();
+
+            style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == "1fr 1fr");
+            style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == "1fr 1fr");
+
+
+            // Act again
+            var gridColumn = cut.FindComponent<GridColumn>();
+
+            gridColumn.SetParametersAndRender(
+                builder =>
+                {
+                    builder.Add(cb => cb.Repeat, 1);
+                });
+
+            // Assert new state
+
+            rootElement = cut.Nodes[0].As<IElement>();
+            style = rootElement.ComputeCurrentStyle();
+
+            style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == "1fr");
+            style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == "1fr 1fr");
+        }
+
         [Theory]
         [InlineData(Fill.Full)]
         [InlineData(Fill.None)]

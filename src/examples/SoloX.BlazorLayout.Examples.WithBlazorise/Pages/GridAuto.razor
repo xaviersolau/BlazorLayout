@@ -1,33 +1,59 @@
 ﻿@page "/GridAuto"
 
-<GridContainer Fill="Fill.Full"
-               ColumnSizing="Sizing.Proportion"
-               RowSizing="Sizing.Proportion">
+<DockContainer Fill="Fill.Full" >
 
-    <GridColumn Size="25" Repeat="4" />
+    <DockPanel Side="Core.Side.Top" Class="panel-container">
 
-    <GridRow Size="50" Repeat="2" />
+        Nb Columns
 
-    @for (var i = 1; i < 6; i++)
-    {
-        var num = i;
+        <InputNumber @bind-Value="NbColumns" />
 
-        <GridCell>
-            <BoxContainer Fill="Fill.Full" Style="@GetBackgroundColor(num)" Class="panel-container">
-                <Heading Style="margin:0px;">
-                    Cell @num!
-                </Heading>
-                <Paragraph Style="margin:0px;">
-                    Using auto flow placement...
-                </Paragraph>
-            </BoxContainer>
-        </GridCell>
-    }
+        Nb Rows
 
-</GridContainer>
+        <InputNumber @bind-Value="NbRows" />
+
+    </DockPanel>
+
+    <GridContainer Fill="Fill.Full"
+                   ColumnSizing="Sizing.Proportion"
+                   RowSizing="Sizing.Proportion">
+
+        <GridColumn Size="@ColumnSize" Repeat="@NbColumns" />
+
+        <GridRow Size="@RowSize" Repeat="@NbRows" />
+
+        @for (var i = 1; i < 6; i++)
+        {
+            var num = i;
+
+            <GridCell>
+                <BoxContainer Fill="Fill.Full" Style="@GetBackgroundColor(num)" Class="panel-container">
+                    <Heading Style="margin:0px;">
+                        Cell @num!
+                    </Heading>
+                    <Paragraph Style="margin:0px;">
+                        Using auto flow placement...
+                    </Paragraph>
+                </BoxContainer>
+            </GridCell>
+        }
+
+    </GridContainer>
+
+</DockContainer>
 
 @code
 {
+    [Parameter]
+    public int NbColumns { get; set; } = 4;
+
+    public int ColumnSize => 100 / NbColumns;
+
+    [Parameter]
+    public int NbRows { get; set; } = 2;
+
+    public int RowSize => 100 / NbRows;
+
     private static string GetBackgroundColor(int num)
     {
         return "background-color: "

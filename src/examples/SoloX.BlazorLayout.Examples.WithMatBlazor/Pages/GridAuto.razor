@@ -1,35 +1,61 @@
 ﻿@page "/GridAuto"
 
-<GridContainer Fill="Fill.Full"
-               ColumnSizing="Sizing.Proportion"
-               RowSizing="Sizing.Proportion">
+<DockContainer Fill="Fill.Full" >
 
-    <GridColumn Size="25" Repeat="4" />
+    <DockPanel Side="Core.Side.Top" Class="card-content">
 
-    <GridRow Size="50" Repeat="2" />
+        Nb Columns
 
-    @for (var i = 1; i < 6; i++)
-    {
-        var num = i;
+        <InputNumber @bind-Value="NbColumns" />
 
-        <GridCell>
-            <MatCard Class="height-100 width-100" Style="@GetBackgroundColor(num)">
-                <div class="card-content">
-                    <MatHeadline6 Style="margin:0px;">
-                        Cell @num!
-                    </MatHeadline6>
-                    <MatBody1 Style="margin:0px;">
-                        Using auto flow placement...
-                    </MatBody1>
-                </div>
-            </MatCard>
-        </GridCell>
-    }
+        Nb Rows
 
-</GridContainer>
+        <InputNumber @bind-Value="NbRows" />
+
+    </DockPanel>
+
+    <GridContainer Fill="Fill.Full"
+                   ColumnSizing="Sizing.Proportion"
+                   RowSizing="Sizing.Proportion">
+
+        <GridColumn Size="@ColumnSize" Repeat="@NbColumns" />
+
+        <GridRow Size="@RowSize" Repeat="@NbRows" />
+
+        @for (var i = 1; i < 6; i++)
+        {
+            var num = i;
+
+            <GridCell>
+                <MatCard Class="height-100 width-100" Style="@GetBackgroundColor(num)">
+                    <div class="card-content">
+                        <MatHeadline6 Style="margin:0px;">
+                            Cell @num!
+                        </MatHeadline6>
+                        <MatBody1 Style="margin:0px;">
+                            Using auto flow placement...
+                        </MatBody1>
+                    </div>
+                </MatCard>
+            </GridCell>
+        }
+
+    </GridContainer>
+
+</DockContainer>
 
 @code
 {
+    [Parameter]
+    public int NbColumns { get; set; } = 4;
+
+    public int ColumnSize => 100 / NbColumns;
+
+    [Parameter]
+    public int NbRows { get; set; } = 2;
+
+    public int RowSize => 100 / NbRows;
+
     private static string GetBackgroundColor(int num)
     {
         return "background-color: "

@@ -186,7 +186,7 @@ namespace SoloX.BlazorLayout.Services.Impl
                 this.id = id;
                 this.disposeHandler = disposeHandler;
             }
-
+#pragma warning disable CA1513
             public ValueTask DisposeAsync()
             {
                 if (this.isDisposed)
@@ -197,6 +197,7 @@ namespace SoloX.BlazorLayout.Services.Impl
                 this.isDisposed = true;
                 return this.disposeHandler();
             }
+#pragma warning restore CA1513
         }
     }
 }

@@ -25,5 +25,27 @@ namespace SoloX.BlazorLayout.Containers.Grid
 
             gridContainer.Add(this);
         }
+
+        ///<inheritdoc/>
+        protected override void UpdateGrid(GridContainer gridContainer)
+        {
+            if (gridContainer == null)
+            {
+                throw new ArgumentNullException(nameof(gridContainer));
+            }
+
+            gridContainer.Update(this);
+        }
+
+        ///<inheritdoc/>
+        protected override void RemoveFromGrid(GridContainer gridContainer)
+        {
+            if (gridContainer == null)
+            {
+                throw new ArgumentNullException(nameof(gridContainer));
+            }
+
+            gridContainer.Remove(this);
+        }
     }
 }
