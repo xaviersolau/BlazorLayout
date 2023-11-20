@@ -32,7 +32,8 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
             public int Repeat { get; }
         }
 
-        private readonly SortedDictionary<TDimension, CacheData> dimensions = new SortedDictionary<TDimension, CacheData>();
+        private readonly List<TDimension> dimensions = new List<TDimension>();
+        private readonly Dictionary<TDimension, CacheData> dimensionCaches = new Dictionary<TDimension, CacheData>();
 
         private readonly List<TDimension> expendedDimensions = new List<TDimension>();
         private readonly Dictionary<string, int> dimensionMap = new Dictionary<string, int>();
@@ -59,12 +60,14 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
                 throw new ArgumentNullException(nameof(dimension));
             }
 
-            if (this.dimensions.ContainsKey(dimension))
+            if (this.dimensionCaches.ContainsKey(dimension))
             {
                 throw new NotSupportedException($"Dimension already added.");
             }
 
-            this.dimensions.Add(dimension, new CacheData(dimension.Repeat, dimension.Name));
+            this.dimensionCaches.Add(dimension, new CacheData(dimension.Repeat, dimension.Name));
+
+            this.dimensions.Add(dimension);
 
             ExpendDimensionsAndBuildMap();
 
@@ -82,7 +85,7 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
                 throw new ArgumentNullException(nameof(dimension));
             }
 
-            if (!this.dimensions.TryGetValue(dimension, out var cache))
+            if (!this.dimensionCaches.TryGetValue(dimension, out var cache))
             {
                 throw new NotSupportedException($"Unknown dimension to be updated.");
             }
@@ -92,7 +95,7 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
                 return;
             }
 
-            this.dimensions[dimension] = new CacheData(dimension.Repeat, dimension.Name);
+            this.dimensionCaches[dimension] = new CacheData(dimension.Repeat, dimension.Name);
 
             ExpendDimensionsAndBuildMap();
 
@@ -105,10 +108,12 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
         /// <param name="dimension"></param>
         public void Remove(TDimension dimension)
         {
-            if (!this.dimensions.Remove(dimension))
+            if (!this.dimensionCaches.Remove(dimension))
             {
                 throw new NotSupportedException($"Unknown dimension to be removed.");
             }
+
+            this.dimensions.Remove(dimension);
 
             ExpendDimensionsAndBuildMap();
 
@@ -120,9 +125,8 @@ namespace SoloX.BlazorLayout.Containers.Grid.Impl
             this.dimensionMap.Clear();
             this.expendedDimensions.Clear();
 
-            foreach (var dimensionItem in this.dimensions)
+            foreach (var dimension in this.dimensions)
             {
-                var dimension = dimensionItem.Key;
                 if (!string.IsNullOrEmpty(dimension.Name))
                 {
                     this.dimensionMap.Add(dimension.Name, this.expendedDimensions.Count);

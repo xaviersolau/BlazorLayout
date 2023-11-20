@@ -11,6 +11,7 @@ using Bunit;
 using FluentAssertions;
 using SoloX.BlazorLayout.Containers.Grid;
 using SoloX.BlazorLayout.Core;
+using SoloX.BlazorLayout.UTest.Containers.Grid.Components;
 using SoloX.BlazorLayout.UTest.Helpers;
 using Xunit;
 
@@ -122,6 +123,64 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
 
             style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == "1fr");
             style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == "1fr 1fr");
+        }
+
+        [Fact]
+        public void ItShouldChangeTheGridDisplayWhenAColumnIsDisposed()
+        {
+            // Arrange
+            using var ctx = new TestContext();
+
+            // Act
+            var cut = ctx.RenderComponent<ConditonalColumnAndRow>();
+
+            // Assert
+            cut.Nodes.Length.Should().Be(1);
+            var rootElement = cut.Nodes[0].As<IElement>();
+
+            rootElement.LocalName.Should().Be(TagNames.Div);
+
+            rootElement.ClassName.Should().Contain("grid-container");
+
+            var style = rootElement.ComputeCurrentStyle();
+
+            style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == "1fr 1fr");
+            style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == "1fr 1fr");
+
+
+            // Act again
+            cut.SetParametersAndRender(builder => builder.Add(x => x.DisableColumn, true));
+
+            // Assert new state
+            rootElement = cut.Nodes[0].As<IElement>();
+            style = rootElement.ComputeCurrentStyle();
+
+            style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == "1fr");
+            style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == "1fr 1fr");
+
+            // Act again
+            cut.SetParametersAndRender(builder => builder.Add(x => x.DisableRow, true));
+
+            // Assert new state
+            rootElement = cut.Nodes[0].As<IElement>();
+            style = rootElement.ComputeCurrentStyle();
+
+            style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == "1fr");
+            style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == "1fr");
+
+            // Act again
+            cut.SetParametersAndRender(builder =>
+            {
+                builder.Add(x => x.DisableColumn, false);
+                builder.Add(x => x.DisableRow, true);
+            });
+
+            // Assert new state
+            rootElement = cut.Nodes[0].As<IElement>();
+            style = rootElement.ComputeCurrentStyle();
+
+            style.Should().ContainSingle(x => x.Name == "grid-template-columns" && x.Value == "1fr 1fr");
+            style.Should().ContainSingle(x => x.Name == "grid-template-rows" && x.Value == "1fr");
         }
 
         [Theory]

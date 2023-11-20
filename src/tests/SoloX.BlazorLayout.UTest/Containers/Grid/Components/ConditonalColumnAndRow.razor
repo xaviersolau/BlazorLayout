@@ -1,0 +1,21 @@
+﻿@using SoloX.BlazorLayout.Containers.Grid
+
+<GridContainer>
+    <GridColumn />
+    @if (!DisableColumn)
+    {
+        <GridColumn />
+    }
+    <GridRow />
+    @if (!DisableRow)
+    {
+        <GridRow />
+    }
+</GridContainer>
+
+@code {
+    [Parameter]
+    public bool DisableColumn { get; set; }
+    [Parameter]
+    public bool DisableRow { get; set; }
+}
