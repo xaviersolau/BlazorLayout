@@ -1,5 +1,6 @@
 ﻿using Blazorise;
 using Microsoft.AspNetCore.Components;
+using SoloX.BlazorLayout.Layouts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,10 @@ namespace SoloX.BlazorLayout.Examples.WithBlazorise.Shared
 
         [Parameter]
         public bool MatchDisplaySize { get; set; }
+        [Parameter]
+        public bool HideHeader { get; set; }
+        [Parameter]
+        public bool HideFooter { get; set; }
 
         [Parameter]
         public bool SmallNav { get; set; }

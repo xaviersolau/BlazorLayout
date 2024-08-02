@@ -4,7 +4,9 @@
                   MaxProportion="20"
                   EnableContentScroll="@MatchDisplaySize"
                   EnableOutline="true"
-                  UseSmallNavigation="@SmallNav">
+                  UseSmallNavigation="@SmallNav"
+                  HideHeader="@HideHeader"
+                  HideFooter="@HideFooter">
 
     <NavigationHeader>
 
@@ -68,6 +70,14 @@
                 <Paragraph Style="margin-top: 1rem;">
                     Main mage locked to display size.
                     <Switch @bind-Checked="@MatchDisplaySize" Color="Color.Primary" ></Switch>
+                </Paragraph>
+                <Paragraph Style="margin-top: 1rem;">
+                    Hide Header.
+                    <Switch @bind-Checked="@HideHeader" Color="Color.Primary"></Switch>
+                </Paragraph>
+                <Paragraph Style="margin-top: 1rem;">
+                    Hide Footer.
+                    <Switch @bind-Checked="@HideFooter" Color="Color.Primary"></Switch>
                 </Paragraph>
             </div>
         </BoxContainer>

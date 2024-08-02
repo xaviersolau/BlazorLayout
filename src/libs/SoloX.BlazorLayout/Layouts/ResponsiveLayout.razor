@@ -1,6 +1,7 @@
-﻿
+﻿<CascadingValue Value="ScreenSize">
+<CascadingValue Value="ScrollInfo">
 
-<div class="full-size main grid-template grid-layout" style="--proportion: @MaxProportion%;">
+<div @ref="ElementReference" class="full-size main grid-template grid-layout" style="--proportion: @MaxProportion%;">
     <div id="@NavigationPanelId" class="dock-left @NavigationClass" style="@NavigationStyle">
         <div class="dock-left-header">
             @(UseSmallNavigation && SmallNavigationHeader != null ? SmallNavigationHeader : NavigationHeader)
@@ -15,7 +16,7 @@
             @(SmallNavigationMenu ?? NavigationMenu)
         </div>
     </div>
-    <div id="@HeaderPanelId" class="dock-top">
+    <div id="@HeaderPanelId" class="dock-top @ClassHideHeader" @ref="HeaderElementReference" style="--header-height: @(headerHeight)px;">
         @Header
     </div>
     @if (EnableOutline)
@@ -27,8 +28,10 @@
     <div id="@ChildContentPanelId" class="main-content @ClassContentOverflow">
         @ChildContent
     </div>
-    <div id="@FooterPanelId" class="dock-bottom">
+    <div id="@FooterPanelId" class="dock-bottom @ClassHideFooter" @ref="FooterElementReference" style="--footer-height: @(footerHeight)px;">
         @Footer
     </div>
 </div>
 
+</CascadingValue>
+</CascadingValue>

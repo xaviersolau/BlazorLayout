@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="ResizeObserverService.cs" company="Xavier Solau">
+// <copyright file="ScrollObserverService.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -9,6 +9,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using SoloX.BlazorLayout.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,52 +18,49 @@ using System.Threading.Tasks;
 namespace SoloX.BlazorLayout.Services.Impl
 {
     /// <summary>
-    /// Resize observer service implementation.
+    /// Scroll observer service implementation.
     /// </summary>
-    public class ResizeObserverService : IResizeObserverService, IAsyncDisposable
+    public class ScrollObserverService : IScrollObserverService, IAsyncDisposable
     {
-        internal const string RegisterResizeCallBack = "resizeManager.registerResizeCallBack";
-        internal const string UnregisterResizeCallBack = "resizeManager.unregisterResizeCallBack";
-        internal const string RegisterMutationObserver = "resizeManager.registerMutationObserver";
-        internal const string UnregisterMutationObserver = "resizeManager.unregisterMutationObserver";
-        internal const string ProcessCallbackReferences = "resizeManager.processCallbackReferences";
-        internal const string Ping = "resizeManager.ping";
+        internal const string RegisterScrollCallBack = "scrollManager.registerScrollCallBack";
+        internal const string UnregisterScrollCallBack = "scrollManager.unregisterScrollCallBack";
+        internal const string ScrollTo = "scrollManager.scrollTo";
+        internal const string Ping = "scrollManager.ping";
         internal const string Import = "import";
-        internal const string ResizeObserverJsInteropFile = "./_content/SoloX.BlazorLayout/resizeObserverJsInterop.js";
+        internal const string ScrollObserverJsInteropFile = "./_content/SoloX.BlazorLayout/scrollObserverJsInterop.js";
 
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
 
         private readonly Dictionary<string, AsyncDisposable> disposables =
             new Dictionary<string, AsyncDisposable>();
 
-        private readonly ILogger<ResizeObserverService> logger;
+        private readonly ILogger<ScrollObserverService> logger;
 
         /// <summary>
         /// Setup the service with the given jsRuntime interface.
         /// </summary>
         /// <param name="jsRuntime">The JS runtime to interact with JS sandbox.</param>
         /// <param name="logger">The logger where to log messages.</param>
-        public ResizeObserverService(IJSRuntime jsRuntime, ILogger<ResizeObserverService> logger)
+        public ScrollObserverService(IJSRuntime jsRuntime, ILogger<ScrollObserverService> logger)
         {
             // Setup lazy loading of the JS size observer module.
             this.moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-               Import, ResizeObserverJsInteropFile).AsTask());
+               Import, ScrollObserverJsInteropFile).AsTask());
 
             this.logger = logger;
         }
 
         ///<inheritdoc/>
-        public async ValueTask<IAsyncDisposable> RegisterResizeCallBackAsync(
-            IResizeCallBack sizeCallBack, ElementReference elementReference)
+        public async ValueTask<IAsyncDisposable> RegisterScrollCallBackAsync(IScrollCallBack scrollCallBack, ElementReference elementReference)
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
-            var objectRef = DotNetObjectReference.Create(new ResizeCallBackProxy(sizeCallBack));
+            var objectRef = DotNetObjectReference.Create(new ScrollCallBackProxy(scrollCallBack));
 
-            await module.InvokeVoidAsync(RegisterResizeCallBack,
+            await module.InvokeVoidAsync(RegisterScrollCallBack,
                 objectRef, elementReference.Id, elementReference).ConfigureAwait(false);
 
-            var id = $"{nameof(RegisterResizeCallBackAsync)}-{elementReference.Id}";
+            var id = $"{nameof(RegisterScrollCallBackAsync)}-{elementReference.Id}";
 
             var disposable = new AsyncDisposable(
                 id,
@@ -72,7 +70,7 @@ namespace SoloX.BlazorLayout.Services.Impl
 
                     try
                     {
-                        await module.InvokeVoidAsync(UnregisterResizeCallBack,
+                        await module.InvokeVoidAsync(UnregisterScrollCallBack,
                             TimeSpan.FromMilliseconds(500),
                             elementReference.Id).ConfigureAwait(false);
                     }
@@ -88,45 +86,12 @@ namespace SoloX.BlazorLayout.Services.Impl
             return disposable;
         }
 
-        ///<inheritdoc/>
-        public async ValueTask<IAsyncDisposable> RegisterMutationObserverAsync(
-            ElementReference elementReference)
+        /// <inheritdoc/>
+        public async ValueTask ScrollToAsync(ElementReference elementReference, int? scrollLeft, int? scrollTop)
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
-            await module.InvokeVoidAsync(RegisterMutationObserver,
-                elementReference.Id, elementReference).ConfigureAwait(false);
-
-            var id = $"{nameof(RegisterMutationObserverAsync)}-{elementReference.Id}";
-
-            var disposable = new AsyncDisposable(
-                id,
-                async () =>
-                {
-                    this.disposables.Remove(id);
-
-                    try
-                    {
-                        await module.InvokeVoidAsync(UnregisterMutationObserver,
-                            TimeSpan.FromMilliseconds(500),
-                            elementReference.Id).ConfigureAwait(false);
-                    }
-                    catch (TaskCanceledException e)
-                    {
-                        this.logger.LogDebug(e.Message);
-                    }
-                });
-
-            this.disposables.Add(id, disposable);
-            return disposable;
-        }
-
-        ///<inheritdoc/>
-        public async ValueTask TriggerCallBackAsync()
-        {
-            var module = await this.moduleTask.Value.ConfigureAwait(false);
-
-            await module.InvokeVoidAsync(ProcessCallbackReferences).ConfigureAwait(false);
+            await module.InvokeVoidAsync(ScrollTo, elementReference, scrollLeft, scrollTop).ConfigureAwait(false);
         }
 
         ///<inheritdoc/>
@@ -160,19 +125,29 @@ namespace SoloX.BlazorLayout.Services.Impl
 #pragma warning restore CA1816 // Les méthodes Dispose doivent appeler SuppressFinalize
         }
 
-        internal class ResizeCallBackProxy : IResizeCallBack
+        internal class ScrollCallBackProxy
         {
-            internal IResizeCallBack SizeCallBack { get; }
+            internal IScrollCallBack ScrollCallBack { get; }
 
-            public ResizeCallBackProxy(IResizeCallBack sizeCallBack)
+            public ScrollCallBackProxy(IScrollCallBack scrollCallBack)
             {
-                SizeCallBack = sizeCallBack;
+                ScrollCallBack = scrollCallBack;
             }
 
             [JSInvokable]
-            public ValueTask ResizeAsync(int width, int height)
+            public ValueTask ScrollAsync(int width, int left, int viewWidth, int height, int top, int viewHeight)
             {
-                return SizeCallBack.ResizeAsync(width, height);
+                var scrollInfo = new ScrollInfo()
+                {
+                    Width = width,
+                    Left = left,
+                    ViewWidth = viewWidth,
+                    Height = height,
+                    Top = top,
+                    ViewHeight = viewHeight,
+                };
+
+                return ScrollCallBack.ScrollAsync(scrollInfo);
             }
         }
     }

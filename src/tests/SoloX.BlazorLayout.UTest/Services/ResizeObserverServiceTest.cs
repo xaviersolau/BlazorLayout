@@ -114,7 +114,7 @@ namespace SoloX.BlazorLayout.UTest.Services
         {
             var callBackMock = new Mock<IResizeCallBack>();
 
-            var proxy = new SizeCallBackProxy(callBackMock.Object);
+            var proxy = new ResizeCallBackProxy(callBackMock.Object);
 
             proxy.SizeCallBack.Should().BeSameAs(callBackMock.Object);
 
@@ -134,7 +134,7 @@ namespace SoloX.BlazorLayout.UTest.Services
             jsRuntimeMock
                 .Setup(r => r.InvokeAsync<IJSObjectReference>(
                     ResizeObserverService.Import,
-                    new object[] { ResizeObserverService.SizeObserverJsInteropFile }))
+                    new object[] { ResizeObserverService.ResizeObserverJsInteropFile }))
                 .ReturnsAsync(jsObjectReferenceMock.Object);
 
             var service = new ResizeObserverService(
@@ -146,7 +146,7 @@ namespace SoloX.BlazorLayout.UTest.Services
         private static bool MatchResizeCallBackRegister(object?[]? args, ElementReference expectedEltRef, IResizeCallBack sizeCallBack)
         {
             if (args != null && args.Length == 3
-                && args[0] is DotNetObjectReference<SizeCallBackProxy> callBackRef
+                && args[0] is DotNetObjectReference<ResizeCallBackProxy> callBackRef
                 && args[1] is string id
                 && args[2] is ElementReference eltRef)
             {
