@@ -88,8 +88,24 @@
   grid-area: content;
 }
 
-@media (max-width: 900px) {
+.hide-header {
+  margin-top: calc(var(--header-height) * -1) !important;
+}
 
+.header {
+  transition: margin-top 0.3s ease-out;
+}
+
+.hide-footer {
+  height: 0px !important;
+  overflow: overlay;
+}
+
+.footer {
+  transition: height 0.3s ease-out;
+}
+
+@media (max-width: 900px) {
   .dock-right {
     z-index: 9;
     position: fixed;

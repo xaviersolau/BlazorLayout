@@ -28,14 +28,18 @@ namespace SoloX.BlazorLayout
             switch (serviceLifetime)
             {
                 case ServiceLifetime.Singleton:
-                    services.AddSingleton<IResizeObserverService, ResizeObserverService>();
+                    services
+                        .AddSingleton<IResizeObserverService, ResizeObserverService>()
+                        .AddSingleton<IScrollObserverService, ScrollObserverService>();
                     break;
                 case ServiceLifetime.Scoped:
-                    services.AddScoped<IResizeObserverService, ResizeObserverService>();
+                    services.AddScoped<IResizeObserverService, ResizeObserverService>()
+                        .AddScoped<IScrollObserverService, ScrollObserverService>();
                     break;
                 case ServiceLifetime.Transient:
                 default:
-                    services.AddTransient<IResizeObserverService, ResizeObserverService>();
+                    services.AddTransient<IResizeObserverService, ResizeObserverService>()
+                        .AddTransient<IScrollObserverService, ScrollObserverService>();
                     break;
             }
 

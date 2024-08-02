@@ -6,10 +6,18 @@
 // </copyright>
 // ----------------------------------------------------------------------
 
+using AngleSharp.Dom;
 using Bunit;
 using FluentAssertions;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using SoloX.BlazorLayout.Core;
 using SoloX.BlazorLayout.Layouts;
+using SoloX.BlazorLayout.Services;
 using SoloX.BlazorLayout.UTest.Helpers;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace SoloX.BlazorLayout.UTest.Layouts
@@ -22,8 +30,7 @@ namespace SoloX.BlazorLayout.UTest.Layouts
             // Arrange
             var childId = "child-id";
             var childHtml = $"<strong id=\"{childId}\">child</strong>";
-
-            using var ctx = new TestContext();
+            using var ctx = BuildTestContext();
 
             // Act
             var cut = ctx.RenderComponent<ResponsiveLayout>(
@@ -39,13 +46,36 @@ namespace SoloX.BlazorLayout.UTest.Layouts
         }
 
         [Fact]
+        public void ItShouldRenderWithHeaderHidden()
+        {
+            // Arrange
+            var childId = "child-id";
+            var childHtml = $"<strong id=\"{childId}\">child</strong>";
+            using var ctx = BuildTestContext();
+
+            // Act
+            var cut = ctx.RenderComponent<ResponsiveLayout>(
+                builder =>
+                {
+                    builder
+                        .Add(l => l.ChildContent, childHtml)
+                        .Add(l => l.HideHeader, true);
+                });
+
+            // Assert
+            var headerElement = cut.Find($"#{ResponsiveLayout.HeaderPanelId}");
+
+            headerElement.ClassList.Should().Contain("hide-header");
+        }
+
+        [Fact]
         public void ItShouldRenderWithFooter()
         {
             // Arrange
             var childId = "child-id";
             var childHtml = $"<strong id=\"{childId}\">child</strong>";
 
-            using var ctx = new TestContext();
+            using var ctx = BuildTestContext();
 
             // Act
             var cut = ctx.RenderComponent<ResponsiveLayout>(
@@ -61,13 +91,37 @@ namespace SoloX.BlazorLayout.UTest.Layouts
         }
 
         [Fact]
+        public void ItShouldRenderWithFooterHidden()
+        {
+            // Arrange
+            var childId = "child-id";
+            var childHtml = $"<strong id=\"{childId}\">child</strong>";
+
+            using var ctx = BuildTestContext();
+
+            // Act
+            var cut = ctx.RenderComponent<ResponsiveLayout>(
+                builder =>
+                {
+                    builder
+                        .Add(l => l.Footer, childHtml)
+                        .Add(l => l.HideFooter, true);
+                });
+
+            // Assert
+            var headerElement = cut.Find($"#{ResponsiveLayout.FooterPanelId}");
+
+            headerElement.ClassList.Should().Contain("hide-footer");
+        }
+
+        [Fact]
         public void ItShouldRenderWithNavMenu()
         {
             // Arrange
             var childId = "child-id";
             var childHtml = $"<strong id=\"{childId}\">child</strong>";
 
-            using var ctx = new TestContext();
+            using var ctx = BuildTestContext();
 
             // Act
             var cut = ctx.RenderComponent<ResponsiveLayout>(
@@ -91,7 +145,7 @@ namespace SoloX.BlazorLayout.UTest.Layouts
             var childId = "child-id";
             var childHtml = $"<strong id=\"{childId}\">child</strong>";
 
-            using var ctx = new TestContext();
+            using var ctx = BuildTestContext();
 
             // Act
             var cut = ctx.RenderComponent<ResponsiveLayout>(
@@ -125,7 +179,7 @@ namespace SoloX.BlazorLayout.UTest.Layouts
 
             var navClass = "my-nav-class";
 
-            using var ctx = new TestContext();
+            using var ctx = BuildTestContext();
 
             // Act
             var cut = ctx.RenderComponent<ResponsiveLayout>(
@@ -154,7 +208,7 @@ namespace SoloX.BlazorLayout.UTest.Layouts
 
             var navStyle = $"{styleKey}: {styleValue};";
 
-            using var ctx = new TestContext();
+            using var ctx = BuildTestContext();
 
             // Act
             var cut = ctx.RenderComponent<ResponsiveLayout>(
@@ -165,12 +219,147 @@ namespace SoloX.BlazorLayout.UTest.Layouts
                 });
 
             // Assert
-
             var navPanel = cut.Find($"#{ResponsiveLayout.NavigationPanelId}");
 
             var style = StyleHelper.LoadStyleAttribute(navPanel);
 
             style.Should().ContainSingle(x => x.Name == styleKey && x.Value == styleValue);
+        }
+
+        [Fact]
+        public async void ItShouldUpdateScreenSize()
+        {
+            // Arrange
+            var resizeObserverServiceMock = SetupResizeObserverServiceMock(out var cbMap);
+
+            using var ctx = BuildTestContext(resizeObserverServiceMock: resizeObserverServiceMock);
+
+            // Act
+            var cut = ctx.RenderComponent<ResponsiveLayout>();
+            var screenSizeBefore = cut.Instance.ScreenSize;
+
+            // Simulate resize on component.
+            await cbMap[cut.Instance.ElementReference.Id].ResizeAsync(100, 200).ConfigureAwait(false);
+
+            // Assert
+            screenSizeBefore.Height.Should().Be(0);
+            screenSizeBefore.Width.Should().Be(0);
+
+            var screenSize = cut.Instance.ScreenSize;
+            screenSize.Width.Should().Be(100);
+            screenSize.Height.Should().Be(200);
+        }
+
+        [Fact]
+        public async void ItShouldUpdateScrollInfo()
+        {
+            // Arrange
+            var scrollObserverServiceMock = SetupScrollObserverServiceMock(out var cbMap);
+
+            using var ctx = BuildTestContext(scrollObserverServiceMock: scrollObserverServiceMock);
+
+            // Act
+            var cut = ctx.RenderComponent<ResponsiveLayout>();
+            var scrollInfoBefore = cut.Instance.ScrollInfo;
+
+            // Simulate scroll on component.
+            await cbMap[cut.Instance.ElementReference.Id].ScrollAsync(new ScrollInfo()
+            {
+                Left = 100,
+                Top = 200,
+            }).ConfigureAwait(false);
+
+            // Assert
+            scrollInfoBefore.Left.Should().Be(0);
+            scrollInfoBefore.Top.Should().Be(0);
+
+            var scrollInfo = cut.Instance.ScrollInfo;
+            scrollInfo.Left.Should().Be(100);
+            scrollInfo.Top.Should().Be(200);
+        }
+
+        [Theory]
+        [InlineData(ResponsiveLayout.HeaderPanelId)]
+        [InlineData(ResponsiveLayout.FooterPanelId)]
+        public async void ItShouldRenderHeaderOrFooterWithHeightVariableInStyle(string id)
+        {
+            // Arrange
+            var resizeObserverServiceMock = SetupResizeObserverServiceMock(out var cbMap);
+
+            using var ctx = BuildTestContext(resizeObserverServiceMock: resizeObserverServiceMock);
+
+            // Act
+            var cut = ctx.RenderComponent<ResponsiveLayout>();
+
+            (var eltRefId, var styleName) = id switch
+            {
+                ResponsiveLayout.HeaderPanelId => (cut.Instance.HeaderElementReference.Id, "--header-height"),
+                ResponsiveLayout.FooterPanelId => (cut.Instance.FooterElementReference.Id, "--footer-height"),
+                _ => throw new NotSupportedException(),
+            };
+
+            // Simulate resize on component.
+            await cbMap[eltRefId].ResizeAsync(100, 200).ConfigureAwait(false);
+
+            cut.Render();
+
+            // Assert
+            var element = cut.Find($"#{id}");
+
+            var styles = StyleHelper.LoadStyleAttribute(element);
+            styles.Should().Contain(x => x.Name == styleName).Which.Value.Should().Be("200px");
+
+        }
+
+        private static Mock<IScrollObserverService> SetupScrollObserverServiceMock(out Dictionary<string, IScrollCallBack> cbMap)
+        {
+            var scrollObserverServiceMock = new Mock<IScrollObserverService>();
+
+            var map = new Dictionary<string, IScrollCallBack>();
+
+            scrollObserverServiceMock
+                .Setup(s => s.RegisterScrollCallBackAsync(It.IsAny<IScrollCallBack>(), It.IsAny<ElementReference>()))
+                .Callback(new InvocationAction((invocation) =>
+                {
+                    var cb = (IScrollCallBack)invocation.Arguments[0];
+                    var er = (ElementReference)invocation.Arguments[1];
+
+                    map.Add(er.Id, cb);
+                }));
+
+            cbMap = map;
+
+            return scrollObserverServiceMock;
+        }
+
+        private static Mock<IResizeObserverService> SetupResizeObserverServiceMock(out Dictionary<string, IResizeCallBack> cbMap)
+        {
+            var resizeObserverServiceMock = new Mock<IResizeObserverService>();
+
+            var map = new Dictionary<string, IResizeCallBack>();
+
+            resizeObserverServiceMock
+                .Setup(s => s.RegisterResizeCallBackAsync(It.IsAny<IResizeCallBack>(), It.IsAny<ElementReference>()))
+                .Callback(new InvocationAction((invocation) =>
+                {
+                    var cb = (IResizeCallBack)invocation.Arguments[0];
+                    var er = (ElementReference)invocation.Arguments[1];
+
+                    map.Add(er.Id, cb);
+                }));
+
+            cbMap = map;
+
+            return resizeObserverServiceMock;
+        }
+
+        private static TestContext BuildTestContext(Mock<IResizeObserverService>? resizeObserverServiceMock = null, Mock<IScrollObserverService>? scrollObserverServiceMock = null)
+        {
+            var ctx = new TestContext();
+
+            ctx.Services.AddSingleton<IResizeObserverService>(resizeObserverServiceMock?.Object ?? Mock.Of<IResizeObserverService>());
+            ctx.Services.AddSingleton<IScrollObserverService>(scrollObserverServiceMock?.Object ?? Mock.Of<IScrollObserverService>());
+            return ctx;
         }
     }
 }
