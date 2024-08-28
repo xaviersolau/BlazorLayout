@@ -90,21 +90,30 @@ Here is a screen from one of the repository example:
 
 The component is designed with several parameters:
 
-| Parameter                              | Description |
-|----------------------------------------|-------------|
-| NavigationHeader (RenderFragment)      | Navigation menu Header |
-| NavigationMenu (RenderFragment)        | Navigation menu (HTML ul and li element should be used as children) |
-| SmallNavigationHeader (RenderFragment) | Navigation menu Header (Small version) |
-| SmallNavigationMenu (RenderFragment)   | Navigation menu (Small version) |
-| Header (RenderFragment)                | Main layout Header |
-| Footer (RenderFragment)                | Main layout Footer |
-| Outline (RenderFragment)               | Outline view |
-| ChildContent (RenderFragment)          | Main layout Body |
-| UseSmallNavigation  (bool)             | Force use of small navigation view |
-| EnableOutline  (bool)                  | Enable/Disable outline view |
-| EnableContentScroll  (bool)            | Change scrolling behavior to force main layout view to fit the display view and to enable scrolling in the child view |
+| Parameter                                      | Description |
+|------------------------------------------------|-------------|
+| NavigationHeader (RenderFragment)              | Navigation menu Header |
+| NavigationMenu (RenderFragment)                | Navigation menu (HTML ul and li element should be used as children) |
+| SmallNavigationHeader (RenderFragment)         | Navigation menu Header (Small version) |
+| SmallNavigationMenu (RenderFragment)           | Navigation menu (Small version) |
+| Header (RenderFragment)                        | Main layout Header |
+| Footer (RenderFragment)                        | Main layout Footer |
+| Outline (RenderFragment)                       | Outline view |
+| ChildContent (RenderFragment)                  | Main layout Body |
+| UseSmallNavigation  (bool)                     | Force use of small navigation view |
+| EnableOutline  (bool)                          | Enable/Disable outline view |
+| EnableContentScroll  (bool)                    | Change scrolling behavior to force main layout view to fit the display view and to enable scrolling in the child view |
+| DisableHorizontalNavigationMenuScrollX  (bool) | Disable scroll on horizontal navigation menu and wrap content |
 
 The small navigation view is used depending on the size of the display view.
+
+Some cascading parameter are available in the child component of the ResponsiveLayout:
+
+| CascadingParameter       | Description |
+|--------------------------|-------------|
+| ScreenSize (ScreenSize)  | [The screen size](src\libs\SoloX.BlazorLayout\Layouts\ScreenSize.cs) |
+| ScrollInfo (ScrollInfo)  | [The main screen scroll info](src\libs\SoloX.BlazorLayout\Core\ScrollInfo.cs) |
+
 
 ### Base layout components
 
@@ -155,12 +164,8 @@ Here is the list of available panels:
 
 ### The services
 
-#### The resize observer service
-
-Let's say that you need to follow the size changed event of a component in your page. The project provides
- you with some help to setup such observer: the `IResizeObserverService`.
-
-In order to use it in your application, you have to register the services in your Startup.cs file or your Program.cs.
+#### Set up
+In order to use the BlazorLayout services in your application, you have to register the services in your Startup.cs file or your Program.cs.
 A ServiceCollection extension method is available for that purpose:
 
 ```csharp
@@ -175,7 +180,12 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-Once it is setup, you can inject the `IResizeObserverService` in your components.
+#### The resize observer service
+
+Let's say that you need to follow the size changed event of a component in your page. The project provides
+ you with some help to setup such observer: the `IResizeObserverService`.
+
+You can inject the `IResizeObserverService` in your components.
 
 For example we can define a ResizeCallBack page that will register a resize callback with a `BoxContainer`:
 
@@ -224,6 +234,73 @@ Here is the C# part of the component:
 
     // Implement the IResizeCallBack interface.
     public ValueTask ResizeAsync(int width, int height)
+    {
+        // CallBack code....
+
+        return ValueTask.CompletedTask;
+    }
+
+    // Dispose the callback resources.
+    public async ValueTask DisposeAsync()
+    {
+        await callBackDisposable.DisposeAsync();
+    }
+```
+
+#### The scroll observer service
+
+Now we are going to follow the scroll changed event of a component in your page. The project provides
+ you with some help to setup such observer: the `IScrollObserverService`.
+
+You can inject the `IScrollObserverService` in your components.
+
+For example we can define a ScrollCallBack page that will register a scroll callback with a `BoxContainer`:
+
+```razor
+@page "/ScrollCallBack"
+
+@inject IScrollObserverService scrollObserverService
+
+@implements IScrollCallBack
+
+@implements IAsyncDisposable
+
+<BoxContainer @ref="ContainerReference" Fill="Fill.Full">
+    @* ... *@
+</BoxContainer>
+```
+
+Note that:
+- We use `@ref` in order to get a reference on the component instance.
+- We implement `IScrollCallBack` in order to use this as callback in the `IScrollObserverService`.
+- We implement `IAsyncDisposable` in order to dispose callback resources.
+
+Here is the C# part of the component:
+
+```csharp
+    // The BoxContainer reference used in the @ref property.
+    private BoxContainer ContainerReference { get; set; }
+
+    // The call back disposable returned by the callback registration.
+    private IAsyncDisposable callBackDisposable;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Register the callback to the IScrollObserverService once the ContainerReference is set
+            // after the first render.
+            // Note that it returns a disposable callback object that must be disposed to properly
+            // unregister the service resources.
+            callBackDisposable = await scrollObserverService
+                .RegisterScrollCallBackAsync(this, ContainerReference.ElementReference);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    // Implement the IResizeCallBack interface.
+    public ValueTask ScrollAsync(ScrollInfo scrollInfo)
     {
         // CallBack code....
 
