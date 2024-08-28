@@ -14,7 +14,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 7.0.402
+        dotnet-version: 8.0.100
     - name: Install dependencies
       run: dotnet restore
     - name: Build
@@ -27,16 +27,19 @@ jobs:
       run: |
         dotnet test ./src/tests/SoloX.BlazorLayout.UTest --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
         echo "::set-output name=FILE::$(find ./src/tests/SoloX.BlazorLayout.UTest -name 'coverage.info' -print)"
+    - name: Moving test results
+      run: mv ./src/tests/SoloX.BlazorLayout.UTest/TestResults/**/coverage.cobertura.xml ./src/tests/SoloX.BlazorLayout.UTest/TestResults/coverage.cobertura.xml
     - name: Send to coverals
-      uses: coverallsapp/github-action@v1.1.2
+      uses: coverallsapp/github-action@v2.2.3
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ${{ steps.coverage-utest.outputs.FILE }}
+        file: ./src/tests/SoloX.BlazorLayout.UTest/TestResults/coverage.cobertura.xml
+        format: cobertura
         flag-name: coverage-utest
         parallel: true
 
     - name: Finish coverals
-      uses: coverallsapp/github-action@v1.1.2
+      uses: coverallsapp/github-action@v2.2.3
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         parallel-finished: true
