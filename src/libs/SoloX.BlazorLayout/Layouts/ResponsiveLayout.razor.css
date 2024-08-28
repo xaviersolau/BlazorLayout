@@ -40,6 +40,8 @@
 
   .dock-left ::deep li {
     width: 100%;
+    height: fit-content;
+    text-wrap: pretty;
   }
 
 
@@ -48,10 +50,13 @@
 }
 
 .dock-left-body {
-  min-width: fit-content;
   overflow-y: overlay;
   overflow-x: hidden;
 }
+
+  .dock-left-body ::deep ul {
+    display: block;
+  }
 
 .dock-left-header-small {
   display: none;
@@ -60,10 +65,25 @@
 
 .dock-left-body-small {
   display: none;
-  min-width: fit-content;
   overflow-y: overlay;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
+
+.dock-left-body-small-scroll {
+
+}
+
+.dock-left-body-small-scroll ::deep ul {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.dock-left-body-small-wrap {
+}
+
+  .dock-left-body-small-wrap ::deep ul {
+    display: block;
+  }
 
 .dock-top {
   grid-area: top;
@@ -105,7 +125,7 @@
   transition: height 0.3s ease-out;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1150px) {
   .dock-right {
     z-index: 9;
     position: fixed;

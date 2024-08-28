@@ -73,10 +73,22 @@ namespace SoloX.BlazorLayout.Layouts
         public RenderFragment? SmallNavigationMenu { get; set; }
 
         /// <summary>
+        /// Disable ScrollX on Horizontal Navigation Menu.
+        /// </summary>
+        [Parameter]
+        public bool DisableHorizontalNavigationMenuScrollX { get; set; }
+
+        /// <summary>
         /// Use Small navigation.
         /// </summary>
         [Parameter]
         public bool UseSmallNavigation { get; set; }
+
+        /// <summary>
+        /// Event triggered when UseSmallNavigation has changed.
+        /// </summary>
+        [Parameter]
+        public EventCallback<bool> UseSmallNavigationChanged { get; set; }
 
         /// <summary>
         /// Header child.
@@ -212,11 +224,30 @@ namespace SoloX.BlazorLayout.Layouts
 
         private async ValueTask SetScreenSizeAsync(int width, int height)
         {
+            var oldScreenSize = ScreenSize;
+
             ScreenSize = new ScreenSize()
             {
                 Width = width,
                 Height = height
             };
+
+            if ((oldScreenSize.IsVeryLarge || oldScreenSize.IsVeryVeryLarge)
+                && !(ScreenSize.IsVeryLarge || ScreenSize.IsVeryVeryLarge)
+                && !UseSmallNavigation)
+            {
+                UseSmallNavigation = true;
+
+                await UseSmallNavigationChanged.InvokeAsync(true).ConfigureAwait(false);
+            }
+            else if (!(oldScreenSize.IsVeryLarge || oldScreenSize.IsVeryVeryLarge)
+                && (ScreenSize.IsVeryLarge || ScreenSize.IsVeryVeryLarge)
+                && UseSmallNavigation)
+            {
+                UseSmallNavigation = false;
+
+                await UseSmallNavigationChanged.InvokeAsync(false).ConfigureAwait(false);
+            }
 
             await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }

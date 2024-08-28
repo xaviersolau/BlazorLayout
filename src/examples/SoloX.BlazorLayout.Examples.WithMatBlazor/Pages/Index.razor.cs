@@ -1,5 +1,7 @@
 ﻿using MatBlazor;
 using Microsoft.AspNetCore.Components;
+using SoloX.BlazorLayout.Core;
+using SoloX.BlazorLayout.Layouts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,12 @@ namespace SoloX.BlazorLayout.Examples.WithMatBlazor.Pages
     {
         [CascadingParameter]
         public MatTheme Theme { get; set; }
+
+        [CascadingParameter]
+        public ScreenSize ScreenSize { get; set; }
+
+        [CascadingParameter]
+        public ScrollInfo ScrollInfo { get; set; }
 
         private void UpdateTheme()
         {

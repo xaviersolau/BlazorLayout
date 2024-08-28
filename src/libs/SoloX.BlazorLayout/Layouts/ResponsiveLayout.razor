@@ -12,7 +12,7 @@
         <div class="dock-left-header-small">
             @(SmallNavigationHeader ?? NavigationHeader)
         </div>
-        <div class="dock-left-body-small">
+        <div class="dock-left-body-small @(DisableHorizontalNavigationMenuScrollX ? "dock-left-body-small-wrap" : "dock-left-body-small-scroll")">
             @(SmallNavigationMenu ?? NavigationMenu)
         </div>
     </div>

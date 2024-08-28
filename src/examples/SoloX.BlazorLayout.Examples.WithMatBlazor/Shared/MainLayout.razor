@@ -4,11 +4,14 @@
                   MaxProportion="20"
                   EnableContentScroll="@MatchDisplaySize"
                   EnableOutline="true"
-                  UseSmallNavigation="@SmallNav">
+                  @bind-UseSmallNavigation="@SmallNav"
+                  HideHeader="@HideHeader"
+                  HideFooter="@HideFooter"
+                  DisableHorizontalNavigationMenuScrollX="@DisableHorizontalNavScroll">
     <NavigationHeader>
         <MatCard Class="@Theme.GetClass("mdc-theme--secondary-bg mdc-theme--on-secondary")">
             <MatCardActions>
-                <MatCardActionIcons>
+                <MatCardActionIcons Style="flex-grow: 0;">
                     <MatIconButton Class="mdc-theme--on-secondary" Icon="@MatIconNames.Menu" @onclick="ToggleNav" />
                 </MatCardActionIcons>
 
@@ -66,8 +69,20 @@
                 </MatBody1>
 
                 <MatBody1 Style="margin-top: 1rem;">
-                    Main mage locked to display size.
+                    Main page locked to display size.
                     <MatSlideToggle @bind-Value="@MatchDisplaySize" Style="--mdc-theme-secondary: var(--mdc-theme-primary);"></MatSlideToggle>
+                </MatBody1>
+                <MatBody1 Style="margin-top: 1rem;">
+                    Hide Header.
+                    <MatSlideToggle @bind-Value="@HideHeader" Style="--mdc-theme-secondary: var(--mdc-theme-primary);"></MatSlideToggle>
+                </MatBody1>
+                <MatBody1 Style="margin-top: 1rem;">
+                    Hide Footer.
+                    <MatSlideToggle @bind-Value="@HideFooter" Style="--mdc-theme-secondary: var(--mdc-theme-primary);"></MatSlideToggle>
+                </MatBody1>
+                <MatBody1 Style="margin-top: 1rem;">
+                    Disable Scroll on Horizontal Nav.
+                    <MatSlideToggle @bind-Value="@DisableHorizontalNavScroll" Style="--mdc-theme-secondary: var(--mdc-theme-primary);"></MatSlideToggle>
                 </MatBody1>
             </div>
         </MatPaper>

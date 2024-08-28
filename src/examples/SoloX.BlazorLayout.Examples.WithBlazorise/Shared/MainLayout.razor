@@ -4,13 +4,14 @@
                   MaxProportion="20"
                   EnableContentScroll="@MatchDisplaySize"
                   EnableOutline="true"
-                  UseSmallNavigation="@SmallNav"
+                  @bind-UseSmallNavigation="@SmallNav"
                   HideHeader="@HideHeader"
-                  HideFooter="@HideFooter">
+                  HideFooter="@HideFooter"
+                  DisableHorizontalNavigationMenuScrollX="@DisableHorizontalNavScroll">
 
     <NavigationHeader>
 
-        <DockContainer Class="bg-secondary">
+        <DockContainer Fill="Fill.Horizontal" Class="bg-secondary">
             <DockPanel Side="Core.Side.Left">
                 <Button Class="btn-icon" Style="min-height: 100%;" Color="Color.Default" @onclick="ToggleNav">
                     <Blazorise.Icon Class="text-white-secondary" Name="MaterialIcons.Menu" />
@@ -68,7 +69,7 @@
                 </Paragraph>
 
                 <Paragraph Style="margin-top: 1rem;">
-                    Main mage locked to display size.
+                    Main page locked to display size.
                     <Switch @bind-Checked="@MatchDisplaySize" Color="Color.Primary" ></Switch>
                 </Paragraph>
                 <Paragraph Style="margin-top: 1rem;">
@@ -78,6 +79,10 @@
                 <Paragraph Style="margin-top: 1rem;">
                     Hide Footer.
                     <Switch @bind-Checked="@HideFooter" Color="Color.Primary"></Switch>
+                </Paragraph>
+                <Paragraph Style="margin-top: 1rem;">
+                    Disable Scroll on Horizontal Nav.
+                    <Switch @bind-Checked="@DisableHorizontalNavScroll" Color="Color.Primary"></Switch>
                 </Paragraph>
             </div>
         </BoxContainer>
