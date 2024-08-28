@@ -4,12 +4,12 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>
-          <Format>lcov</Format>
+          <Format>cobertura</Format>
           <SingleHit>false</SingleHit>
-          <UseSourceLink>true</UseSourceLink>
+          <UseSourceLink>false</UseSourceLink>
           <IncludeTestAssembly>false</IncludeTestAssembly>
           <SkipAutoProps>true</SkipAutoProps>
-          <DeterministicReport>false</DeterministicReport>
+          <DeterministicReport>true</DeterministicReport>
         </Configuration>
       </DataCollector>
     </DataCollectors>
