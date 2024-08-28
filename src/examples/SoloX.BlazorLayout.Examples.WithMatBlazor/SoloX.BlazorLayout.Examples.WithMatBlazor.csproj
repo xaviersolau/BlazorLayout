@@ -12,4 +12,12 @@
     <ProjectReference Include="..\..\libs\SoloX.BlazorLayout\SoloX.BlazorLayout.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\ScrollCallBack.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\ScrollCallBack.razor" />
+  </ItemGroup>
+
 </Project>

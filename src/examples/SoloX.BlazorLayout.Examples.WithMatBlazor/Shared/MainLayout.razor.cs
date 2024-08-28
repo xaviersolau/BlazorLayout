@@ -14,6 +14,13 @@ namespace SoloX.BlazorLayout.Examples.WithMatBlazor.Shared
 
         [Parameter]
         public bool MatchDisplaySize { get; set; }
+        [Parameter]
+        public bool HideHeader { get; set; }
+        [Parameter]
+        public bool HideFooter { get; set; }
+
+        [Parameter]
+        public bool DisableHorizontalNavScroll { get; set; }
 
         [Parameter]
         public bool SmallNav { get; set; }

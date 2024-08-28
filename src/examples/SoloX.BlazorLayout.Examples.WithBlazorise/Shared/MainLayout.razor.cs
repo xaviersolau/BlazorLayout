@@ -21,6 +21,9 @@ namespace SoloX.BlazorLayout.Examples.WithBlazorise.Shared
         public bool HideFooter { get; set; }
 
         [Parameter]
+        public bool DisableHorizontalNavScroll { get; set; }
+
+        [Parameter]
         public bool SmallNav { get; set; }
 
         private void ToggleNav()
