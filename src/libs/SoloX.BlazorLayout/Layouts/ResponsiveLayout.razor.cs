@@ -138,6 +138,12 @@ namespace SoloX.BlazorLayout.Layouts
         public bool HideFooter { get; set; }
 
         /// <summary>
+        /// ResponsiveLayoutService
+        /// </summary>
+        [Inject]
+        public IResponsiveLayoutServiceInternal ResponsiveLayoutServiceInternal { get; set; } = default!;
+
+        /// <summary>
         /// ResizeObserverService to handle root footer and header size observation.
         /// </summary>
         [Inject]
@@ -293,6 +299,31 @@ namespace SoloX.BlazorLayout.Layouts
             await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
         }
 
+        private async void OnRequestReceivedAsync(object? sender, ResponsiveLayoutRequestEventArgs e)
+        {
+            switch (e.Request)
+            {
+                case ResponsiveLayoutRequestEventArgs.RequestType.HideHeader:
+                    HideHeader = e.BoolEventData;
+                    break;
+                case ResponsiveLayoutRequestEventArgs.RequestType.HideFooter:
+                    HideFooter = e.BoolEventData;
+                    break;
+                default:
+                    break;
+            }
+
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc/>
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            ResponsiveLayoutServiceInternal.RequestReceivedEvent += OnRequestReceivedAsync;
+        }
+
         /// <summary>
         /// Dispose all resources.
         /// </summary>
@@ -300,6 +331,8 @@ namespace SoloX.BlazorLayout.Layouts
         public async ValueTask DisposeAsync()
         {
             GC.SuppressFinalize(this);
+
+            ResponsiveLayoutServiceInternal.RequestReceivedEvent -= OnRequestReceivedAsync;
 
             if (this.rootCallBackDisposable != null)
             {
