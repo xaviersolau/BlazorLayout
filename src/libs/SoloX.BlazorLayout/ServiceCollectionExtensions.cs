@@ -21,27 +21,14 @@ namespace SoloX.BlazorLayout
         /// Add BlazorLayout services.
         /// </summary>
         /// <param name="services">The service collection to setup.</param>
-        /// <param name="serviceLifetime">Service Lifetime to use to register the IStringLocalizerFactory. (Default is Scoped)</param>
         /// <returns>The given service collection updated with the BlazorLayout services.</returns>
-        public static IServiceCollection AddBlazorLayout(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
+        public static IServiceCollection AddBlazorLayout(this IServiceCollection services)
         {
-            switch (serviceLifetime)
-            {
-                case ServiceLifetime.Singleton:
-                    services
-                        .AddSingleton<IResizeObserverService, ResizeObserverService>()
-                        .AddSingleton<IScrollObserverService, ScrollObserverService>();
-                    break;
-                case ServiceLifetime.Scoped:
-                    services.AddScoped<IResizeObserverService, ResizeObserverService>()
-                        .AddScoped<IScrollObserverService, ScrollObserverService>();
-                    break;
-                case ServiceLifetime.Transient:
-                default:
-                    services.AddTransient<IResizeObserverService, ResizeObserverService>()
-                        .AddTransient<IScrollObserverService, ScrollObserverService>();
-                    break;
-            }
+            services
+                .AddScoped<IResizeObserverService, ResizeObserverService>()
+                .AddScoped<IScrollObserverService, ScrollObserverService>()
+                .AddScoped<IResponsiveLayoutServiceInternal, ResponsiveLayoutService>()
+                .AddScoped<IResponsiveLayoutService>(r => r.GetRequiredService<IResponsiveLayoutServiceInternal>());
 
             return services;
         }

@@ -101,9 +101,11 @@ The component is designed with several parameters:
 | Outline (RenderFragment)                       | Outline view |
 | ChildContent (RenderFragment)                  | Main layout Body |
 | UseSmallNavigation  (bool)                     | Force use of small navigation view |
-| EnableOutline  (bool)                          | Enable/Disable outline view |
-| EnableContentScroll  (bool)                    | Change scrolling behavior to force main layout view to fit the display view and to enable scrolling in the child view |
-| DisableHorizontalNavigationMenuScrollX  (bool) | Disable scroll on horizontal navigation menu and wrap content |
+| EnableOutline (bool)                           | Enable/Disable outline view |
+| EnableContentScroll (bool)                     | Change scrolling behavior to force main layout view to fit the display view and to enable scrolling in the child view |
+| DisableHorizontalNavigationMenuScrollX (bool)  | Disable scroll on horizontal navigation menu and wrap content |
+| HideHeader (bool)                              | Hide header panel |
+| HideFooter (bool)                              | Hide footer panel |
 
 The small navigation view is used depending on the size of the display view.
 
@@ -312,4 +314,35 @@ Here is the C# part of the component:
     {
         await callBackDisposable.DisposeAsync();
     }
+```
+
+#### The ResponsiveLayout service
+
+The `IResponsiveLayoutService` is provided to allow you to dynamically hide the header or the footer panel.
+
+For exemple you can inject the service in your component:
+
+```csharp
+[Inject]
+public IResponsiveLayoutService ResponsiveLayoutService { get; set; }
+```
+
+And you can hide or show the header in your scroll call back method:
+
+```csharp
+public ValueTask ScrollAsync(ScrollInfo scrollInfo)
+{
+    ResponsiveLayoutService.HideHeader(scrollInfo.Top > 0);
+
+    return ValueTask.CompletedTask;
+}
+```
+
+Note that you should restore the Hide header/footer when your page is destroyed:
+
+```csharp
+public async ValueTask DisposeAsync()
+{
+    ResponsiveLayoutService.HideHeader(false);
+}
 ```

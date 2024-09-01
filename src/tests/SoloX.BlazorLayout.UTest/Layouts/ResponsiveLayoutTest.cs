@@ -359,6 +359,7 @@ namespace SoloX.BlazorLayout.UTest.Layouts
 
             ctx.Services.AddSingleton<IResizeObserverService>(resizeObserverServiceMock?.Object ?? Mock.Of<IResizeObserverService>());
             ctx.Services.AddSingleton<IScrollObserverService>(scrollObserverServiceMock?.Object ?? Mock.Of<IScrollObserverService>());
+            ctx.Services.AddSingleton<IResponsiveLayoutServiceInternal>(Mock.Of<IResponsiveLayoutServiceInternal>());
             return ctx;
         }
     }

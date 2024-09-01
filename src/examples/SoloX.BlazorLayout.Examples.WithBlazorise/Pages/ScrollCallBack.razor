@@ -12,7 +12,7 @@
             Let's register a scroll callback!
         </Heading>
         <Paragraph Style="margin:0px;">
-            Scroll is @scroll <br>
+            Scroll is @scroll (@scrollPercent.ToString("F")) <br>
             Height is @scrollHeight <br>
             View Height is @scrollViewHeight
         </Paragraph>
@@ -49,8 +49,12 @@
     private int scroll;
     private int scrollHeight;
     private int scrollViewHeight;
+    private double scrollPercent;
 
     private IAsyncDisposable callBackDisposable;
+
+    [Inject]
+    public IResponsiveLayoutService ResponsiveLayoutService { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -64,6 +68,13 @@
 
     public ValueTask ScrollAsync(ScrollInfo scrollInfo)
     {
+        ResponsiveLayoutService.HideHeader(scrollInfo.Top > 0);
+
+        double maxTop = (scrollInfo.Height - scrollInfo.ViewHeight);
+        this.scrollPercent = (scrollInfo.Top / maxTop) * 100.0;
+
+        ResponsiveLayoutService.HideFooter(scrollInfo.ViewHeight != scrollInfo.Height && scrollPercent < 80.0);
+
         this.scroll = scrollInfo.Top;
         this.scrollHeight = scrollInfo.Height;
         this.scrollViewHeight = scrollInfo.ViewHeight;
@@ -80,6 +91,9 @@
 
     public async ValueTask DisposeAsync()
     {
+        ResponsiveLayoutService.HideHeader(false);
+        ResponsiveLayoutService.HideFooter(false);
+
         if (this.callBackDisposable != null)
         {
             await callBackDisposable.DisposeAsync();
