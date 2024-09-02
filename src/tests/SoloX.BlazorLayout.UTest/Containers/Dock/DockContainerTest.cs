@@ -72,7 +72,7 @@ namespace SoloX.BlazorLayout.UTest.Containers.Dock
         [InlineData(Fill.Horizontal)]
         public void ItShouldFillParentSpaceAccordinglyToFillParameter(Fill fill)
         {
-            ContainerHelper.AssertIdIsProperlyRendered<DockContainer>(fill);
+            ContainerHelper.AssertFillClassIsProperlyRendered<DockContainer>(fill);
         }
 
         [Theory]

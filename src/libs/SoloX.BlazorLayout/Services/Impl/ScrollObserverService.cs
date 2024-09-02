@@ -74,6 +74,12 @@ namespace SoloX.BlazorLayout.Services.Impl
                             TimeSpan.FromMilliseconds(500),
                             elementReference.Id).ConfigureAwait(false);
                     }
+#if NET6_0_OR_GREATER
+                    catch (JSDisconnectedException e)
+                    {
+                        this.logger.LogDebug(e, e.Message);
+                    }
+#endif
                     catch (TaskCanceledException e)
                     {
                         this.logger.LogDebug(e, e.Message);
@@ -114,6 +120,12 @@ namespace SoloX.BlazorLayout.Services.Impl
 
                     await module.DisposeAsync().ConfigureAwait(false);
                 }
+#if NET6_0_OR_GREATER
+                catch (JSDisconnectedException e)
+                {
+                    this.logger.LogDebug(e, e.Message);
+                }
+#endif
                 catch (TaskCanceledException e)
                 {
                     this.logger.LogDebug(e.Message);
