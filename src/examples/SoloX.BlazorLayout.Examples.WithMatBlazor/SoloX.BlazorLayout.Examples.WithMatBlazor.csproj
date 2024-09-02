@@ -20,4 +20,10 @@
     <_ContentIncludedByDefault Remove="Pages\ScrollCallBack.razor" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\DisplayOnWidth.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

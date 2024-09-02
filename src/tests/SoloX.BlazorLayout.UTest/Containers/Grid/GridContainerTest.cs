@@ -190,7 +190,7 @@ namespace SoloX.BlazorLayout.UTest.Containers.Grid
         [InlineData(Fill.Horizontal)]
         public void ItShouldFillParentSpaceAccordinglyToFillParameter(Fill fill)
         {
-            ContainerHelper.AssertIdIsProperlyRendered<GridContainer>(fill);
+            ContainerHelper.AssertFillClassIsProperlyRendered<GridContainer>(fill);
         }
 
         [Fact]

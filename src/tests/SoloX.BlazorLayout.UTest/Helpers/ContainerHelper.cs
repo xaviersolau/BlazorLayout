@@ -16,7 +16,7 @@ namespace SoloX.BlazorLayout.UTest.Helpers
 {
     public static class ContainerHelper
     {
-        public static void AssertIdIsProperlyRendered<TContainer>(
+        public static void AssertFillClassIsProperlyRendered<TContainer>(
             Fill fill,
             Action<ComponentParameterCollectionBuilder<TContainer>>? setup = null)
             where TContainer : AContainer

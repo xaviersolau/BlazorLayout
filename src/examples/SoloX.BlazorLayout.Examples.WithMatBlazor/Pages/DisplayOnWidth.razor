@@ -1,0 +1,35 @@
+﻿
+@page "/DisplayOnWidth"
+
+<BoxContainer DisplayOn="@DisplaySize.Small">
+    <h3 >Display On Small</h3>
+</BoxContainer>
+<BoxContainer DisplayOn="@DisplaySize.Large">
+    <h3 >Display On Large</h3>
+</BoxContainer>
+<BoxContainer DisplayOn="@DisplaySize.VeryLarge">
+    <h3 >Display On Very Large</h3>
+</BoxContainer>
+<BoxContainer DisplayOn="@DisplaySize.VeryVeryLarge">
+    <h3 >Display On Very Very Large</h3>
+</BoxContainer>
+
+<BoxContainer DisplayOn="@(DisplaySize.Small | DisplaySize.Large)">
+    <h3>Display From Small to Large</h3>
+</BoxContainer>
+
+<BoxContainer DisplayOn="@(DisplaySize.Small | DisplaySize.Large | DisplaySize.VeryLarge)">
+    <h3>Display From Small to Very Large</h3>
+</BoxContainer>
+
+<BoxContainer DisplayOn="@(DisplaySize.Large | DisplaySize.VeryLarge| DisplaySize.VeryVeryLarge)">
+    <h3>Display From Large to Very Very Large</h3>
+</BoxContainer>
+
+<BoxContainer DisplayOn="@(DisplaySize.VeryLarge| DisplaySize.VeryVeryLarge)">
+    <h3>Display From Very Large to Very Very Large</h3>
+</BoxContainer>
+
+@code {
+
+}

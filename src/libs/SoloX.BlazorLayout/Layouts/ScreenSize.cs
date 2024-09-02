@@ -36,11 +36,11 @@ namespace SoloX.BlazorLayout.Layouts
         /// <summary>
         /// Is Very Large size.
         /// </summary>
-        public bool IsVeryLarge => Width > 900 && Width <= 1150;
+        public bool IsVeryLarge => Width > 900 && Width <= 1400;
 
         /// <summary>
         /// Is Very Very Large size.
         /// </summary>
-        public bool IsVeryVeryLarge => Width > 1150;
+        public bool IsVeryVeryLarge => Width > 1400;
     }
 }
