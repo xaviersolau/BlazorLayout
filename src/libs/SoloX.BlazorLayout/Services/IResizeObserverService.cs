@@ -20,11 +20,11 @@ namespace SoloX.BlazorLayout.Services
         /// <summary>
         /// Register a resize callback for the given element reference.
         /// </summary>
-        /// <param name="sizeCallBack">The resize callback to trigger on size changed.</param>
+        /// <param name="sizeCallback">The resize callback to trigger on size changed.</param>
         /// <param name="elementReference">The element reference to look after.</param>
         /// <returns>The asynchronous disposable that will unregister the callback once disposed.</returns>
-        ValueTask<IAsyncDisposable> RegisterResizeCallBackAsync(
-            IResizeCallBack sizeCallBack, ElementReference elementReference);
+        ValueTask<IAsyncDisposable> RegisterResizeCallbackAsync(
+            IResizeCallback sizeCallback, ElementReference elementReference);
 
         /// <summary>
         /// Register a mutation observer on the given mutable element reference.
@@ -38,6 +38,6 @@ namespace SoloX.BlazorLayout.Services
         /// Manually trigger the registered callbacks.
         /// </summary>
         /// <returns>The asynchronous value task.</returns>
-        ValueTask TriggerCallBackAsync();
+        ValueTask TriggerCallbackAsync();
     }
 }

@@ -33,7 +33,14 @@ namespace SoloX.BlazorLayout.Examples.WithBlazorise
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddBlazorLayout();
+            services.AddBlazorLayout(options =>
+            {
+                options.EnableJsModuleLogs = true;
+                options.ResizeCallbackDelay = 100;
+                options.EnableResizeEventBurstBoxingCallback = true;
+                options.ScrollCallbackDelay = 100;
+                options.EnableScrollEventBurstBoxingCallback = true;
+            });
 
             services
                 .AddBlazorise(options =>

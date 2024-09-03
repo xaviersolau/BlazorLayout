@@ -31,7 +31,10 @@ namespace SoloX.BlazorLayout.Examples.WithMatBlazor
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            services.AddBlazorLayout();
+            services.AddBlazorLayout(options =>
+            {
+                options.EnableJsModuleLogs = false;
+            });
 
             services.AddMatBlazor();
         }

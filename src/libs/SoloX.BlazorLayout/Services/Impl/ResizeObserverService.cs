@@ -8,6 +8,7 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
@@ -21,15 +22,17 @@ namespace SoloX.BlazorLayout.Services.Impl
     /// </summary>
     public class ResizeObserverService : IResizeObserverService, IAsyncDisposable
     {
-        internal const string RegisterResizeCallBack = "resizeManager.registerResizeCallBack";
-        internal const string UnregisterResizeCallBack = "resizeManager.unregisterResizeCallBack";
+        internal const string RegisterResizeCallback = "resizeManager.registerResizeCallback";
+        internal const string UnregisterResizeCallback = "resizeManager.unregisterResizeCallback";
         internal const string RegisterMutationObserver = "resizeManager.registerMutationObserver";
         internal const string UnregisterMutationObserver = "resizeManager.unregisterMutationObserver";
         internal const string ProcessCallbackReferences = "resizeManager.processCallbackReferences";
         internal const string Ping = "resizeManager.ping";
+        internal const string SetupModule = "resizeManager.setupModule";
         internal const string Import = "import";
         internal const string ResizeObserverJsInteropFile = "./_content/SoloX.BlazorLayout/resizeObserverJsInterop.js";
 
+        private readonly BlazorLayoutOptions options;
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
 
         private readonly Dictionary<string, AsyncDisposable> disposables =
@@ -40,29 +43,49 @@ namespace SoloX.BlazorLayout.Services.Impl
         /// <summary>
         /// Setup the service with the given jsRuntime interface.
         /// </summary>
+        /// <param name="options">Service options.</param>
         /// <param name="jsRuntime">The JS runtime to interact with JS sandbox.</param>
         /// <param name="logger">The logger where to log messages.</param>
-        public ResizeObserverService(IJSRuntime jsRuntime, ILogger<ResizeObserverService> logger)
+        public ResizeObserverService(IOptions<BlazorLayoutOptions> options, IJSRuntime jsRuntime, ILogger<ResizeObserverService> logger)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            this.options = options.Value;
+
             // Setup lazy loading of the JS size observer module.
-            this.moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-               Import, ResizeObserverJsInteropFile).AsTask());
+            this.moduleTask = new(async () =>
+            {
+                var module = await jsRuntime.InvokeAsync<IJSObjectReference>(
+                   Import,
+                   ResizeObserverJsInteropFile).ConfigureAwait(false);
+
+                await module.InvokeVoidAsync(
+                    SetupModule,
+                    this.options.EnableJsModuleLogs,
+                    this.options.ResizeCallbackDelay,
+                    this.options.EnableResizeEventBurstBoxingCallback).ConfigureAwait(false);
+
+                return module;
+            });
 
             this.logger = logger;
         }
 
         ///<inheritdoc/>
-        public async ValueTask<IAsyncDisposable> RegisterResizeCallBackAsync(
-            IResizeCallBack sizeCallBack, ElementReference elementReference)
+        public async ValueTask<IAsyncDisposable> RegisterResizeCallbackAsync(
+            IResizeCallback sizeCallback, ElementReference elementReference)
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
-            var objectRef = DotNetObjectReference.Create(new ResizeCallBackProxy(sizeCallBack));
+            var objectRef = DotNetObjectReference.Create(new ResizeCallbackProxy(sizeCallback));
 
-            await module.InvokeVoidAsync(RegisterResizeCallBack,
+            await module.InvokeVoidAsync(RegisterResizeCallback,
                 objectRef, elementReference.Id, elementReference).ConfigureAwait(false);
 
-            var id = $"{nameof(RegisterResizeCallBackAsync)}-{elementReference.Id}";
+            var id = $"{nameof(RegisterResizeCallbackAsync)}-{elementReference.Id}";
 
             var disposable = new AsyncDisposable(
                 id,
@@ -72,7 +95,7 @@ namespace SoloX.BlazorLayout.Services.Impl
 
                     try
                     {
-                        await module.InvokeVoidAsync(UnregisterResizeCallBack,
+                        await module.InvokeVoidAsync(UnregisterResizeCallback,
                             TimeSpan.FromMilliseconds(500),
                             elementReference.Id).ConfigureAwait(false);
                     }
@@ -134,7 +157,7 @@ namespace SoloX.BlazorLayout.Services.Impl
         }
 
         ///<inheritdoc/>
-        public async ValueTask TriggerCallBackAsync()
+        public async ValueTask TriggerCallbackAsync()
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
@@ -178,19 +201,19 @@ namespace SoloX.BlazorLayout.Services.Impl
 #pragma warning restore CA1816 // Les méthodes Dispose doivent appeler SuppressFinalize
         }
 
-        internal class ResizeCallBackProxy : IResizeCallBack
+        internal class ResizeCallbackProxy : IResizeCallback
         {
-            internal IResizeCallBack SizeCallBack { get; }
+            internal IResizeCallback SizeCallback { get; }
 
-            public ResizeCallBackProxy(IResizeCallBack sizeCallBack)
+            public ResizeCallbackProxy(IResizeCallback sizeCallback)
             {
-                SizeCallBack = sizeCallBack;
+                SizeCallback = sizeCallback;
             }
 
             [JSInvokable]
             public ValueTask ResizeAsync(int width, int height)
             {
-                return SizeCallBack.ResizeAsync(width, height);
+                return SizeCallback.ResizeAsync(width, height);
             }
         }
     }

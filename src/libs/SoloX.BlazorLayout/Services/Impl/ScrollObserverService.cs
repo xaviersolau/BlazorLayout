@@ -8,6 +8,7 @@
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using SoloX.BlazorLayout.Core;
 using System;
@@ -22,13 +23,15 @@ namespace SoloX.BlazorLayout.Services.Impl
     /// </summary>
     public class ScrollObserverService : IScrollObserverService, IAsyncDisposable
     {
-        internal const string RegisterScrollCallBack = "scrollManager.registerScrollCallBack";
-        internal const string UnregisterScrollCallBack = "scrollManager.unregisterScrollCallBack";
+        internal const string RegisterScrollCallback = "scrollManager.registerScrollCallback";
+        internal const string UnregisterScrollCallback = "scrollManager.unregisterScrollCallback";
         internal const string ScrollTo = "scrollManager.scrollTo";
         internal const string Ping = "scrollManager.ping";
+        internal const string SetupModule = "scrollManager.setupModule";
         internal const string Import = "import";
         internal const string ScrollObserverJsInteropFile = "./_content/SoloX.BlazorLayout/scrollObserverJsInterop.js";
 
+        private readonly BlazorLayoutOptions options;
         private readonly Lazy<Task<IJSObjectReference>> moduleTask;
 
         private readonly Dictionary<string, AsyncDisposable> disposables =
@@ -39,28 +42,48 @@ namespace SoloX.BlazorLayout.Services.Impl
         /// <summary>
         /// Setup the service with the given jsRuntime interface.
         /// </summary>
+        /// <param name="options">Service options.</param>
         /// <param name="jsRuntime">The JS runtime to interact with JS sandbox.</param>
         /// <param name="logger">The logger where to log messages.</param>
-        public ScrollObserverService(IJSRuntime jsRuntime, ILogger<ScrollObserverService> logger)
+        public ScrollObserverService(IOptions<BlazorLayoutOptions> options, IJSRuntime jsRuntime, ILogger<ScrollObserverService> logger)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            this.options = options.Value;
+
             // Setup lazy loading of the JS size observer module.
-            this.moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>(
-               Import, ScrollObserverJsInteropFile).AsTask());
+            this.moduleTask = new(async () =>
+            {
+                var module = await jsRuntime.InvokeAsync<IJSObjectReference>(
+                   Import,
+                   ScrollObserverJsInteropFile).ConfigureAwait(false);
+
+                await module.InvokeVoidAsync(
+                    SetupModule,
+                    this.options.EnableJsModuleLogs,
+                    this.options.ScrollCallbackDelay,
+                    this.options.EnableScrollEventBurstBoxingCallback).ConfigureAwait(false);
+
+                return module;
+            });
 
             this.logger = logger;
         }
 
         ///<inheritdoc/>
-        public async ValueTask<IAsyncDisposable> RegisterScrollCallBackAsync(IScrollCallBack scrollCallBack, ElementReference elementReference)
+        public async ValueTask<IAsyncDisposable> RegisterScrollCallbackAsync(IScrollCallback scrollCallback, ElementReference elementReference)
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
-            var objectRef = DotNetObjectReference.Create(new ScrollCallBackProxy(scrollCallBack));
+            var objectRef = DotNetObjectReference.Create(new ScrollCallbackProxy(scrollCallback));
 
-            await module.InvokeVoidAsync(RegisterScrollCallBack,
+            await module.InvokeVoidAsync(RegisterScrollCallback,
                 objectRef, elementReference.Id, elementReference).ConfigureAwait(false);
 
-            var id = $"{nameof(RegisterScrollCallBackAsync)}-{elementReference.Id}";
+            var id = $"{nameof(RegisterScrollCallbackAsync)}-{elementReference.Id}";
 
             var disposable = new AsyncDisposable(
                 id,
@@ -70,7 +93,7 @@ namespace SoloX.BlazorLayout.Services.Impl
 
                     try
                     {
-                        await module.InvokeVoidAsync(UnregisterScrollCallBack,
+                        await module.InvokeVoidAsync(UnregisterScrollCallback,
                             TimeSpan.FromMilliseconds(500),
                             elementReference.Id).ConfigureAwait(false);
                     }
@@ -137,13 +160,13 @@ namespace SoloX.BlazorLayout.Services.Impl
 #pragma warning restore CA1816 // Les méthodes Dispose doivent appeler SuppressFinalize
         }
 
-        internal class ScrollCallBackProxy
+        internal class ScrollCallbackProxy
         {
-            internal IScrollCallBack ScrollCallBack { get; }
+            internal IScrollCallback ScrollCallback { get; }
 
-            public ScrollCallBackProxy(IScrollCallBack scrollCallBack)
+            public ScrollCallbackProxy(IScrollCallback scrollCallback)
             {
-                ScrollCallBack = scrollCallBack;
+                ScrollCallback = scrollCallback;
             }
 
             [JSInvokable]
@@ -159,7 +182,7 @@ namespace SoloX.BlazorLayout.Services.Impl
                     ViewHeight = viewHeight,
                 };
 
-                return ScrollCallBack.ScrollAsync(scrollInfo);
+                return ScrollCallback.ScrollAsync(scrollInfo);
             }
         }
     }

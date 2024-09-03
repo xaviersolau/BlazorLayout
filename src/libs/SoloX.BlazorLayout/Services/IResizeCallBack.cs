@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="IResizeCallBack.cs" company="Xavier Solau">
+// <copyright file="IResizeCallback.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -13,7 +13,7 @@ namespace SoloX.BlazorLayout.Services
     /// <summary>
     /// Asynchronous resize callback interface.
     /// </summary>
-    public interface IResizeCallBack
+    public interface IResizeCallback
     {
         /// <summary>
         /// Callback method if a resize is detected.

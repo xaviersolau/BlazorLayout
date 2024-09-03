@@ -25,10 +25,10 @@ namespace SoloX.BlazorLayout.Layouts
         internal const string ChildContentPanelId = "child-content-panel-id";
         internal const string FooterPanelId = "footer-panel-id";
 
-        private IAsyncDisposable? rootCallBackDisposable;
-        private IAsyncDisposable? headerCallBackDisposable;
-        private IAsyncDisposable? footerCallBackDisposable;
-        private IAsyncDisposable? rootScrollCallBackDisposable;
+        private IAsyncDisposable? rootCallbackDisposable;
+        private IAsyncDisposable? headerCallbackDisposable;
+        private IAsyncDisposable? footerCallbackDisposable;
+        private IAsyncDisposable? rootScrollCallbackDisposable;
 
         /// <summary>
         /// Max proportion of the page side elements.
@@ -198,11 +198,11 @@ namespace SoloX.BlazorLayout.Layouts
         private string ClassHideFooter
             => HideFooter ? "footer hide-footer" : "footer";
 
-        private class ResizeCallBack : IResizeCallBack
+        private class ResizeCallback : IResizeCallback
         {
             private readonly Func<int, int, ValueTask> handler;
 
-            public ResizeCallBack(Func<int, int, ValueTask> handler)
+            public ResizeCallback(Func<int, int, ValueTask> handler)
             {
                 this.handler = handler;
             }
@@ -213,11 +213,11 @@ namespace SoloX.BlazorLayout.Layouts
             }
         }
 
-        private class ScrollCallBack : IScrollCallBack
+        private class ScrollCallback : IScrollCallback
         {
             private readonly Func<ScrollInfo, ValueTask> handler;
 
-            public ScrollCallBack(Func<ScrollInfo, ValueTask> handler)
+            public ScrollCallback(Func<ScrollInfo, ValueTask> handler)
             {
                 this.handler = handler;
             }
@@ -290,10 +290,10 @@ namespace SoloX.BlazorLayout.Layouts
         {
             if (firstRender)
             {
-                this.rootCallBackDisposable = await ResizeObserverService.RegisterResizeCallBackAsync(new ResizeCallBack(SetScreenSizeAsync), ElementReference).ConfigureAwait(false);
-                this.headerCallBackDisposable = await ResizeObserverService.RegisterResizeCallBackAsync(new ResizeCallBack(SetHeaderHeightAsync), HeaderElementReference).ConfigureAwait(false);
-                this.footerCallBackDisposable = await ResizeObserverService.RegisterResizeCallBackAsync(new ResizeCallBack(SetFooterHeightAsync), FooterElementReference).ConfigureAwait(false);
-                this.rootScrollCallBackDisposable = await ScrollObserverService.RegisterScrollCallBackAsync(new ScrollCallBack(SetScrollAsync), ElementReference).ConfigureAwait(false);
+                this.rootCallbackDisposable = await ResizeObserverService.RegisterResizeCallbackAsync(new ResizeCallback(SetScreenSizeAsync), ElementReference).ConfigureAwait(false);
+                this.headerCallbackDisposable = await ResizeObserverService.RegisterResizeCallbackAsync(new ResizeCallback(SetHeaderHeightAsync), HeaderElementReference).ConfigureAwait(false);
+                this.footerCallbackDisposable = await ResizeObserverService.RegisterResizeCallbackAsync(new ResizeCallback(SetFooterHeightAsync), FooterElementReference).ConfigureAwait(false);
+                this.rootScrollCallbackDisposable = await ScrollObserverService.RegisterScrollCallbackAsync(new ScrollCallback(SetScrollAsync), ElementReference).ConfigureAwait(false);
             }
 
             await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
@@ -334,10 +334,10 @@ namespace SoloX.BlazorLayout.Layouts
 
             ResponsiveLayoutServiceInternal.RequestReceivedEvent -= OnRequestReceivedAsync;
 
-            if (this.rootCallBackDisposable != null)
+            if (this.rootCallbackDisposable != null)
             {
-                await this.rootCallBackDisposable.DisposeAsync().ConfigureAwait(false);
-                this.rootCallBackDisposable = null;
+                await this.rootCallbackDisposable.DisposeAsync().ConfigureAwait(false);
+                this.rootCallbackDisposable = null;
             }
         }
     }

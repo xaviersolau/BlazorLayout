@@ -311,17 +311,17 @@ namespace SoloX.BlazorLayout.UTest.Layouts
 
         }
 
-        private static Mock<IScrollObserverService> SetupScrollObserverServiceMock(out Dictionary<string, IScrollCallBack> cbMap)
+        private static Mock<IScrollObserverService> SetupScrollObserverServiceMock(out Dictionary<string, IScrollCallback> cbMap)
         {
             var scrollObserverServiceMock = new Mock<IScrollObserverService>();
 
-            var map = new Dictionary<string, IScrollCallBack>();
+            var map = new Dictionary<string, IScrollCallback>();
 
             scrollObserverServiceMock
-                .Setup(s => s.RegisterScrollCallBackAsync(It.IsAny<IScrollCallBack>(), It.IsAny<ElementReference>()))
+                .Setup(s => s.RegisterScrollCallbackAsync(It.IsAny<IScrollCallback>(), It.IsAny<ElementReference>()))
                 .Callback(new InvocationAction((invocation) =>
                 {
-                    var cb = (IScrollCallBack)invocation.Arguments[0];
+                    var cb = (IScrollCallback)invocation.Arguments[0];
                     var er = (ElementReference)invocation.Arguments[1];
 
                     map.Add(er.Id, cb);
@@ -332,17 +332,17 @@ namespace SoloX.BlazorLayout.UTest.Layouts
             return scrollObserverServiceMock;
         }
 
-        private static Mock<IResizeObserverService> SetupResizeObserverServiceMock(out Dictionary<string, IResizeCallBack> cbMap)
+        private static Mock<IResizeObserverService> SetupResizeObserverServiceMock(out Dictionary<string, IResizeCallback> cbMap)
         {
             var resizeObserverServiceMock = new Mock<IResizeObserverService>();
 
-            var map = new Dictionary<string, IResizeCallBack>();
+            var map = new Dictionary<string, IResizeCallback>();
 
             resizeObserverServiceMock
-                .Setup(s => s.RegisterResizeCallBackAsync(It.IsAny<IResizeCallBack>(), It.IsAny<ElementReference>()))
+                .Setup(s => s.RegisterResizeCallbackAsync(It.IsAny<IResizeCallback>(), It.IsAny<ElementReference>()))
                 .Callback(new InvocationAction((invocation) =>
                 {
-                    var cb = (IResizeCallBack)invocation.Arguments[0];
+                    var cb = (IResizeCallback)invocation.Arguments[0];
                     var er = (ElementReference)invocation.Arguments[1];
 
                     map.Add(er.Id, cb);

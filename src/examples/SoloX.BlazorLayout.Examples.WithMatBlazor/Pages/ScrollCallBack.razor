@@ -1,9 +1,9 @@
-﻿@page "/ScrollCallBack"
+﻿@page "/ScrollCallback"
 
 
 @inject IScrollObserverService scrollObserverService
 
-@implements IScrollCallBack
+@implements IScrollCallback
 @implements IAsyncDisposable
 
 <DockContainer Fill="Fill.Full" Proportion="30">
@@ -51,7 +51,7 @@
     private int scrollViewHeight;
     private double scrollPercent;
 
-    private IAsyncDisposable callBackDisposable;
+    private IAsyncDisposable callbackDisposable;
 
     [Inject]
     public IResponsiveLayoutService ResponsiveLayoutService { get; set; }
@@ -60,7 +60,7 @@
     {
         if (firstRender)
         {
-            callBackDisposable = await scrollObserverService.RegisterScrollCallBackAsync(this, ContainerReference.ElementReference);
+            callbackDisposable = await scrollObserverService.RegisterScrollCallbackAsync(this, ContainerReference.ElementReference);
         }
 
         await base.OnAfterRenderAsync(firstRender);
@@ -94,10 +94,10 @@
         ResponsiveLayoutService.HideHeader(false);
         ResponsiveLayoutService.HideFooter(false);
 
-        if (this.callBackDisposable != null)
+        if (this.callbackDisposable != null)
         {
-            await callBackDisposable.DisposeAsync();
-            this.callBackDisposable = null;
+            await callbackDisposable.DisposeAsync();
+            this.callbackDisposable = null;
         }
     }
 }
