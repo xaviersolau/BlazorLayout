@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.Infrastructure;
 using Moq;
@@ -33,9 +34,9 @@ namespace SoloX.BlazorLayout.UTest.Services
         }
 
         [Fact]
-        public async Task ItShouldCallJSObjectReferenceRegisterAndUnRegisterScrollCallBackAsync()
+        public async Task ItShouldCallJSObjectReferenceRegisterAndUnRegisterScrollCallbackAsync()
         {
-            var callbackMock = new Mock<IScrollCallBack>();
+            var callbackMock = new Mock<IScrollCallback>();
 
             var service = SetupScrollObserverService(out var jsObjectReferenceMock);
 
@@ -43,16 +44,16 @@ namespace SoloX.BlazorLayout.UTest.Services
 
             var eltRef = new ElementReference("id");
 
-            var disposable = await service.RegisterScrollCallBackAsync(callbackMock.Object, eltRef).ConfigureAwait(false);
+            var disposable = await service.RegisterScrollCallbackAsync(callbackMock.Object, eltRef).ConfigureAwait(false);
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
-                    ScrollObserverService.RegisterScrollCallBack,
-                    It.Is<object?[]?>(a => MatchScrollCallBackRegister(a, eltRef, callbackMock.Object))),
+                    ScrollObserverService.RegisterScrollCallback,
+                    It.Is<object?[]?>(a => MatchScrollCallbackRegister(a, eltRef, callbackMock.Object))),
                 Times.Once);
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
-                    ScrollObserverService.UnregisterScrollCallBack,
+                    ScrollObserverService.UnregisterScrollCallback,
                     It.IsAny<CancellationToken>(), It.IsAny<object?[]?>()),
                 Times.Never);
 
@@ -60,7 +61,7 @@ namespace SoloX.BlazorLayout.UTest.Services
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
-                    ScrollObserverService.UnregisterScrollCallBack,
+                    ScrollObserverService.UnregisterScrollCallback,
                     It.IsAny<CancellationToken>(),
                     It.Is<object?[]?>(a => MatchUnRegister(a, eltRef))),
                 Times.Once);
@@ -104,15 +105,15 @@ namespace SoloX.BlazorLayout.UTest.Services
         [Fact]
         public async Task ItShouldForwardTheScrollCallAsync()
         {
-            var callBackMock = new Mock<IScrollCallBack>();
+            var callbackMock = new Mock<IScrollCallback>();
 
-            var proxy = new ScrollCallBackProxy(callBackMock.Object);
+            var proxy = new ScrollCallbackProxy(callbackMock.Object);
 
-            proxy.ScrollCallBack.Should().BeSameAs(callBackMock.Object);
+            proxy.ScrollCallback.Should().BeSameAs(callbackMock.Object);
 
             await proxy.ScrollAsync(1, 2, 3, 4, 5, 6).ConfigureAwait(false);
 
-            callBackMock.Verify(
+            callbackMock.Verify(
                 cb => cb.ScrollAsync(It.Is<ScrollInfo>(si => si.Width == 1 && si.Left == 2 && si.ViewWidth == 3 && si.Height == 4 && si.Top == 5 && si.ViewHeight == 6)),
                 Times.Once);
         }
@@ -123,6 +124,10 @@ namespace SoloX.BlazorLayout.UTest.Services
             var jsRuntimeMock = new Mock<IJSRuntime>();
             jsObjectReferenceMock = new Mock<IJSObjectReference>();
 
+            var optionsMock = new Mock<IOptions<BlazorLayoutOptions>>();
+
+            optionsMock.SetupGet(o => o.Value).Returns(new BlazorLayoutOptions());
+
             jsRuntimeMock
                 .Setup(r => r.InvokeAsync<IJSObjectReference>(
                     ScrollObserverService.Import,
@@ -130,21 +135,22 @@ namespace SoloX.BlazorLayout.UTest.Services
                 .ReturnsAsync(jsObjectReferenceMock.Object);
 
             var service = new ScrollObserverService(
-                            jsRuntimeMock.Object,
-                            new TestLogger<ScrollObserverService>(this.testOutputHelper));
+                optionsMock.Object,
+                jsRuntimeMock.Object,
+                new TestLogger<ScrollObserverService>(this.testOutputHelper));
             return service;
         }
 
-        private static bool MatchScrollCallBackRegister(object?[]? args, ElementReference expectedEltRef, IScrollCallBack scrollCallBack)
+        private static bool MatchScrollCallbackRegister(object?[]? args, ElementReference expectedEltRef, IScrollCallback scrollCallback)
         {
             if (args != null && args.Length == 3
-                && args[0] is DotNetObjectReference<ScrollCallBackProxy> callBackRef
+                && args[0] is DotNetObjectReference<ScrollCallbackProxy> callbackRef
                 && args[1] is string id
                 && args[2] is ElementReference eltRef)
             {
                 return expectedEltRef.Id == eltRef.Id
                     && id == expectedEltRef.Id
-                    && object.ReferenceEquals(callBackRef.Value.ScrollCallBack, scrollCallBack);
+                    && object.ReferenceEquals(callbackRef.Value.ScrollCallback, scrollCallback);
             }
 
             return false;

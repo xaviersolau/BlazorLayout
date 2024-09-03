@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="IScrollCallBack.cs" company="Xavier Solau">
+// <copyright file="IScrollCallback.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -14,7 +14,7 @@ namespace SoloX.BlazorLayout.Services
     /// <summary>
     /// Asynchronous scroll callback interface.
     /// </summary>
-    public interface IScrollCallBack
+    public interface IScrollCallback
     {
         /// <summary>
         /// Callback method if a scroll is detected.

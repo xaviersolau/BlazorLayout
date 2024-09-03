@@ -3,7 +3,7 @@
 
 @inject IResizeObserverService sizeObserverService
 
-@implements IResizeCallBack
+@implements IResizeCallback
 @implements IAsyncDisposable
 
 <ResizeContainer @ref="ResizeContainerReference" Fill="Fill.None">
@@ -26,7 +26,7 @@
     private int width;
     private int height;
 
-    private IAsyncDisposable callBackDisposable;
+    private IAsyncDisposable callbackDisposable;
     private IAsyncDisposable observerDisposable;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -35,7 +35,7 @@
         {
             observerDisposable = await sizeObserverService.RegisterMutationObserverAsync(ResizeContainerReference.ElementReference);
 
-            callBackDisposable = await sizeObserverService.RegisterResizeCallBackAsync(this, ResizeContainerReference.ElementReference);
+            callbackDisposable = await sizeObserverService.RegisterResizeCallbackAsync(this, ResizeContainerReference.ElementReference);
         }
 
         await base.OnAfterRenderAsync(firstRender);
@@ -59,10 +59,10 @@
             this.observerDisposable = null;
         }
 
-        if (this.callBackDisposable != null)
+        if (this.callbackDisposable != null)
         {
-            await callBackDisposable.DisposeAsync();
-            this.callBackDisposable = null;
+            await callbackDisposable.DisposeAsync();
+            this.callbackDisposable = null;
         }
     }
 }

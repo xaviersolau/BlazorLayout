@@ -8,6 +8,7 @@
 
 using FluentAssertions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
 using Moq;
 using SoloX.BlazorLayout.Services;
@@ -31,25 +32,25 @@ namespace SoloX.BlazorLayout.UTest.Services
         }
 
         [Fact]
-        public async Task ItShouldCallJSObjectReferenceRegisterAndUnRegisterResizeCallBackAsync()
+        public async Task ItShouldCallJSObjectReferenceRegisterAndUnRegisterResizeCallbackAsync()
         {
-            var callbackMock = new Mock<IResizeCallBack>();
+            var callbackMock = new Mock<IResizeCallback>();
 
             var service = SetupResizeObserverService(out var jsObjectReferenceMock);
             await using var _ = service.ConfigureAwait(false);
 
             var eltRef = new ElementReference("id");
 
-            var disposable = await service.RegisterResizeCallBackAsync(callbackMock.Object, eltRef).ConfigureAwait(false);
+            var disposable = await service.RegisterResizeCallbackAsync(callbackMock.Object, eltRef).ConfigureAwait(false);
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
-                    ResizeObserverService.RegisterResizeCallBack,
-                    It.Is<object?[]?>(a => MatchResizeCallBackRegister(a, eltRef, callbackMock.Object))),
+                    ResizeObserverService.RegisterResizeCallback,
+                    It.Is<object?[]?>(a => MatchResizeCallbackRegister(a, eltRef, callbackMock.Object))),
                 Times.Once);
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
-                    ResizeObserverService.UnregisterResizeCallBack,
+                    ResizeObserverService.UnregisterResizeCallback,
                     It.IsAny<CancellationToken>(), It.IsAny<object?[]?>()),
                 Times.Never);
 
@@ -57,7 +58,7 @@ namespace SoloX.BlazorLayout.UTest.Services
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
-                    ResizeObserverService.UnregisterResizeCallBack,
+                    ResizeObserverService.UnregisterResizeCallback,
                     It.IsAny<CancellationToken>(),
                     It.Is<object?[]?>(a => MatchUnRegister(a, eltRef))),
                 Times.Once);
@@ -95,12 +96,12 @@ namespace SoloX.BlazorLayout.UTest.Services
         }
 
         [Fact]
-        public async Task ItShouldCallJSObjectReferenceProcessCallBackAsync()
+        public async Task ItShouldCallJSObjectReferenceProcessCallbackAsync()
         {
             var service = SetupResizeObserverService(out var jsObjectReferenceMock);
             await using var _ = service.ConfigureAwait(false);
 
-            await service.TriggerCallBackAsync().ConfigureAwait(false);
+            await service.TriggerCallbackAsync().ConfigureAwait(false);
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
@@ -112,15 +113,15 @@ namespace SoloX.BlazorLayout.UTest.Services
         [Fact]
         public async Task ItShouldForwardTheResizeCallAsync()
         {
-            var callBackMock = new Mock<IResizeCallBack>();
+            var callbackMock = new Mock<IResizeCallback>();
 
-            var proxy = new ResizeCallBackProxy(callBackMock.Object);
+            var proxy = new ResizeCallbackProxy(callbackMock.Object);
 
-            proxy.SizeCallBack.Should().BeSameAs(callBackMock.Object);
+            proxy.SizeCallback.Should().BeSameAs(callbackMock.Object);
 
             await proxy.ResizeAsync(1, 2).ConfigureAwait(false);
 
-            callBackMock.Verify(
+            callbackMock.Verify(
                 cb => cb.ResizeAsync(1, 2),
                 Times.Once);
         }
@@ -131,6 +132,10 @@ namespace SoloX.BlazorLayout.UTest.Services
             var jsRuntimeMock = new Mock<IJSRuntime>();
             jsObjectReferenceMock = new Mock<IJSObjectReference>();
 
+            var optionsMock = new Mock<IOptions<BlazorLayoutOptions>>();
+
+            optionsMock.SetupGet(o => o.Value).Returns(new BlazorLayoutOptions());
+
             jsRuntimeMock
                 .Setup(r => r.InvokeAsync<IJSObjectReference>(
                     ResizeObserverService.Import,
@@ -138,21 +143,22 @@ namespace SoloX.BlazorLayout.UTest.Services
                 .ReturnsAsync(jsObjectReferenceMock.Object);
 
             var service = new ResizeObserverService(
-                            jsRuntimeMock.Object,
-                            new TestLogger<ResizeObserverService>(this.testOutputHelper));
+                optionsMock.Object,
+                jsRuntimeMock.Object,
+                new TestLogger<ResizeObserverService>(this.testOutputHelper));
             return service;
         }
 
-        private static bool MatchResizeCallBackRegister(object?[]? args, ElementReference expectedEltRef, IResizeCallBack sizeCallBack)
+        private static bool MatchResizeCallbackRegister(object?[]? args, ElementReference expectedEltRef, IResizeCallback sizeCallback)
         {
             if (args != null && args.Length == 3
-                && args[0] is DotNetObjectReference<ResizeCallBackProxy> callBackRef
+                && args[0] is DotNetObjectReference<ResizeCallbackProxy> callbackRef
                 && args[1] is string id
                 && args[2] is ElementReference eltRef)
             {
                 return expectedEltRef.Id == eltRef.Id
                     && id == expectedEltRef.Id
-                    && object.ReferenceEquals(callBackRef.Value.SizeCallBack, sizeCallBack);
+                    && object.ReferenceEquals(callbackRef.Value.SizeCallback, sizeCallback);
             }
 
             return false;

@@ -1,22 +1,42 @@
 
 class ResizeManager {
 
+  #callbackReferences = [];
+  #observerReferences = [];
+
+  #enableLogsOption = false;
+  #callbackDelay = 250;
+  #eventBurstBoxingCallback = false;
+  #callbackTimeoutId = null;
+
   constructor() {
     window.addEventListener("resize", this.callbackResize);
-
-    this.callbackReferences = [];
-    this.observerReferences = [];
   }
 
-  registerResizeCallBack(callbackObjetReference, elementReferenceId, element) {
-    console.log("registerResizeCallBack");
-    console.log(elementReferenceId);
+  setupModule(enableLogs, callbackDelay, eventBurstBoxingCallback) {
+    this.#enableLogsOption = enableLogs;
+    this.#callbackDelay = callbackDelay;
+    this.#eventBurstBoxingCallback = eventBurstBoxingCallback;
 
-    let size = { width: element.clientWidth, height: element.clientHeight };
+    this.#consoleLog("Set up Resize module",
+    {
+      enableLogs: enableLogs,
+      callbackDelay: callbackDelay,
+      eventBurstBoxingCallback: eventBurstBoxingCallback
+    });
+  }
+
+  registerResizeCallback(callbackObjetReference, elementReferenceId, element) {
+    this.#consoleLog("registerResizeCallback",
+    {
+      elementReferenceId: elementReferenceId
+    });
+
+    const size = { width: element.clientWidth, height: element.clientHeight };
 
     callbackObjetReference.invokeMethodAsync('ResizeAsync', size.width, size.height)
 
-    this.callbackReferences.push({
+    this.#callbackReferences.push({
       elementReferenceId: elementReferenceId,
       element: element,
       callbackObject: callbackObjetReference,
@@ -25,14 +45,16 @@ class ResizeManager {
 
   }
 
-  unregisterResizeCallBack(elementReferenceId) {
-    console.log("unregisterResizeCallBack");
-    console.log(elementReferenceId);
+  unregisterResizeCallback(elementReferenceId) {
+    this.#consoleLog("unregisterResizeCallback",
+    {
+      elementReferenceId: elementReferenceId
+    });
 
-    for (var i = 0; i < this.callbackReferences.length; i++) {
+    for (var i = 0; i < this.#callbackReferences.length; i++) {
 
-      if (this.callbackReferences[i].elementReferenceId === elementReferenceId) {
-        this.callbackReferences.splice(i, 1);
+      if (this.#callbackReferences[i].elementReferenceId === elementReferenceId) {
+        this.#callbackReferences.splice(i, 1);
 
         break;
       }
@@ -40,13 +62,15 @@ class ResizeManager {
   }
 
   registerMutationObserver(elementReferenceId, element) {
-    console.log("registerMutationObserver");
-    console.log(elementReferenceId);
+    this.#consoleLog("registerMutationObserver",
+    {
+      elementReferenceId: elementReferenceId
+    });
 
-    let observer = new MutationObserver(this.callbackObserver);
+    const observer = new MutationObserver(this.callbackObserver);
     observer.observe(element, { attributes: true });
 
-    this.observerReferences.push({
+    this.#observerReferences.push({
       element: element,
       elementReferenceId: elementReferenceId,
       observer: observer
@@ -55,19 +79,21 @@ class ResizeManager {
   }
 
   unregisterMutationObserver(elementReferenceId) {
-    console.log("unregisterMutationObserver");
-    console.log(elementReferenceId);
+    this.#consoleLog("unregisterMutationObserver",
+    {
+      elementReferenceId: elementReferenceId
+    });
 
-    for (var i = 0; i < this.observerReferences.length; i++) {
-      let item = this.observerReferences[i];
+    for (var i = 0; i < this.#observerReferences.length; i++) {
+      const item = this.#observerReferences[i];
       if (item.elementReferenceId === elementReferenceId) {
 
-        let element = item.element;
-        console.log(element);
+        const element = item.element;
+        this.#consoleLog(element);
 
         item.observer.disconnect(element);
 
-        this.observerReferences.splice(i, 1);
+        this.#observerReferences.splice(i, 1);
 
         return;
       }
@@ -76,48 +102,70 @@ class ResizeManager {
   }
 
   ping() {
-    console.log("ping");
+    this.#consoleLog("ping");
   }
 
   processCallbackReferences() {
+    if (this.#callbackReferences.length > 0) {
 
-    console.log("processCallbackReferences");
+      if (this.#callbackTimeoutId == null && this.#eventBurstBoxingCallback) {
+        this.#callbackTimeoutHandler(false);
+      }
 
-    if (this.callbackReferences.length > 0) {
-      clearTimeout(this.callbackTimeoutId);
-
-      this.callbackTimeoutId = setTimeout(
-        function () {
-          console.log("processing all callback references...");
-          console.log(resizeManager.callbackReferences);
-          resizeManager.callbackReferences
-            .forEach(ref => {
-              let width = ref.element.clientWidth;
-              let height = ref.element.clientHeight;
-              if (ref.size.width != width || ref.size.height != height) {
-
-                ref.size.width = width;
-                ref.size.height = height;
-
-                ref.callbackObject.invokeMethodAsync('ResizeAsync', width, height)
-              }
-            });
-        },
-        250
-      );
+      if (this.#callbackDelay != null && this.#callbackDelay > 0) {
+        clearTimeout(this.#callbackTimeoutId);
+        this.#callbackTimeoutId = setTimeout(
+          function () {
+            resizeManager.#callbackTimeoutHandler(true);
+          },
+          this.#callbackDelay
+        );
+      }
     }
   }
 
+  #callbackTimeoutHandler(fromTimer) {
+    this.#consoleLog("processing all resize callback references.",
+    {
+      fromTimer: fromTimer,
+      callbackReferences: this.#callbackReferences
+    });
+
+    this.#callbackReferences
+      .forEach(ref => {
+        const width = ref.element.clientWidth;
+        const height = ref.element.clientHeight;
+        if (ref.size.width != width || ref.size.height != height) {
+
+          ref.size.width = width;
+          ref.size.height = height;
+
+          this.#consoleLog("invoke Callback Method");
+          ref.callbackObject.invokeMethodAsync('ResizeAsync', width, height)
+        }
+      });
+
+    this.#callbackTimeoutId = null;
+  }
+
   callbackObserver(mutationsList) {
-    console.log("mutation");
     resizeManager.processCallbackReferences();
   }
 
   callbackResize(event) {
-    console.log("resize");
     resizeManager.processCallbackReferences();
+  }
+
+  #consoleLog(message, data) {
+    if (this.#enableLogsOption) {
+      if (data === undefined) {
+        console.log(message);
+      } else {
+        console.log([message, data]);
+      }
+    }
   }
 }
 
-export var resizeManager = new ResizeManager();
+export const resizeManager = new ResizeManager();
 

@@ -1,45 +1,75 @@
 
 class ScrollManager {
 
-  constructor() {
-    this.scrollObserverReferences = [];
+  #scrollObserverReferencesMap = new Map();
+
+  #eventTargetMap = new Map();
+
+  #enableLogsOption = false;
+  #callbackDelay = 250;
+  #eventBurstBoxingCallback = false;
+  #callbackTimeoutId = null;
+
+  setupModule(enableLogs, callbackDelay, eventBurstBoxingCallback) {
+    this.#enableLogsOption = enableLogs;
+    this.#callbackDelay = callbackDelay;
+    this.#eventBurstBoxingCallback = eventBurstBoxingCallback;
+
+    this.#consoleLog(
+      "Set up Scroll module",
+      {
+        enableLogs: enableLogs,
+        callbackDelay: callbackDelay,
+        eventBurstBoxingCallback: eventBurstBoxingCallback
+      });
   }
 
-  registerScrollCallBack(callbackObjetReference, elementReferenceId, element) {
-    console.log("registerScrollCallBack");
-    console.log(elementReferenceId);
+  registerScrollCallback(callbackObjetReference, elementReferenceId, element) {
+    this.#consoleLog("registerScrollCallback",
+    {
+      elementReferenceId: elementReferenceId
+    });
 
     element.addEventListener('scroll', this.scrollCallback)
 
     callbackObjetReference.invokeMethodAsync('ScrollAsync', element.scrollWidth, element.scrollLeft, element.clientWidth, element.scrollHeight, element.scrollTop, element.clientHeight);
 
-    this.scrollObserverReferences.push({
+    this.#scrollObserverReferencesMap.set(element, {
       elementReferenceId: elementReferenceId,
       element: element,
       callbackObject: callbackObjetReference,
     });
   }
 
-  unregisterScrollCallBack(elementReferenceId) {
-    console.log("unregisterScrollCallBack");
-    console.log(elementReferenceId);
+  unregisterScrollCallback(elementReferenceId) {
+    this.#consoleLog("unregisterScrollCallback",
+    {
+      elementReferenceId: elementReferenceId
+    });
 
-    for (var i = 0; i < this.scrollObserverReferences.length; i++) {
+    this.#scrollObserverReferencesMap
+      .keys()
+      .every((observerReferenceKey, index, array) => {
+        const observerReference = this.#scrollObserverReferencesMap.get(observerReferenceKey);
 
-      if (this.scrollObserverReferences[i].elementReferenceId === elementReferenceId) {
+        if (observerReference.elementReferenceId === elementReferenceId) {
+          observerReference.element.removeEventListener('scroll', this.scrollCallback);
 
-        this.scrollObserverReferences[i].element.removeEventListener('scroll', this.scrollCallback);
-        this.scrollObserverReferences.splice(i, 1);
+          this.#scrollObserverReferencesMap.delete(observerReferenceKey);
 
-        break;
-      }
-    }
+          return false;
+        }
+
+        return true;
+      });
   }
 
   scrollTo(element, left, top) {
-    console.log("scrollTo");
-    console.log(left);
-    console.log(top);
+    this.#consoleLog("scrollTo",
+    {
+      left: left,
+      top: top
+    });
 
     if (left >= 0) {
       element.scrollLeft = left;
@@ -51,7 +81,7 @@ class ScrollManager {
   }
 
   ping() {
-    console.log("ping");
+    this.#consoleLog("ping");
   }
 
   scrollCallback(event) {
@@ -59,21 +89,58 @@ class ScrollManager {
   }
 
   processScrollCallback(event) {
-    console.log("processScrollCallback");
+    if (this.#scrollObserverReferencesMap.size > 0) {
 
-    for (var i = 0; i < this.scrollObserverReferences.length; i++) {
+      this.#eventTargetMap.set(event.target, event.target);
 
-      const obsRef = this.scrollObserverReferences[i];
+      if (this.#callbackTimeoutId == null && this.#eventBurstBoxingCallback) {
+        this.#callbackTimeoutHandler(false);
+      }
 
-      if (obsRef.element === event.currentTarget) {
+      if (this.#callbackDelay != null && this.#callbackDelay > 0) {
+        clearTimeout(this.#callbackTimeoutId);
+        this.#callbackTimeoutId = setTimeout(
+          function () {
+            scrollManager.#callbackTimeoutHandler(true);
+          },
+          this.#callbackDelay
+        );
+      }
+    }
+  }
 
-        obsRef.callbackObject.invokeMethodAsync('ScrollAsync', event.currentTarget.scrollWidth, event.currentTarget.scrollLeft, event.currentTarget.clientWidth, event.currentTarget.scrollHeight, event.currentTarget.scrollTop, event.currentTarget.clientHeight);
+  #callbackTimeoutHandler(fromTimer) {
+    this.#consoleLog("processing all scroll callback references. From timer = " + fromTimer);
 
-        break;
+    this.#eventTargetMap
+      .keys()
+      .forEach(eventTargetKey => {
+
+        const eventTarget = this.#eventTargetMap.get(eventTargetKey);
+        this.#eventTargetMap.delete(eventTargetKey);
+
+        const obsRef = this.#scrollObserverReferencesMap.get(eventTarget);
+
+        if (obsRef !== undefined) {
+          this.#consoleLog("invoke Callback Method");
+          obsRef.callbackObject.invokeMethodAsync('ScrollAsync', eventTarget.scrollWidth, eventTarget.scrollLeft, eventTarget.clientWidth, eventTarget.scrollHeight, eventTarget.scrollTop, eventTarget.clientHeight);
+        }
+
+      });
+
+    this.#callbackTimeoutId = null;
+  }
+
+  #consoleLog(message, data) {
+    if (this.#enableLogsOption) {
+      if (data === undefined) {
+        console.log(message);
+      } else {
+        console.log([message, data]);
       }
     }
   }
 }
 
-export var scrollManager = new ScrollManager();
+export const scrollManager = new ScrollManager();
 

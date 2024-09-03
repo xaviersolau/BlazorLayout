@@ -13,11 +13,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\ScrollCallBack.razor" />
+    <UpToDateCheckInput Remove="Pages\ScrollCallback.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\ScrollCallBack.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ScrollCallback.razor" />
   </ItemGroup>
 
   <ItemGroup>
