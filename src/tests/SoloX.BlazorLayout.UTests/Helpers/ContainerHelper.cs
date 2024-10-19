@@ -12,7 +12,7 @@ using FluentAssertions;
 using SoloX.BlazorLayout.Core;
 using System;
 
-namespace SoloX.BlazorLayout.UTest.Helpers
+namespace SoloX.BlazorLayout.UTests.Helpers
 {
     public static class ContainerHelper
     {

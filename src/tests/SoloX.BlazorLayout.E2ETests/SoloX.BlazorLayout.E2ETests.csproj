@@ -1,0 +1,88 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\SharedProperties.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="JavaScript\Resources\index.html" />
+    <None Remove="JavaScript\Resources\resizeIndex.html" />
+    <None Remove="JavaScript\Resources\scrollIndex.html" />
+    <None Remove="JavaScript\Resources\site.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="JavaScript\Resources\site.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="SoloX.CodeQuality.Playwright" Version="2.2.2" />
+    <PackageReference Include="SoloX.CodeQuality.Test.Helpers" Version="2.2.2" />
+    <PackageReference Include="SoloX.CodeQuality.Test.Helpers.XUnit" Version="2.2.2" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SoloX.CodeQuality.Test" Version="2.2.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\examples\SoloX.BlazorLayout.Examples.WithBlazorise\SoloX.BlazorLayout.Examples.WithBlazorise.csproj" />
+    <ProjectReference Include="..\..\examples\SoloX.BlazorLayout.Examples.WithMatBlazor\SoloX.BlazorLayout.Examples.WithMatBlazor.csproj" />
+    <ProjectReference Include="..\..\libs\SoloX.BlazorLayout\SoloX.BlazorLayout.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\libs\SoloX.BlazorLayout\wwwroot\resizeObserverJsInterop.js" Link="JavaScript\Resources\resizeObserverJsInterop.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\libs\SoloX.BlazorLayout\wwwroot\scrollObserverJsInterop.js" Link="JavaScript\Resources\scrollObserverJsInterop.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="JavaScript\Resources\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="JavaScript\Resources\site.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="JavaScript\Resources\site.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- This will ensure that the file is copied to the output directory -->
+    <None Update="contentFiles\any\$(TargetFramework)\SoloX.CodeQuality.WebHost.deps.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <!-- This will ensure that the file is copied to the output directory -->
+    <None Update="content\any\net8.0\appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+</Project>

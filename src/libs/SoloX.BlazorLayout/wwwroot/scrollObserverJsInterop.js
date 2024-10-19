@@ -93,7 +93,9 @@ class ScrollManager {
 
       this.#eventTargetMap.set(event.target, event.target);
 
-      if (this.#callbackTimeoutId == null && this.#eventBurstBoxingCallback) {
+      if ((this.#callbackTimeoutId == null && this.#eventBurstBoxingCallback)
+        || this.#callbackDelay == null
+        || this.#callbackDelay <= 0) {
         this.#callbackTimeoutHandler(false);
       }
 

@@ -22,7 +22,7 @@ using Xunit;
 using Xunit.Abstractions;
 using static SoloX.BlazorLayout.Services.Impl.ScrollObserverService;
 
-namespace SoloX.BlazorLayout.UTest.Services
+namespace SoloX.BlazorLayout.UTests.Services
 {
     public class ScrollObserverServiceTest
     {

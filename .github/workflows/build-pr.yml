@@ -22,18 +22,18 @@ jobs:
     - name: Test
       run: dotnet test --configuration Release --no-restore --no-build
 
-    - name: Test Coverage SoloX.BlazorLayout.UTest
+    - name: Test Coverage SoloX.BlazorLayout.UTests
       id: coverage-utest
       run: |
-        dotnet test ./src/tests/SoloX.BlazorLayout.UTest --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
-        echo "::set-output name=FILE::$(find ./src/tests/SoloX.BlazorLayout.UTest -name 'coverage.info' -print)"
+        dotnet test ./src/tests/SoloX.BlazorLayout.UTests --configuration Release --no-restore --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+        echo "::set-output name=FILE::$(find ./src/tests/SoloX.BlazorLayout.UTests -name 'coverage.info' -print)"
     - name: Moving test results
-      run: mv ./src/tests/SoloX.BlazorLayout.UTest/TestResults/**/coverage.cobertura.xml ./src/tests/SoloX.BlazorLayout.UTest/TestResults/coverage.cobertura.xml
+      run: mv ./src/tests/SoloX.BlazorLayout.UTests/TestResults/**/coverage.cobertura.xml ./src/tests/SoloX.BlazorLayout.UTests/TestResults/coverage.cobertura.xml
     - name: Send to coverals
       uses: coverallsapp/github-action@v2.2.3
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./src/tests/SoloX.BlazorLayout.UTest/TestResults/coverage.cobertura.xml
+        file: ./src/tests/SoloX.BlazorLayout.UTests/TestResults/coverage.cobertura.xml
         format: cobertura
         flag-name: coverage-utest
         parallel: true

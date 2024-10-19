@@ -11,10 +11,10 @@ using Bunit;
 using FluentAssertions;
 using SoloX.BlazorLayout.Containers.Dock;
 using SoloX.BlazorLayout.Core;
-using SoloX.BlazorLayout.UTest.Helpers;
+using SoloX.BlazorLayout.UTests.Helpers;
 using Xunit;
 
-namespace SoloX.BlazorLayout.UTest.Containers.Dock
+namespace SoloX.BlazorLayout.UTests.Containers.Dock
 {
     public class DockContainerTest
     {

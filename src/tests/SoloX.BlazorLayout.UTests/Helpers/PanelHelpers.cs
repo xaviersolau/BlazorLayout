@@ -12,7 +12,7 @@ using Bunit;
 using FluentAssertions;
 using SoloX.BlazorLayout.Core;
 
-namespace SoloX.BlazorLayout.UTest.Helpers
+namespace SoloX.BlazorLayout.UTests.Helpers
 {
     public static class PanelHelpers
     {

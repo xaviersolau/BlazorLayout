@@ -1,5 +1,5 @@
 ﻿// ----------------------------------------------------------------------
-// <copyright file="InlineContainerTest.cs" company="Xavier Solau">
+// <copyright file="ResizeContainerTest.cs" company="Xavier Solau">
 // Copyright © 2021 Xavier Solau.
 // Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
@@ -8,35 +8,35 @@
 
 using SoloX.BlazorLayout.Containers;
 using SoloX.BlazorLayout.Core;
-using SoloX.BlazorLayout.UTest.Helpers;
+using SoloX.BlazorLayout.UTests.Helpers;
 using Xunit;
 
-namespace SoloX.BlazorLayout.UTest.Containers
+namespace SoloX.BlazorLayout.UTests.Containers
 {
-    public class InlineContainerTest
+    public class ResizeContainerTest
     {
         [Fact]
         public void ItShouldRenderWithTheGivenId()
         {
-            PanelHelpers.AssertIdIsProperlyRendered<InlineContainer>();
+            PanelHelpers.AssertIdIsProperlyRendered<ResizeContainer>();
         }
 
         [Fact]
         public void ItShouldRenderWithTheGivenClass()
         {
-            PanelHelpers.AssertClassIsProperlyRendered<InlineContainer>();
+            PanelHelpers.AssertClassIsProperlyRendered<ResizeContainer>();
         }
 
         [Fact]
         public void ItShouldRenderWithTheGivenStyle()
         {
-            PanelHelpers.AssertStyleIsProperlyRendered<InlineContainer>();
+            PanelHelpers.AssertStyleIsProperlyRendered<ResizeContainer>();
         }
 
         [Fact]
         public void ItShouldInitializeElementReference()
         {
-            PanelHelpers.AssertElementReferenceIsProperlySet<InlineContainer>();
+            PanelHelpers.AssertElementReferenceIsProperlySet<ResizeContainer>();
         }
 
         [Theory]
@@ -46,7 +46,7 @@ namespace SoloX.BlazorLayout.UTest.Containers
         [InlineData(Fill.Horizontal)]
         public void ItShouldFillParentSpaceAccordinglyToFillParameter(Fill fill)
         {
-            ContainerHelper.AssertFillClassIsProperlyRendered<InlineContainer>(fill);
+            ContainerHelper.AssertFillClassIsProperlyRendered<ResizeContainer>(fill);
         }
     }
 }

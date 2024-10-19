@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SoloX.BlazorLayout.UTest.Helpers
+namespace SoloX.BlazorLayout.UTests.Helpers
 {
     /// <summary>
     /// Helper to read style attribute from Html tree element.

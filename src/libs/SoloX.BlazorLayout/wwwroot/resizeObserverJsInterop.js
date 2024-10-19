@@ -108,7 +108,9 @@ class ResizeManager {
   processCallbackReferences() {
     if (this.#callbackReferences.length > 0) {
 
-      if (this.#callbackTimeoutId == null && this.#eventBurstBoxingCallback) {
+      if ((this.#callbackTimeoutId == null && this.#eventBurstBoxingCallback)
+        || this.#callbackDelay == null
+        || this.#callbackDelay <= 0) {
         this.#callbackTimeoutHandler(false);
       }
 
