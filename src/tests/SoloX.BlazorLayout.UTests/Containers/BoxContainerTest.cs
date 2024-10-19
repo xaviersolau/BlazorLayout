@@ -11,11 +11,11 @@ using AngleSharp.Dom;
 using FluentAssertions;
 using SoloX.BlazorLayout.Containers;
 using Xunit;
-using SoloX.BlazorLayout.UTest.Helpers;
+using SoloX.BlazorLayout.UTests.Helpers;
 using SoloX.BlazorLayout.Core;
 using System;
 
-namespace SoloX.BlazorLayout.UTest.Containers
+namespace SoloX.BlazorLayout.UTests.Containers
 {
     public class BoxContainerTest
     {

@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html style="overflow: hidden;">
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+
+  <link href="site.css" rel="stylesheet" />
+
+</head>
+<body style="margin: 0; overflow: auto;">
+  <script type="module" src="scrollObserverJsInterop.js"></script>
+
+  <script type="module">
+    import { scrollManager } from './scrollObserverJsInterop.js';
+
+    window.scrollManager = scrollManager;
+
+    console.log(window.scrollManager);
+
+  </script>
+
+  <div id="box" style="height: 800px; width: 1500px; background-color: red;"></div>
+
+
+</body>
+</html>

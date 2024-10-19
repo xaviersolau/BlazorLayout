@@ -7,10 +7,10 @@
 // ----------------------------------------------------------------------
 
 using SoloX.BlazorLayout.Containers.Grid;
-using SoloX.BlazorLayout.UTest.Helpers;
+using SoloX.BlazorLayout.UTests.Helpers;
 using Xunit;
 
-namespace SoloX.BlazorLayout.UTest.Containers.Grid
+namespace SoloX.BlazorLayout.UTests.Containers.Grid
 {
     public class GridCellTest
     {

@@ -15,12 +15,12 @@ using Moq;
 using SoloX.BlazorLayout.Core;
 using SoloX.BlazorLayout.Layouts;
 using SoloX.BlazorLayout.Services;
-using SoloX.BlazorLayout.UTest.Helpers;
+using SoloX.BlazorLayout.UTests.Helpers;
 using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace SoloX.BlazorLayout.UTest.Layouts
+namespace SoloX.BlazorLayout.UTests.Layouts
 {
     public class ResponsiveLayoutTest
     {
@@ -353,13 +353,16 @@ namespace SoloX.BlazorLayout.UTest.Layouts
             return resizeObserverServiceMock;
         }
 
-        private static TestContext BuildTestContext(Mock<IResizeObserverService>? resizeObserverServiceMock = null, Mock<IScrollObserverService>? scrollObserverServiceMock = null)
+        private static TestContext BuildTestContext(
+            Mock<IResizeObserverService>? resizeObserverServiceMock = null,
+            Mock<IScrollObserverService>? scrollObserverServiceMock = null,
+            Mock<IResponsiveLayoutServiceInternal>? responsiveLayoutServiceInternalMock = null)
         {
             var ctx = new TestContext();
 
             ctx.Services.AddSingleton<IResizeObserverService>(resizeObserverServiceMock?.Object ?? Mock.Of<IResizeObserverService>());
             ctx.Services.AddSingleton<IScrollObserverService>(scrollObserverServiceMock?.Object ?? Mock.Of<IScrollObserverService>());
-            ctx.Services.AddSingleton<IResponsiveLayoutServiceInternal>(Mock.Of<IResponsiveLayoutServiceInternal>());
+            ctx.Services.AddSingleton<IResponsiveLayoutServiceInternal>(responsiveLayoutServiceInternalMock?.Object ?? Mock.Of<IResponsiveLayoutServiceInternal>());
             return ctx;
         }
     }

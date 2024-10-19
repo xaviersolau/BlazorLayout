@@ -13,7 +13,7 @@ using SoloX.BlazorLayout.Services.Impl;
 using SoloX.BlazorLayout.Services;
 using FluentAssertions;
 
-namespace SoloX.BlazorLayout.UTest.Services
+namespace SoloX.BlazorLayout.UTests.Services
 {
     public class ResponsiveLayoutServiceTest
     {

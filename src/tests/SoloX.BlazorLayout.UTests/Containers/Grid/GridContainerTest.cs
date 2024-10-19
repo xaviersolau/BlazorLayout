@@ -11,11 +11,11 @@ using Bunit;
 using FluentAssertions;
 using SoloX.BlazorLayout.Containers.Grid;
 using SoloX.BlazorLayout.Core;
-using SoloX.BlazorLayout.UTest.Containers.Grid.Components;
-using SoloX.BlazorLayout.UTest.Helpers;
+using SoloX.BlazorLayout.UTests.Containers.Grid.Components;
+using SoloX.BlazorLayout.UTests.Helpers;
 using Xunit;
 
-namespace SoloX.BlazorLayout.UTest.Containers.Grid
+namespace SoloX.BlazorLayout.UTests.Containers.Grid
 {
     public class GridContainerTest
     {
