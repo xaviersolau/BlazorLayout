@@ -1,7 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
+
+    <ImplicitUsings>enable</ImplicitUsings>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,11 +16,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\ScrollCallBack.razor" />
+    <UpToDateCheckInput Remove="Pages\ScrollCallback.razor" />
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\ScrollCallBack.razor" />
+    <_ContentIncludedByDefault Remove="Pages\ScrollCallback.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Pages\DisplayOnWidth.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
   </ItemGroup>
 
 </Project>

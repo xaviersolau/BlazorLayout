@@ -33,17 +33,17 @@ You can checkout this Github repository or you can use the NuGet packages:
 
 **Install using the command line from the Package Manager:**
 ```bash
-Install-Package SoloX.BlazorLayout -version 1.0.0-alpha.10
+Install-Package SoloX.BlazorLayout -version 1.0.0-alpha.11
 ```
 
 **Install using the .Net CLI:**
 ```bash
-dotnet add package SoloX.BlazorLayout --version 1.0.0-alpha.10
+dotnet add package SoloX.BlazorLayout --version 1.0.0-alpha.11
 ```
 
 **Install editing your project file (csproj):**
 ```xml
-<PackageReference Include="SoloX.BlazorLayout" Version="1.0.0-alpha.10" />
+<PackageReference Include="SoloX.BlazorLayout" Version="1.0.0-alpha.11" />
 ```
 
 Once the package is referenced, you can add in you project **_Imports.razor** file all using directives to
@@ -101,9 +101,11 @@ The component is designed with several parameters:
 | Outline (RenderFragment)                       | Outline view |
 | ChildContent (RenderFragment)                  | Main layout Body |
 | UseSmallNavigation  (bool)                     | Force use of small navigation view |
-| EnableOutline  (bool)                          | Enable/Disable outline view |
-| EnableContentScroll  (bool)                    | Change scrolling behavior to force main layout view to fit the display view and to enable scrolling in the child view |
-| DisableHorizontalNavigationMenuScrollX  (bool) | Disable scroll on horizontal navigation menu and wrap content |
+| EnableOutline (bool)                           | Enable/Disable outline view |
+| EnableContentScroll (bool)                     | Change scrolling behavior to force main layout view to fit the display view and to enable scrolling in the child view |
+| DisableHorizontalNavigationMenuScrollX (bool)  | Disable scroll on horizontal navigation menu and wrap content |
+| HideHeader (bool)                              | Hide header panel |
+| HideFooter (bool)                              | Hide footer panel |
 
 The small navigation view is used depending on the size of the display view.
 
@@ -187,14 +189,14 @@ Let's say that you need to follow the size changed event of a component in your 
 
 You can inject the `IResizeObserverService` in your components.
 
-For example we can define a ResizeCallBack page that will register a resize callback with a `BoxContainer`:
+For example we can define a ResizeCallback page that will register a resize callback with a `BoxContainer`:
 
 ```razor
-@page "/ResizeCallBack"
+@page "/ResizeCallback"
 
 @inject IResizeObserverService sizeObserverService
 
-@implements IResizeCallBack
+@implements IResizeCallback
 
 @implements IAsyncDisposable
 
@@ -205,7 +207,7 @@ For example we can define a ResizeCallBack page that will register a resize call
 
 Note that:
 - We use `@ref` in order to get a reference on the component instance.
-- We implement `IResizeCallBack` in order to use this as callback in the `IResizeObserverService`.
+- We implement `IResizeCallback` in order to use this as callback in the `IResizeObserverService`.
 - We implement `IAsyncDisposable` in order to dispose callback resources.
 
 Here is the C# part of the component:
@@ -215,7 +217,7 @@ Here is the C# part of the component:
     private BoxContainer ContainerReference { get; set; }
 
     // The call back disposable returned by the callback registration.
-    private IAsyncDisposable callBackDisposable;
+    private IAsyncDisposable callbackDisposable;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -225,17 +227,17 @@ Here is the C# part of the component:
             // after the first render.
             // Note that it returns a disposable callback object that must be disposed to properly
             // unregister the service resources.
-            callBackDisposable = await sizeObserverService
-                .RegisterResizeCallBackAsync(this, ContainerReference.ElementReference);
+            callbackDisposable = await sizeObserverService
+                .RegisterResizeCallbackAsync(this, ContainerReference.ElementReference);
         }
 
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    // Implement the IResizeCallBack interface.
+    // Implement the IResizeCallback interface.
     public ValueTask ResizeAsync(int width, int height)
     {
-        // CallBack code....
+        // Callback code....
 
         return ValueTask.CompletedTask;
     }
@@ -243,7 +245,7 @@ Here is the C# part of the component:
     // Dispose the callback resources.
     public async ValueTask DisposeAsync()
     {
-        await callBackDisposable.DisposeAsync();
+        await callbackDisposable.DisposeAsync();
     }
 ```
 
@@ -254,14 +256,14 @@ Now we are going to follow the scroll changed event of a component in your page.
 
 You can inject the `IScrollObserverService` in your components.
 
-For example we can define a ScrollCallBack page that will register a scroll callback with a `BoxContainer`:
+For example we can define a ScrollCallback page that will register a scroll callback with a `BoxContainer`:
 
 ```razor
-@page "/ScrollCallBack"
+@page "/ScrollCallback"
 
 @inject IScrollObserverService scrollObserverService
 
-@implements IScrollCallBack
+@implements IScrollCallback
 
 @implements IAsyncDisposable
 
@@ -272,7 +274,7 @@ For example we can define a ScrollCallBack page that will register a scroll call
 
 Note that:
 - We use `@ref` in order to get a reference on the component instance.
-- We implement `IScrollCallBack` in order to use this as callback in the `IScrollObserverService`.
+- We implement `IScrollCallback` in order to use this as callback in the `IScrollObserverService`.
 - We implement `IAsyncDisposable` in order to dispose callback resources.
 
 Here is the C# part of the component:
@@ -282,7 +284,7 @@ Here is the C# part of the component:
     private BoxContainer ContainerReference { get; set; }
 
     // The call back disposable returned by the callback registration.
-    private IAsyncDisposable callBackDisposable;
+    private IAsyncDisposable callbackDisposable;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -292,17 +294,17 @@ Here is the C# part of the component:
             // after the first render.
             // Note that it returns a disposable callback object that must be disposed to properly
             // unregister the service resources.
-            callBackDisposable = await scrollObserverService
-                .RegisterScrollCallBackAsync(this, ContainerReference.ElementReference);
+            callbackDisposable = await scrollObserverService
+                .RegisterScrollCallbackAsync(this, ContainerReference.ElementReference);
         }
 
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    // Implement the IResizeCallBack interface.
+    // Implement the IResizeCallback interface.
     public ValueTask ScrollAsync(ScrollInfo scrollInfo)
     {
-        // CallBack code....
+        // Callback code....
 
         return ValueTask.CompletedTask;
     }
@@ -310,6 +312,37 @@ Here is the C# part of the component:
     // Dispose the callback resources.
     public async ValueTask DisposeAsync()
     {
-        await callBackDisposable.DisposeAsync();
+        await callbackDisposable.DisposeAsync();
     }
+```
+
+#### The ResponsiveLayout service
+
+The `IResponsiveLayoutService` is provided to allow you to dynamically hide the header or the footer panel.
+
+For exemple you can inject the service in your component:
+
+```csharp
+[Inject]
+public IResponsiveLayoutService ResponsiveLayoutService { get; set; }
+```
+
+And you can hide or show the header in your scroll call back method:
+
+```csharp
+public ValueTask ScrollAsync(ScrollInfo scrollInfo)
+{
+    ResponsiveLayoutService.HideHeader(scrollInfo.Top > 0);
+
+    return ValueTask.CompletedTask;
+}
+```
+
+Note that you should restore the Hide header/footer when your page is destroyed:
+
+```csharp
+public async ValueTask DisposeAsync()
+{
+    ResponsiveLayoutService.HideHeader(false);
+}
 ```

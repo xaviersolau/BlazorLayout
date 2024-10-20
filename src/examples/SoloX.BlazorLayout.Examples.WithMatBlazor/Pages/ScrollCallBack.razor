@@ -1,9 +1,9 @@
-﻿@page "/ScrollCallBack"
+﻿@page "/ScrollCallback"
 
 
 @inject IScrollObserverService scrollObserverService
 
-@implements IScrollCallBack
+@implements IScrollCallback
 @implements IAsyncDisposable
 
 <DockContainer Fill="Fill.Full" Proportion="30">
@@ -12,7 +12,7 @@
             Let's register a scroll callback!
         </MatHeadline6>
         <MatBody1 Style="margin:0px;">
-            Scroll is @scroll <br>
+            Scroll is @scroll (@scrollPercent.ToString("F")) <br>
             Height is @scrollHeight <br>
             View Height is @scrollViewHeight
         </MatBody1>
@@ -49,14 +49,18 @@
     private int scroll;
     private int scrollHeight;
     private int scrollViewHeight;
+    private double scrollPercent;
 
-    private IAsyncDisposable callBackDisposable;
+    private IAsyncDisposable callbackDisposable;
+
+    [Inject]
+    public IResponsiveLayoutService ResponsiveLayoutService { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            callBackDisposable = await scrollObserverService.RegisterScrollCallBackAsync(this, ContainerReference.ElementReference);
+            callbackDisposable = await scrollObserverService.RegisterScrollCallbackAsync(this, ContainerReference.ElementReference);
         }
 
         await base.OnAfterRenderAsync(firstRender);
@@ -64,6 +68,13 @@
 
     public ValueTask ScrollAsync(ScrollInfo scrollInfo)
     {
+        ResponsiveLayoutService.HideHeader(scrollInfo.Top > 0);
+
+        double maxTop = (scrollInfo.Height - scrollInfo.ViewHeight);
+        this.scrollPercent = (scrollInfo.Top / maxTop) * 100.0;
+
+        ResponsiveLayoutService.HideFooter(scrollInfo.ViewHeight != scrollInfo.Height && scrollPercent < 80.0);
+
         this.scroll = scrollInfo.Top;
         this.scrollHeight = scrollInfo.Height;
         this.scrollViewHeight = scrollInfo.ViewHeight;
@@ -80,10 +91,13 @@
 
     public async ValueTask DisposeAsync()
     {
-        if (this.callBackDisposable != null)
+        ResponsiveLayoutService.HideHeader(false);
+        ResponsiveLayoutService.HideFooter(false);
+
+        if (this.callbackDisposable != null)
         {
-            await callBackDisposable.DisposeAsync();
-            this.callBackDisposable = null;
+            await callbackDisposable.DisposeAsync();
+            this.callbackDisposable = null;
         }
     }
 }

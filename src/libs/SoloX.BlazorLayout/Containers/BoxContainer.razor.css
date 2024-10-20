@@ -21,3 +21,143 @@
     width: fit-content;
     height: fit-content;
 }
+
+.no-display {
+  display: none;
+}
+
+.display-on-small {
+  display: none;
+}
+
+.display-on-large {
+  display: none;
+}
+
+.display-on-very-large {
+  display: none;
+}
+
+.display-on-very-very-large {
+  display: unset;
+}
+
+.display-from-small-to-large {
+  display: none;
+}
+
+.display-from-small-to-very-large {
+  display: none;
+}
+
+.display-from-very-large-to-very-very-large {
+  display: unset;
+}
+
+.display-from-large-to-very-very-large {
+  display: unset;
+}
+
+@media (max-width: 1400px) {
+  .display-on-small {
+    display: none;
+  }
+
+  .display-on-large {
+    display: none;
+  }
+
+  .display-on-very-large {
+    display: unset;
+  }
+
+  .display-on-very-very-large {
+    display: none;
+  }
+
+  .display-from-small-to-large {
+    display: none;
+  }
+
+  .display-from-small-to-very-large {
+    display: unset;
+  }
+
+  .display-from-very-large-to-very-very-large {
+    display: unset;
+  }
+
+  .display-from-large-to-very-very-large {
+    display: unset;
+  }
+}
+
+@media (max-width: 900px) {
+
+  .display-on-small {
+    display: none;
+  }
+
+  .display-on-large {
+    display: unset;
+  }
+
+  .display-on-very-large {
+    display: none;
+  }
+
+  .display-on-very-very-large {
+    display: none;
+  }
+
+  .display-from-small-to-large {
+    display: unset;
+  }
+
+  .display-from-small-to-very-large {
+    display: unset;
+  }
+
+  .display-from-very-large-to-very-very-large {
+    display: none;
+  }
+
+  .display-from-large-to-very-very-large {
+    display: unset;
+  }
+}
+
+@media (max-width: 650px) {
+
+  .display-on-small {
+    display: unset;
+  }
+
+  .display-on-large {
+    display: none;
+  }
+
+  .display-on-very-large {
+    display: none;
+  }
+
+  .display-on-very-very-large {
+    display: none;
+  }
+
+  .display-from-small-to-large {
+    display: unset;
+  }
+
+  .display-from-small-to-very-large {
+    display: unset;
+  }
+
+  .display-from-very-large-to-very-very-large {
+    display: none;
+  }
+
+  .display-from-large-to-very-very-large {
+    display: none;
+  }
+}

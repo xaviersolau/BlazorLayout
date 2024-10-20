@@ -20,11 +20,11 @@ namespace SoloX.BlazorLayout.Services
         /// <summary>
         /// Register a scroll callback for the given element reference.
         /// </summary>
-        /// <param name="scrollCallBack">The scroll callback to trigger on size changed.</param>
+        /// <param name="scrollCallback">The scroll callback to trigger on size changed.</param>
         /// <param name="elementReference">The element reference to look after.</param>
         /// <returns>The asynchronous disposable that will unregister the callback once disposed.</returns>
-        ValueTask<IAsyncDisposable> RegisterScrollCallBackAsync(
-            IScrollCallBack scrollCallBack, ElementReference elementReference);
+        ValueTask<IAsyncDisposable> RegisterScrollCallbackAsync(
+            IScrollCallback scrollCallback, ElementReference elementReference);
 
         /// <summary>
         /// Scroll To the given scroll values.

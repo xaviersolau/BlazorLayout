@@ -8,5 +8,5 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("SoloX.BlazorLayout.UTest")]
+[assembly: InternalsVisibleTo("SoloX.BlazorLayout.UTests")]
 

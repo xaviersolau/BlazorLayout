@@ -1,9 +1,9 @@
-﻿@page "/ResizeCallBack"
+﻿@page "/ResizeCallback"
 
 
 @inject IResizeObserverService sizeObserverService
 
-@implements IResizeCallBack
+@implements IResizeCallback
 @implements IAsyncDisposable
 
 <BoxContainer @ref="ContainerReference" Fill="Fill.Full">
@@ -26,13 +26,13 @@
     private int width;
     private int height;
 
-    private IAsyncDisposable callBackDisposable;
+    private IAsyncDisposable callbackDisposable;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            callBackDisposable = await sizeObserverService.RegisterResizeCallBackAsync(this, ContainerReference.ElementReference);
+            callbackDisposable = await sizeObserverService.RegisterResizeCallbackAsync(this, ContainerReference.ElementReference);
         }
 
         await base.OnAfterRenderAsync(firstRender);
@@ -50,10 +50,10 @@
 
     public async ValueTask DisposeAsync()
     {
-        if (this.callBackDisposable != null)
+        if (this.callbackDisposable != null)
         {
-            await callBackDisposable.DisposeAsync();
-            this.callBackDisposable = null;
+            await callbackDisposable.DisposeAsync();
+            this.callbackDisposable = null;
         }
     }
 }

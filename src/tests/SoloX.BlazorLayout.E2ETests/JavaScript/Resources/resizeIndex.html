@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+
+  <link href="site.css" rel="stylesheet" />
+
+</head>
+<body style="margin:0;">
+  <script type="module" src="resizeObserverJsInterop.js"></script>
+
+  <script type="module">
+    import { resizeManager } from './resizeObserverJsInterop.js';
+
+    window.resizeManager = resizeManager;
+
+    console.log(window.resizeManager);
+
+  </script>
+
+
+</body>
+</html>
