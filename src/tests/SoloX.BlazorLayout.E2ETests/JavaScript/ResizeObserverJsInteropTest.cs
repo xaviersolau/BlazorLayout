@@ -38,7 +38,7 @@ namespace SoloX.BlazorLayout.E2ETests.JavaScript
                 })
                 .WithPlaywrightOptions(opt =>
                 {
-                    opt.Headless = false;
+                    //opt.Headless = false;
                     //opt.SlowMo = 1000;
                     //opt.Timeout = 60000;
                 })
