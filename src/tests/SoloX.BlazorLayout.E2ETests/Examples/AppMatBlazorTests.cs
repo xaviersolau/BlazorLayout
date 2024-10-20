@@ -8,6 +8,7 @@
 
 using FluentAssertions;
 using Microsoft.Playwright;
+using SoloX.BlazorLayout.E2ETests.Utils;
 using SoloX.CodeQuality.Playwright;
 using Program = SoloX.BlazorLayout.Examples.WithMatBlazor.Program;
 
@@ -38,7 +39,7 @@ namespace SoloX.BlazorLayout.E2ETests.Examples
                 })
                 .WithPlaywrightOptions(opt =>
                 {
-                    opt.Headless = false;
+                    //opt.Headless = false;
                     //opt.SlowMo = 1000;
                     //opt.Timeout = 60000;
                 })
@@ -65,7 +66,11 @@ namespace SoloX.BlazorLayout.E2ETests.Examples
 
             pngBuffer.Should().NotBeNull();
 
-            await File.WriteAllBytesAsync("screenshot.png", pngBuffer!);
+            var isDifferences = ImageComparison.CompareAndGenerateDifferenceImage(
+                $"../../../Examples/Screenshots/AppMatBlazorTests.IsShouldDisplayComponentExample{Browser.Chromium}.png",
+                pngBuffer!);
+
+            isDifferences.Should().BeFalse();
         }
     }
 }
