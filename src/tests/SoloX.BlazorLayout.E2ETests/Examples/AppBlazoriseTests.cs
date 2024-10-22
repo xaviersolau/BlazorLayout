@@ -17,10 +17,22 @@ namespace SoloX.BlazorLayout.E2ETests.Examples
     public class AppBlazoriseTests
     {
         [Theory]
-        [InlineData(Browser.Chromium)]
-        [InlineData(Browser.Firefox)]
-        [InlineData(Browser.Webkit)]
-        public async Task IsShouldDisplayComponentExample(Browser browser)
+        [InlineData(Browser.Chromium, "")]
+        [InlineData(Browser.Chromium, "Dock")]
+        [InlineData(Browser.Chromium, "GridAuto")]
+        [InlineData(Browser.Chromium, "GridManual")]
+        [InlineData(Browser.Chromium, "DisplayOnWidth")]
+        [InlineData(Browser.Firefox, "")]
+        [InlineData(Browser.Firefox, "Dock")]
+        [InlineData(Browser.Firefox, "GridAuto")]
+        [InlineData(Browser.Firefox, "GridManual")]
+        [InlineData(Browser.Firefox, "DisplayOnWidth")]
+        [InlineData(Browser.Webkit, "")]
+        [InlineData(Browser.Webkit, "Dock")]
+        [InlineData(Browser.Webkit, "GridAuto")]
+        [InlineData(Browser.Webkit, "GridManual")]
+        [InlineData(Browser.Webkit, "DisplayOnWidth")]
+        public async Task IsShouldDisplayComponentExample(Browser browser, string route)
         {
             var builder = PlaywrightTestBuilder.Create()
                 .WithLocalHost(configuration =>
@@ -49,7 +61,7 @@ namespace SoloX.BlazorLayout.E2ETests.Examples
                 .WithPlaywrightNewContextOptions(opt =>
                 {
                     // Set up the browser view port size.
-                    opt.ViewportSize = new ViewportSize() { Width = 1000, Height = 600 };
+                    opt.ViewportSize = new ViewportSize() { Width = 1300, Height = 800 };
                 });
 
             var playwrightTest = await builder
@@ -61,7 +73,7 @@ namespace SoloX.BlazorLayout.E2ETests.Examples
             byte[]? pngBuffer = null;
 
             await playwrightTest
-                .GotoPageAsync(string.Empty, async page =>
+                .GotoPageAsync(route, async page =>
                 {
                     pngBuffer = await page.ScreenshotAsync().ConfigureAwait(false);
                 });
@@ -69,7 +81,7 @@ namespace SoloX.BlazorLayout.E2ETests.Examples
             pngBuffer.Should().NotBeNull();
 
             var isDifferences = ImageComparison.CompareAndGenerateImageDifference(
-                $"../../../Examples/Screenshots/AppBlazoriseTests.IsShouldDisplayComponentExample{browser}.png",
+                $"../../../Examples/Screenshots/AppBlazoriseTests.IsShouldDisplayComponentExample{browser}{route}.png",
                 pngBuffer!);
 
             isDifferences.Should().BeFalse();
