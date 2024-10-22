@@ -16,8 +16,11 @@ namespace SoloX.BlazorLayout.E2ETests.Examples
 {
     public class AppMatBlazorTests
     {
-        [Fact]
-        public async Task IsShouldDisplayComponentExample()
+        [Theory]
+        [InlineData(Browser.Chromium)]
+        [InlineData(Browser.Firefox)]
+        [InlineData(Browser.Webkit)]
+        public async Task IsShouldDisplayComponentExample(Browser browser)
         {
             var builder = PlaywrightTestBuilder.Create()
                 .WithLocalHost(configuration =>
@@ -46,12 +49,12 @@ namespace SoloX.BlazorLayout.E2ETests.Examples
                 .WithPlaywrightNewContextOptions(opt =>
                 {
                     // Set up the browser view port size.
-                    opt.ViewportSize = new ViewportSize() { Width = 800, Height = 600 };
+                    opt.ViewportSize = new ViewportSize() { Width = 10000, Height = 600 };
                 });
 
 
             var playwrightTest = await builder
-                .BuildAsync(Browser.Chromium)
+                .BuildAsync(browser)
                 .ConfigureAwait(true);
 
             await using var _ = playwrightTest.ConfigureAwait(false);
@@ -66,11 +69,11 @@ namespace SoloX.BlazorLayout.E2ETests.Examples
 
             pngBuffer.Should().NotBeNull();
 
-            var isDifferences = ImageComparison.CompareAndGenerateDifferenceImage(
-                $"../../../Examples/Screenshots/AppMatBlazorTests.IsShouldDisplayComponentExample{Browser.Chromium}.png",
+            var differences = ImageComparison.CompareAndGenerateImageDifference(
+                $"../../../Examples/Screenshots/AppMatBlazorTests.IsShouldDisplayComponentExample{browser}.png",
                 pngBuffer!);
 
-            isDifferences.Should().BeFalse();
+            differences.Should().BeFalse();
         }
     }
 }

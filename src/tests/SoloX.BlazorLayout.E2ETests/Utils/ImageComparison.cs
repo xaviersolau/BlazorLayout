@@ -12,7 +12,7 @@ namespace SoloX.BlazorLayout.E2ETests.Utils
 {
     public static class ImageComparison
     {
-        public static bool CompareAndGenerateDifferenceImage(string imagePath1, byte[] imageBytes2)
+        public static bool CompareAndGenerateImageDifference(string imagePath1, byte[] imageBytes2, double threshold = 0.5)
         {
             if (!File.Exists(imagePath1))
             {
@@ -26,7 +26,9 @@ namespace SoloX.BlazorLayout.E2ETests.Utils
 
             using var resultStream = new MemoryStream();
 
-            var isDifferences = CompareAndGenerateDifferenceImage(imageStream1, imageStream2, resultStream);
+            var differences = CompareImage(imageStream1, imageStream2, resultStream);
+
+            var isDifferences = differences > threshold;
 
             if (isDifferences)
             {
@@ -46,9 +48,9 @@ namespace SoloX.BlazorLayout.E2ETests.Utils
             return isDifferences;
         }
 
-        public static bool CompareAndGenerateDifferenceImage(Stream imageStream1, Stream imageStream2, Stream resultStream)
+        private static double CompareImage(Stream imageStream1, Stream imageStream2, Stream resultStream)
         {
-            var isDifferences = false;
+            long sumDif = 0;
 
             // Load both images
             using var bitmap1 = SKBitmap.Decode(imageStream1);
@@ -73,21 +75,24 @@ namespace SoloX.BlazorLayout.E2ETests.Utils
                         // Compare the pixels
                         if (pixel1 != pixel2)
                         {
+                            var dif = (byte)((Math.Abs(pixel1.Red - pixel2.Red) + Math.Abs(pixel1.Green - pixel2.Green) + Math.Abs(pixel1.Blue - pixel2.Blue)) / 3);
+
                             // Highlight differences with a red color
-                            resultBitmap.SetPixel(x, y, new SKColor(255, 0, 0)); // Red for difference
-                            isDifferences = true;
+                            resultBitmap.SetPixel(x, y, new SKColor(dif, 0, 0)); // Red for difference
+
+                            sumDif += dif;
                         }
                         else
                         {
-                            // Copy the original pixel if no difference
-                            resultBitmap.SetPixel(x, y, pixel1);
+                            // 0 if no difference
+                            resultBitmap.SetPixel(x, y, new SKColor(0, 0, 0));
                         }
                     }
                     for (var x = minWidth; x < maxWidth; x++)
                     {
                         // Highlight differences with a red color
                         resultBitmap.SetPixel(x, y, new SKColor(255, 0, 0)); // Red for difference
-                        isDifferences = true;
+                        sumDif += 255;
                     }
                 }
                 for (var y = minHeight; y < maxHeight; y++)
@@ -96,11 +101,11 @@ namespace SoloX.BlazorLayout.E2ETests.Utils
                     {
                         // Highlight differences with a red color
                         resultBitmap.SetPixel(x, y, new SKColor(255, 0, 0)); // Red for difference
-                        isDifferences = true;
+                        sumDif += 255;
                     }
                 }
 
-                if (isDifferences)
+                if (sumDif > 0)
                 {
                     // Save the resulting image with highlighted differences
                     using var image = SKImage.FromBitmap(resultBitmap);
@@ -110,7 +115,7 @@ namespace SoloX.BlazorLayout.E2ETests.Utils
                 }
             }
 
-            return isDifferences;
+            return (double)(sumDif / (maxWidth * maxHeight)) / 255;
         }
     }
 }
