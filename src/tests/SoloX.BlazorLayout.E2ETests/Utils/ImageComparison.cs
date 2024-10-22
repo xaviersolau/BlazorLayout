@@ -12,7 +12,7 @@ namespace SoloX.BlazorLayout.E2ETests.Utils
 {
     public static class ImageComparison
     {
-        public static bool CompareAndGenerateImageDifference(string imagePath1, byte[] imageBytes2, double threshold = 0.5)
+        public static bool CompareAndGenerateImageDifference(string imagePath1, byte[] imageBytes2, double threshold = 0.10)
         {
             if (!File.Exists(imagePath1))
             {
