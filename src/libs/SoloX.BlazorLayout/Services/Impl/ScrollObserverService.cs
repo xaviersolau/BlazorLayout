@@ -170,19 +170,24 @@ namespace SoloX.BlazorLayout.Services.Impl
             }
 
             [JSInvokable]
-            public ValueTask ScrollAsync(int width, int left, int viewWidth, int height, int top, int viewHeight)
+            public ValueTask ScrollAsync(double width, double left, double viewWidth, double height, double top, double viewHeight)
             {
                 var scrollInfo = new ScrollInfo()
                 {
-                    Width = width,
-                    Left = left,
-                    ViewWidth = viewWidth,
-                    Height = height,
-                    Top = top,
-                    ViewHeight = viewHeight,
+                    Width = RoundToInt(width),
+                    Left = RoundToInt(left),
+                    ViewWidth = RoundToInt(viewWidth),
+                    Height = RoundToInt(height),
+                    Top = RoundToInt(top),
+                    ViewHeight = RoundToInt(viewHeight),
                 };
 
                 return ScrollCallback.ScrollAsync(scrollInfo);
+            }
+
+            internal static int RoundToInt(double value)
+            {
+                return (int)Math.Round(value);
             }
         }
     }
