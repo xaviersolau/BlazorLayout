@@ -30,7 +30,8 @@ class ScrollManager {
       elementReferenceId: elementReferenceId
     });
 
-    element.addEventListener('scroll', this.scrollCallback)
+    element.addEventListener('scroll', this.scrollCallback, { passive: true })
+    element.addEventListener('touchmove', this.scrollCallback, { passive: true })
 
     callbackObjetReference.invokeMethodAsync('ScrollAsync', element.scrollWidth, element.scrollLeft, element.clientWidth, element.scrollHeight, element.scrollTop, element.clientHeight);
 
@@ -53,6 +54,7 @@ class ScrollManager {
         const observerReference = this.#scrollObserverReferencesMap.get(observerReferenceKey);
 
         if (observerReference.elementReferenceId === elementReferenceId) {
+          observerReference.element.removeEventListener('touchmove', this.scrollCallback);
           observerReference.element.removeEventListener('scroll', this.scrollCallback);
 
           this.#scrollObserverReferencesMap.delete(observerReferenceKey);
