@@ -201,7 +201,7 @@ namespace SoloX.BlazorLayout.Services.Impl
 #pragma warning restore CA1816 // Les méthodes Dispose doivent appeler SuppressFinalize
         }
 
-        internal class ResizeCallbackProxy : IResizeCallback
+        internal class ResizeCallbackProxy
         {
             internal IResizeCallback SizeCallback { get; }
 
@@ -211,9 +211,9 @@ namespace SoloX.BlazorLayout.Services.Impl
             }
 
             [JSInvokable]
-            public ValueTask ResizeAsync(int width, int height)
+            public ValueTask ResizeAsync(double width, double height)
             {
-                return SizeCallback.ResizeAsync(width, height);
+                return SizeCallback.ResizeAsync(ScrollObserverService.ScrollCallbackProxy.RoundToInt(width), ScrollObserverService.ScrollCallbackProxy.RoundToInt(height));
             }
         }
     }
