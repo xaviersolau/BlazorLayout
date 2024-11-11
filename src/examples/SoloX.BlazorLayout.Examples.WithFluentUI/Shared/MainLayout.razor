@@ -1,0 +1,130 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+
+@inherits LayoutComponentBase
+
+<PageTitle>SoloX.BlazorLayout.Examples.WithFluentUI</PageTitle>
+
+<FluentToastProvider />
+<FluentDialogProvider />
+<FluentTooltipProvider />
+<FluentMessageBarProvider />
+<FluentMenuProvider />
+
+
+@* <div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+ *@
+
+<ResponsiveLayout NavigationClass="bg-light nav-container"
+                  MaxProportion="20"
+                  EnableContentScroll="@MatchDisplaySize"
+                  EnableOutline="true"
+                  @bind-UseSmallNavigation="@SmallNav"
+                  HideHeader="@HideHeader"
+                  HideFooter="@HideFooter"
+                  DisableHorizontalNavigationMenuScrollX="@DisableHorizontalNavScroll">
+
+    <NavigationHeader>
+
+        <DockContainer Fill="Fill.Horizontal" Class="bg-secondary">
+            <DockPanel Side="Core.Side.Left">
+                <FluentButton Class="btn-icon" Style="min-height: 100%;" Color="Color.Default" @onclick="ToggleNav">
+                    <FluentIcon Value="@(new Icons.Regular.Size24.Save())" />
+                </FluentButton>
+            </DockPanel>
+            <BoxContainer Style="align-self: center;">
+                <DisplayHeading Size="DisplayHeadingSize.Is4" Alignment="TextAlignment.Center" Style="margin-block: 0; font-size: 1.75rem;">
+                    <Link Class="text-white-secondary" To="">BlazorLayout Examples</Link>
+                </DisplayHeading>
+            </BoxContainer>
+        </DockContainer>
+
+    </NavigationHeader>
+
+    <NavigationMenu>
+        <NavMenu />
+    </NavigationMenu>
+
+    <SmallNavigationHeader>
+        <FluentButton Class="btn-icon bg-secondary" Style="justify-content: center;" Color="Color.Default" @onclick="ToggleNav">
+            <Blazorise.Icon Class="text-white-secondary" Name="MaterialIcons.Menu" />
+        </FluentButton>
+    </SmallNavigationHeader>
+
+    <SmallNavigationMenu>
+        <NavMenu SmallNav="true" />
+    </SmallNavigationMenu>
+
+    <Header>
+        <BoxContainer Class="bg-primary text-white-primary page-container" Fill="Fill.Full">
+            <div class="card-content">
+                <Heading Style="margin:0px;" Size="HeadingSize.Is4">
+                    Header
+                </Heading>
+
+                <Paragraph Style="margin:0px;">
+                    Here is a demo of the BlazorLayout project.
+                </Paragraph>
+            </div>
+
+        </BoxContainer>
+    </Header>
+    <Outline>
+        <BoxContainer Class="bg-secondary text-white-secondary page-container" Fill="Fill.Full">
+            <div class="card-content">
+                <Heading Style="margin:0px;" Size="HeadingSize.Is4">
+                    Outline
+                </Heading>
+
+                <Paragraph Style="margin:0px;">
+                    Here is the Outline of the demo.
+                </Paragraph>
+                <Paragraph Style="margin:0px;">
+                    It will hide itself if the display size is too small.
+                </Paragraph>
+
+                <Paragraph Style="margin-top: 1rem;">
+                    Main page locked to display size.
+                    <Switch @bind-Checked="@MatchDisplaySize" Color="Color.Primary" ></Switch>
+                </Paragraph>
+                <Paragraph Style="margin-top: 1rem;">
+                    Hide Header.
+                    <Switch @bind-Checked="@HideHeader" Color="Color.Primary"></Switch>
+                </Paragraph>
+                <Paragraph Style="margin-top: 1rem;">
+                    Hide Footer.
+                    <Switch @bind-Checked="@HideFooter" Color="Color.Primary"></Switch>
+                </Paragraph>
+                <Paragraph Style="margin-top: 1rem;">
+                    Disable Scroll on Horizontal Nav.
+                    <Switch @bind-Checked="@DisableHorizontalNavScroll" Color="Color.Primary"></Switch>
+                </Paragraph>
+            </div>
+        </BoxContainer>
+    </Outline>
+    <Footer>
+        <BoxContainer Class="bg-secondary text-white-secondary page-container" Fill="Fill.Full">
+            <Paragraph Style="margin:0px;">
+                Footer : Thanks to Blazorise we can use Material Design.
+            </Paragraph>
+        </BoxContainer>
+    </Footer>
+
+    <ChildContent>
+        @Body
+    </ChildContent>
+
+</ResponsiveLayout>

@@ -17,9 +17,9 @@ Don't hesitate to post issues, pull requests on the project or to fork and impro
 [![Coverage Status](https://coveralls.io/repos/github/xaviersolau/BlazorLayout/badge.svg?branch=main)](https://coveralls.io/github/xaviersolau/BlazorLayout?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-| Package                                    | Nuget.org |
-|--------------------------------------------|-----------|
-|**SoloX.BlazorLayout**            |[![NuGet Beta](https://img.shields.io/nuget/vpre/SoloX.BlazorLayout.svg)](https://www.nuget.org/packages/SoloX.BlazorLayout)|
+| Package                                    | Nuget.org | Pre-release |
+|--------------------------------------------|-----------|-------------|
+|**SoloX.BlazorLayout**            |[![NuGet](https://img.shields.io/nuget/v/SoloX.BlazorLayout.svg)](https://www.nuget.org/packages/SoloX.BlazorLayout)|[![NuGet Beta](https://img.shields.io/nuget/vpre/SoloX.BlazorLayout.svg)](https://www.nuget.org/packages/SoloX.BlazorLayout)|
 
 ## License and credits
 
@@ -33,17 +33,17 @@ You can checkout this Github repository or you can use the NuGet packages:
 
 **Install using the command line from the Package Manager:**
 ```bash
-Install-Package SoloX.BlazorLayout -version 1.0.0-alpha.14
+Install-Package SoloX.BlazorLayout -version 1.0.0
 ```
 
 **Install using the .Net CLI:**
 ```bash
-dotnet add package SoloX.BlazorLayout --version 1.0.0-alpha.14
+dotnet add package SoloX.BlazorLayout --version 1.0.0
 ```
 
 **Install editing your project file (csproj):**
 ```xml
-<PackageReference Include="SoloX.BlazorLayout" Version="1.0.0-alpha.14" />
+<PackageReference Include="SoloX.BlazorLayout" Version="1.0.0" />
 ```
 
 Once the package is referenced, you can add in you project **_Imports.razor** file all using directives to

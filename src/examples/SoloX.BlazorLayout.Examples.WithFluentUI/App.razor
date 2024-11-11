@@ -1,0 +1,38 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components.DesignTokens
+<FluentDesignTheme @bind-Mode="@Mode" @bind-CustomColor="@Color" StorageName="theme" />
+
+
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+
+    <FluentSelect Label="Theme"
+                  Width="250px"
+                  Items="@(Enum.GetValues<DesignThemeModes>())"
+                  @bind-SelectedOption="@Mode" />
+
+@code {
+    public DesignThemeModes Mode { get; set; } = DesignThemeModes.Light;
+
+    public string Color { get; set; } = "#008800";
+
+    [Inject]
+    private ControlCornerRadius ControlCornerRadius { get; set; } = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ControlCornerRadius.WithDefault("10");
+        }
+    }
+}
