@@ -61,6 +61,9 @@
 
     .dock-left-body ::deep ul {
       display: block;
+      list-style-type: none;
+      padding-inline-start: 0px;
+      margin: 0;
     }
 
   .dock-left-header-small {
@@ -80,13 +83,22 @@
     .dock-left-body-small-scroll ::deep ul {
       display: flex;
       flex-wrap: nowrap;
+      gap: 4px;
+      list-style-type: none;
+      padding-inline-start: 0px;
+      margin: 0;
     }
 
   .dock-left-body-small-wrap {
   }
 
     .dock-left-body-small-wrap ::deep ul {
-      display: block;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      list-style-type: none;
+      padding-inline-start: 0px;
+      margin: 0;
     }
 
 .dock-top {
