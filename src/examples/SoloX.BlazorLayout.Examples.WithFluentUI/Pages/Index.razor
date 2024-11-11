@@ -1,0 +1,97 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components.DesignTokens
+
+@page "/"
+
+<BoxContainer Fill="Fill.Full" Class="panel-padding">
+
+    <PageTitle>Index</PageTitle>
+
+    <h1>
+        Welcome to the BlazorLayout Demo.
+    </h1>
+
+    <p>
+        It gives you an idea of what we can do with the BlazorLayout layout components.<br>
+        Screen size is @ScreenSize.Width x @ScreenSize.Height<br>
+        Scroll is @ScrollInfo.Top
+
+    </p>
+
+    <h2>Theme...</h2>
+
+    <FluentStack Orientation="Orientation.Vertical">
+        <FluentSlider Label="Luminance" Min="0f" Max="1f" Step="0.05f" @bind-Value="Luminance"></FluentSlider>
+
+        @*         <FluentSelect Label="Theme"
+        Width="250px"
+        Items="@(Enum.GetValues<DesignThemeModes>())"
+        @bind-SelectedOption="@Mode"/>
+ *@
+        <FluentTextField Label="CornerRadius" @bind-Value="@CornerRadius" />
+
+        <FluentTextField Label="StrokeWidth" @bind-Value="@StrokeWidth" />
+
+        <FluentLabel>Color</FluentLabel>
+        <input type="color" @bind-value="Color"></input>
+
+        <FluentLabel>Neutral Color</FluentLabel>
+        <input type="color" @bind-value="NeutralColor"></input>
+
+        <FluentButton Appearance="Appearance.Accent" @onclick="UpdateThemeAsync">Update theme!</FluentButton>
+
+    </FluentStack>
+
+</BoxContainer>
+
+@code {
+
+    //public DesignThemeModes Mode { get; set; } = DesignThemeModes.Light;
+    public float Luminance { get; set; }
+    public string Color { get; set; }
+    public string NeutralColor { get; set; }
+    public string CornerRadius { get; set; }
+    public string StrokeWidth { get; set; }
+
+    [CascadingParameter]
+    public FluentThemeProvider FluentThemeProvider { get; set; }
+
+    [CascadingParameter]
+    public ScreenSize ScreenSize { get; set; }
+
+    [CascadingParameter]
+    public ScrollInfo ScrollInfo { get; set; }
+
+    // [Inject]
+    // private ControlCornerRadius ControlCornerRadius { get; set; } = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var theme = await FluentThemeProvider.LoadThemeAsync();
+
+            Color = theme.Color;
+            NeutralColor = theme.NeutralColor;
+            //Mode = theme.Mode;
+            Luminance = theme.Luminance;
+            CornerRadius = theme.CornerRadius;
+            StrokeWidth = theme.StrokeWidth;
+
+            StateHasChanged();
+        }
+    }
+
+    private async Task UpdateThemeAsync()
+    {
+        await FluentThemeProvider.SetupAsync(
+            new Theme
+            {
+                Color = Color,
+                NeutralColor = NeutralColor,
+                //Mode = Mode,
+                Luminance = Luminance,
+                CornerRadius = CornerRadius,
+                StrokeWidth = StrokeWidth,
+            });
+    }
+}

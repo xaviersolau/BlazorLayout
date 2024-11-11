@@ -52,6 +52,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\examples\SoloX.BlazorLayout.Examples.WithBlazorise\SoloX.BlazorLayout.Examples.WithBlazorise.csproj" />
+    <ProjectReference Include="..\..\examples\SoloX.BlazorLayout.Examples.WithFluentUI\SoloX.BlazorLayout.Examples.WithFluentUI.csproj" />
     <ProjectReference Include="..\..\examples\SoloX.BlazorLayout.Examples.WithMatBlazor\SoloX.BlazorLayout.Examples.WithMatBlazor.csproj" />
     <ProjectReference Include="..\..\libs\SoloX.BlazorLayout\SoloX.BlazorLayout.csproj" />
   </ItemGroup>
