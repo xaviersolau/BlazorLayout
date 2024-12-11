@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoloX.BlazorLayout.Examples
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoloX.BlazorLayout.E2ETests", "src\tests\SoloX.BlazorLayout.E2ETests\SoloX.BlazorLayout.E2ETests.csproj", "{F3746A4F-A1F1-4216-979E-283845D5AF8E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoloX.BlazorLayout.Examples.WithFluentUI", "src\examples\SoloX.BlazorLayout.Examples.WithFluentUI\SoloX.BlazorLayout.Examples.WithFluentUI.csproj", "{F62F8A54-5C2A-4DEC-BC68-2A4CD44CA05E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{F3746A4F-A1F1-4216-979E-283845D5AF8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3746A4F-A1F1-4216-979E-283845D5AF8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3746A4F-A1F1-4216-979E-283845D5AF8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F62F8A54-5C2A-4DEC-BC68-2A4CD44CA05E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F62F8A54-5C2A-4DEC-BC68-2A4CD44CA05E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F62F8A54-5C2A-4DEC-BC68-2A4CD44CA05E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F62F8A54-5C2A-4DEC-BC68-2A4CD44CA05E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{06FCD8B0-E9D5-4EC0-BFA4-FF7F99E0604E} = {50BC6485-276F-4CEF-9604-0C6F000E201A}
 		{B3F22C7F-7BCD-45B3-8D56-E2435A2560CD} = {1AC39ACF-C5F1-4AE4-B4A2-A3CBDAC8B66C}
 		{F3746A4F-A1F1-4216-979E-283845D5AF8E} = {50BC6485-276F-4CEF-9604-0C6F000E201A}
+		{F62F8A54-5C2A-4DEC-BC68-2A4CD44CA05E} = {1AC39ACF-C5F1-4AE4-B4A2-A3CBDAC8B66C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2C4A09E6-0A38-446C-A6F1-11F8032C38A6}

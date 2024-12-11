@@ -1,0 +1,48 @@
+﻿@page "/GridManual"
+
+<GridContainer Fill="Fill.Full"
+               ColumnSizing="Sizing.Fill"
+               RowSizing="Sizing.Fill">
+
+    <GridColumn Repeat="3" />
+
+    <GridRow Repeat="2" />
+
+    @for (var i = 1; i < 4; i++)
+    {
+        var col = i - 1;
+        var row = col % 2;
+
+        <GridCell Column="@col.ToString()" Row="@row.ToString()">
+            <BoxContainer Fill="Fill.Full">
+                <FluentCard MinimalStyle="true" Style="@GetBackgroundColor(col)">
+                    <FluentLabel Typo="Typography.H1">
+                        Cell at Column @col Row @row !
+                    </FluentLabel>
+                    <p Style="margin:0px;">
+                        Using auto explicit placement...
+                    </p>
+                </FluentCard>
+            </BoxContainer>
+        </GridCell>
+    }
+
+</GridContainer>
+
+@code
+{
+    private static string GetBackgroundColor(int num)
+    {
+        return "background-color: "
+            + num switch
+            {
+                1 => "chocolate",
+                2 => "silver",
+                3 => "burlywood",
+                4 => "cadetblue",
+                5 => "darkseagreen",
+                _ => "olive"
+            }
+            + ";";
+    }
+}

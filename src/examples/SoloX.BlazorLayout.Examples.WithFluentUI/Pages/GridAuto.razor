@@ -1,0 +1,73 @@
+﻿@page "/GridAuto"
+
+<DockContainer Fill="Fill.Full" >
+
+    <DockPanel Side="Core.Side.Top" Class="panel-container">
+
+        Nb Columns
+
+        <FluentNumberField @bind-Value="NbColumns" />
+
+        Nb Rows
+
+        <FluentNumberField @bind-Value="NbRows" />
+
+    </DockPanel>
+
+    <GridContainer Fill="Fill.Full"
+                   ColumnSizing="Sizing.Proportion"
+                   RowSizing="Sizing.Proportion">
+
+        <GridColumn Size="@ColumnSize" Repeat="@NbColumns" />
+
+        <GridRow Size="@RowSize" Repeat="@NbRows" />
+
+        @for (var i = 1; i < 6; i++)
+        {
+            var num = i;
+
+            <GridCell>
+                <BoxContainer Fill="Fill.Full">
+                    <FluentCard MinimalStyle="true" Style="@GetBackgroundColor(num)">
+                        <FluentLabel Typo="Typography.H1">
+                            Cell @num!
+                        </FluentLabel>
+                        <p Style="margin:0px;">
+                            Using auto flow placement...
+                        </p>
+                    </FluentCard>
+                </BoxContainer>
+            </GridCell>
+        }
+
+    </GridContainer>
+
+</DockContainer>
+
+@code
+{
+    [Parameter]
+    public int NbColumns { get; set; } = 4;
+
+    public int ColumnSize => 100 / NbColumns;
+
+    [Parameter]
+    public int NbRows { get; set; } = 2;
+
+    public int RowSize => 100 / NbRows;
+
+    private static string GetBackgroundColor(int num)
+    {
+        return "background-color: "
+            + num switch
+            {
+                1 => "chocolate",
+                2 => "silver",
+                3 => "burlywood",
+                4 => "cadetblue",
+                5 => "darkseagreen",
+                _ => "olive"
+            }
+            + ";";
+    }
+}

@@ -1,0 +1,34 @@
+﻿
+<FluentThemeProviderComponent @ref="fluentThemeProviderComponent"></FluentThemeProviderComponent>
+
+<CascadingValue Value="fluentThemeProvider">
+
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+
+</CascadingValue>
+
+@code {
+    private readonly FluentThemeProvider fluentThemeProvider = new FluentThemeProvider();
+    private FluentThemeProviderComponent fluentThemeProviderComponent;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            fluentThemeProvider.Component = fluentThemeProviderComponent;
+        }
+
+        base.OnAfterRender(firstRender);
+    }
+}

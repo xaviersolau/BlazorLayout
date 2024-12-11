@@ -1,0 +1,132 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+
+@inherits LayoutComponentBase
+
+<PageTitle>SoloX.BlazorLayout.Examples.WithFluentUI</PageTitle>
+
+<FluentToastProvider />
+<FluentDialogProvider />
+<FluentTooltipProvider />
+<FluentMessageBarProvider />
+<FluentMenuProvider />
+
+<ResponsiveLayout 
+                  MaxProportion="20"
+                  EnableContentScroll="@MatchDisplaySize"
+                  EnableOutline="true"
+                  @bind-UseSmallNavigation="@SmallNav"
+                  HideHeader="@HideHeader"
+                  HideFooter="@HideFooter"
+                  DisableHorizontalNavigationMenuScrollX="@DisableHorizontalNavScroll"
+                  NavigationClass="panel-nav">
+
+    <NavigationHeader>
+
+        <DockContainer Fill="Fill.Horizontal" Style="background-color: var(--fill-color);">
+            <DockPanel Side="Core.Side.Left" Style="align-content: center; margin:5px;">
+                <FluentButton @onclick="ToggleNav">
+                    <FluentIcon Value="@(new Icons.Regular.Size20.LineHorizontal3())" />
+                </FluentButton>
+            </DockPanel>
+            <BoxContainer Style="align-self: center;">
+                <FluentAnchor Href="" Appearance="Appearance.Lightweight" Style="height:fit-content;">
+                    
+                    <h1 style="text-wrap:pretty;">BlazorLayout Examples</h1>
+                    
+@*                     <FluentLabel Typo="Typography.H1" Style="text-wrap:pretty;">
+                        BlazorLayout Examples
+                    </FluentLabel>
+ *@
+
+                </FluentAnchor>
+            </BoxContainer>
+        </DockContainer>
+
+
+    </NavigationHeader>
+
+    <NavigationMenu>
+        <NavMenu />
+    </NavigationMenu>
+
+    <SmallNavigationHeader>
+        <BoxContainer Fill="Fill.Full" Style="text-align: center; padding-top:5px; padding-bottom:5px; background-color: var(--fill-color);">
+            <FluentButton @onclick="ToggleNav">
+                <FluentIcon Value="@(new Icons.Regular.Size20.LineHorizontal3())" />
+            </FluentButton>
+        </BoxContainer>
+    </SmallNavigationHeader>
+
+    <SmallNavigationMenu>
+        <NavMenu SmallNav="true" />
+    </SmallNavigationMenu>
+
+    <Header>
+        <BoxContainer Fill="Fill.Full" Class="panel-shadow">
+            <FluentHeader Height="null">
+                <BoxContainer Fill="Fill.Full">
+
+                <FluentLabel Typo="Typography.HeroTitle">
+                    Header
+                </FluentLabel>
+
+                <p>
+                    Here is a demo of the BlazorLayout project.
+                </p>
+
+                </BoxContainer>
+
+            </FluentHeader>
+
+        </BoxContainer>
+    </Header>
+    <Outline>
+        <BoxContainer Fill="Fill.Full" Class="panel-container" Style="background-color: var(--neutral-fill-stealth-rest);">
+            <div >
+                <FluentLabel Typo="Typography.HeroTitle">
+                    Outline
+                </FluentLabel>
+
+                <p>
+                    Here is the Outline of the demo.
+                </p>
+
+                <p>
+                    It will hide itself if the display size is too small.
+                </p>
+
+
+                <p style="margin-top: 1rem;">
+                    Main page locked to display size.
+                    <FluentSwitch @bind-Value="@MatchDisplaySize" ></FluentSwitch>
+                </p>
+                <p style="margin-top: 1rem;">
+                    Hide Header.
+                    <FluentSwitch @bind-Value="@HideHeader" ></FluentSwitch>
+                </p>
+                <p style="margin-top: 1rem;">
+                    Hide Footer.
+                    <FluentSwitch @bind-Value="@HideFooter" ></FluentSwitch>
+                </p>
+                <p style="margin-top: 1rem;">
+                    Disable Scroll on Horizontal Nav.
+                    <FluentSwitch @bind-Value="@DisableHorizontalNavScroll" ></FluentSwitch>
+                </p>
+
+            </div>
+
+        </BoxContainer>
+    </Outline>
+    <Footer>
+        <BoxContainer Fill="Fill.Full" Class="panel-container" Style="background-color: var(--neutral-layer-4);">
+            <FluentFooter>
+                Footer : How about Fluent Design?
+            </FluentFooter>
+        </BoxContainer>
+    </Footer>
+
+    <ChildContent>
+        @Body
+    </ChildContent>
+
+</ResponsiveLayout>

@@ -1,0 +1,75 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components.DesignTokens
+
+@* <FluentDesignTheme @bind-Mode="Mode" @bind-CustomColor="Color" StorageName="theme" /> *@
+<div @ref="elementReference"></div>
+
+@code {
+    private ElementReference elementReference;
+
+    // public DesignThemeModes Mode { get; set; } = DesignThemeModes.Light;
+    // public string Color { get; set; } = "#008800";
+
+    [Inject]
+    private BaseLayerLuminance BaseLayerLuminance { get; set; } = default!;
+
+    [Inject]
+    private AccentBaseColor AccentBaseColor { get; set; } = default!;
+
+    [Inject]
+    private NeutralBaseColor NeutralBaseColor { get; set; } = default!;
+
+    [Inject]
+    private BodyFont BodyFont { get; set; } = default!;
+
+    [Inject]
+    private StrokeWidth StrokeWidth { get; set; } = default!;
+
+    [Inject]
+    private ControlCornerRadius ControlCornerRadius { get; set; } = default!;
+
+
+    public async Task SetupAsync(Theme theme)
+    {
+        // Mode = theme.Mode;
+        // Color = theme.Color;
+
+        await BaseLayerLuminance.WithDefault(theme.Luminance);
+        await NeutralBaseColor.WithDefault(theme.NeutralColor.ToSwatch());
+        await AccentBaseColor.WithDefault(theme.Color.ToSwatch());
+        await ControlCornerRadius.WithDefault(int.Parse(theme.CornerRadius));
+        await StrokeWidth.WithDefault(float.Parse(theme.StrokeWidth));
+
+        StateHasChanged();
+    }
+
+    public async Task<Theme> LoadThemeAsync()
+    {
+        var htmlNeutralColor = await LoadHtmlColor(NeutralBaseColor);
+        var htmlColor = await LoadHtmlColor(AccentBaseColor);
+
+        var cornerRadius = await ControlCornerRadius.GetValueFor(elementReference);
+        var strokeWidth = await StrokeWidth.GetValueFor(elementReference);
+
+        var lumi = await BaseLayerLuminance.GetValueFor(elementReference);
+
+        return new Theme
+        {
+            Luminance = lumi.Value,
+            Color = htmlColor,
+            NeutralColor = htmlNeutralColor,
+            CornerRadius = cornerRadius.Value.ToString(),
+            StrokeWidth = strokeWidth.Value.ToString(),
+        };
+    }
+
+    private async ValueTask<string> LoadHtmlColor(DesignToken<Swatch> designToken)
+    {
+        var color = await designToken.GetValueFor(elementReference);
+
+        var c = System.Drawing.Color.FromArgb((int)(color.R * 255), (int)(color.G * 255), (int)(color.B * 255));
+
+        var htmlColor = System.Drawing.ColorTranslator.ToHtml(c);
+
+        return htmlColor;
+    }
+}
