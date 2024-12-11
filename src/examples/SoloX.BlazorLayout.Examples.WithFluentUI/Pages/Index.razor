@@ -2,7 +2,7 @@
 
 @page "/"
 
-<BoxContainer Fill="Fill.Full" Class="panel-padding">
+<BoxContainer Fill="Fill.Horizontal" Class="panel-padding">
 
     <PageTitle>Index</PageTitle>
 
@@ -18,6 +18,8 @@
     </p>
 
     <h2>Theme...</h2>
+
+    <FluentCard >
 
     <FluentStack Orientation="Orientation.Vertical">
         <FluentSlider Label="Luminance" Min="0f" Max="1f" Step="0.05f" @bind-Value="Luminance"></FluentSlider>
@@ -40,6 +42,8 @@
         <FluentButton Appearance="Appearance.Accent" @onclick="UpdateThemeAsync">Update theme!</FluentButton>
 
     </FluentStack>
+
+    </FluentCard>
 
 </BoxContainer>
 
