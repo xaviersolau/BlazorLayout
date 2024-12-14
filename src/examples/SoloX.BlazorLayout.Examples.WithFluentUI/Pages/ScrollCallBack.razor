@@ -1,0 +1,103 @@
+﻿@page "/ScrollCallback"
+
+
+@inject IScrollObserverService scrollObserverService
+
+@implements IScrollCallback
+@implements IAsyncDisposable
+
+<DockContainer Fill="Fill.Full" Proportion="30">
+    <DockPanel Side="Core.Side.Left">
+        <FluentLabel Typo="Typography.H1">
+            Let's register a scroll callback!
+        </FluentLabel>
+        <p>
+            Scroll is @scroll (@scrollPercent.ToString("F")) <br>
+            Height is @scrollHeight <br>
+            View Height is @scrollViewHeight
+        </p>
+
+        <FluentButton @onclick="GoToTheTop">
+            Got to the top
+        </FluentButton>
+    </DockPanel>
+
+    <BoxContainer @ref="ContainerReference" Fill="Fill.Full">
+        <BoxContainer  Class="panel-container" Fill="Fill.Horizontal" Style="height: 300px; background-color: chocolate;">
+            Box1
+        </BoxContainer>
+        <BoxContainer Class="panel-container" Fill="Fill.Horizontal" Style="height: 300px; background-color: cornflowerblue;">
+            Box2
+        </BoxContainer>
+        <BoxContainer Class="panel-container" Fill="Fill.Horizontal" Style="height: 300px; background-color: burlywood;">
+            Box3
+        </BoxContainer>
+        <BoxContainer Class="panel-container" Fill="Fill.Horizontal" Style="height: 300px; background-color: gray;">
+            Box4
+        </BoxContainer>
+        <BoxContainer Class="panel-container" Fill="Fill.Horizontal" Style="height: 300px; background-color: bisque;">
+            Box5
+        </BoxContainer>
+    </BoxContainer>
+
+</DockContainer>
+
+
+@code {
+    private BoxContainer ContainerReference { get; set; }
+
+    private int scroll;
+    private int scrollHeight;
+    private int scrollViewHeight;
+    private double scrollPercent;
+
+    private IAsyncDisposable callbackDisposable;
+
+    [Inject]
+    public IResponsiveLayoutService ResponsiveLayoutService { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            callbackDisposable = await scrollObserverService.RegisterScrollCallbackAsync(this, ContainerReference.ElementReference);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    public ValueTask ScrollAsync(ScrollInfo scrollInfo)
+    {
+        ResponsiveLayoutService.HideHeader(scrollInfo.Top > 0);
+
+        double maxTop = (scrollInfo.Height - scrollInfo.ViewHeight);
+        this.scrollPercent = (scrollInfo.Top / maxTop) * 100.0;
+
+        ResponsiveLayoutService.HideFooter(scrollInfo.ViewHeight != scrollInfo.Height && scrollPercent < 80.0);
+
+        this.scroll = scrollInfo.Top;
+        this.scrollHeight = scrollInfo.Height;
+        this.scrollViewHeight = scrollInfo.ViewHeight;
+
+        this.StateHasChanged();
+
+        return ValueTask.CompletedTask;
+    }
+
+    private async Task GoToTheTop()
+    {
+        await scrollObserverService.ScrollToAsync(ContainerReference.ElementReference, null, 0);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        ResponsiveLayoutService.HideHeader(false);
+        ResponsiveLayoutService.HideFooter(false);
+
+        if (this.callbackDisposable != null)
+        {
+            await callbackDisposable.DisposeAsync();
+            this.callbackDisposable = null;
+        }
+    }
+}

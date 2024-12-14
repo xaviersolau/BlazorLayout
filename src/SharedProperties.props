@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <Version>1.0.0-alpha.14</Version>
+    <Version>1.0.0</Version>
     <Authors>Xavier Solau</Authors>
     <Copyright>Copyright © 2021 Xavier Solau</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -21,7 +21,7 @@
 
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
 
-    <NoWarn>$(NoWarn);CA1510</NoWarn>
+    <NoWarn>$(NoWarn);CA1510;CA1515</NoWarn>
 
   </PropertyGroup>
 

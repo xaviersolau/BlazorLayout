@@ -1,0 +1,29 @@
+﻿<li>
+
+<FluentNavLink Href="@Href" Icon="@Icon" Match="@NavLinkMatch" >
+    @if (!SmallNav)
+    {
+        @Label
+    }
+</FluentNavLink>
+
+</li>
+
+@* <li>
+    <NavLink href="@Href" Match="@NavLinkMatch">
+        @if (SmallNav)
+        {
+            <FluentButton Class="btn-icon" Style="justify-content: center;" Color="Color.Default">
+                <FluentIcon Class="text-secondary" Value="@Icon" />
+            </FluentButton>
+        }
+        else
+        {
+            <FluentButton Class="width-100 text-secondary " Color="Color.Link" Style="text-wrap: pretty; height: fit-content; text-align: justify;">
+                <FluentIcon Value="@Icon" />
+                @Label
+            </FluentButton>
+        }
+    </NavLink>
+</li>
+ *@
