@@ -36,12 +36,11 @@ namespace SoloX.BlazorLayout.UTests.Services
         {
             var callbackMock = new Mock<IResizeCallback>();
 
-            var service = SetupResizeObserverService(out var jsObjectReferenceMock);
-            await using var _ = service.ConfigureAwait(false);
+            await using var service = SetupResizeObserverService(out var jsObjectReferenceMock);
 
             var eltRef = new ElementReference("id");
 
-            var disposable = await service.RegisterResizeCallbackAsync(callbackMock.Object, eltRef).ConfigureAwait(false);
+            var disposable = await service.RegisterResizeCallbackAsync(callbackMock.Object, eltRef, CancellationToken.None);
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
@@ -54,7 +53,7 @@ namespace SoloX.BlazorLayout.UTests.Services
                     It.IsAny<CancellationToken>(), It.IsAny<object?[]?>()),
                 Times.Never);
 
-            await disposable.DisposeAsync().ConfigureAwait(false);
+            await disposable.DisposeAsync();
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
@@ -67,12 +66,11 @@ namespace SoloX.BlazorLayout.UTests.Services
         [Fact]
         public async Task ItShouldCallJSObjectReferenceRegisterAndUnRegisterMutationObserverAsync()
         {
-            var service = SetupResizeObserverService(out var jsObjectReferenceMock);
-            await using var _ = service.ConfigureAwait(false);
+            await using var service = SetupResizeObserverService(out var jsObjectReferenceMock);
 
             var eltRef = new ElementReference("id");
 
-            var disposable = await service.RegisterMutationObserverAsync(eltRef).ConfigureAwait(false);
+            var disposable = await service.RegisterMutationObserverAsync(eltRef, CancellationToken.None);
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
@@ -85,7 +83,7 @@ namespace SoloX.BlazorLayout.UTests.Services
                     It.IsAny<CancellationToken>(), It.IsAny<object?[]?>()),
                 Times.Never);
 
-            await disposable.DisposeAsync().ConfigureAwait(false);
+            await disposable.DisposeAsync();
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
@@ -98,10 +96,9 @@ namespace SoloX.BlazorLayout.UTests.Services
         [Fact]
         public async Task ItShouldCallJSObjectReferenceProcessCallbackAsync()
         {
-            var service = SetupResizeObserverService(out var jsObjectReferenceMock);
-            await using var _ = service.ConfigureAwait(false);
+            await using var service = SetupResizeObserverService(out var jsObjectReferenceMock);
 
-            await service.TriggerCallbackAsync().ConfigureAwait(false);
+            await service.TriggerCallbackAsync(CancellationToken.None);
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
@@ -119,7 +116,7 @@ namespace SoloX.BlazorLayout.UTests.Services
 
             proxy.SizeCallback.Should().BeSameAs(callbackMock.Object);
 
-            await proxy.ResizeAsync(1, 2).ConfigureAwait(false);
+            await proxy.ResizeAsync(1, 2);
 
             callbackMock.Verify(
                 cb => cb.ResizeAsync(1, 2),

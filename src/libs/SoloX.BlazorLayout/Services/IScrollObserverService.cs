@@ -8,6 +8,7 @@
 
 using Microsoft.AspNetCore.Components;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SoloX.BlazorLayout.Services
@@ -22,9 +23,10 @@ namespace SoloX.BlazorLayout.Services
         /// </summary>
         /// <param name="scrollCallback">The scroll callback to trigger on size changed.</param>
         /// <param name="elementReference">The element reference to look after.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The asynchronous disposable that will unregister the callback once disposed.</returns>
         ValueTask<IAsyncDisposable> RegisterScrollCallbackAsync(
-            IScrollCallback scrollCallback, ElementReference elementReference);
+            IScrollCallback scrollCallback, ElementReference elementReference, CancellationToken cancellationToken);
 
         /// <summary>
         /// Scroll To the given scroll values.
@@ -32,7 +34,8 @@ namespace SoloX.BlazorLayout.Services
         /// <param name="elementReference"></param>
         /// <param name="scrollLeft"></param>
         /// <param name="scrollTop"></param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns></returns>
-        ValueTask ScrollToAsync(ElementReference elementReference, int? scrollLeft, int? scrollTop);
+        ValueTask ScrollToAsync(ElementReference elementReference, int? scrollLeft, int? scrollTop, CancellationToken cancellationToken);
     }
 }

@@ -30,11 +30,20 @@
 
     private IAsyncDisposable callbackDisposable;
 
+    private readonly CancellationTokenSource cancelTokenSource = new();
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && !this.cancelTokenSource.IsCancellationRequested)
         {
-            callbackDisposable = await sizeObserverService.RegisterResizeCallbackAsync(this, ContainerReference.ElementReference);
+            try
+            {
+                callbackDisposable = await sizeObserverService.RegisterResizeCallbackAsync(this, ContainerReference.ElementReference, this.cancelTokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected if component is disposed early
+            }
         }
 
         await base.OnAfterRenderAsync(firstRender);
@@ -52,10 +61,14 @@
 
     public async ValueTask DisposeAsync()
     {
+        await this.cancelTokenSource.CancelAsync().ConfigureAwait(false);
+
         if (this.callbackDisposable != null)
         {
             await callbackDisposable.DisposeAsync();
             this.callbackDisposable = null;
         }
+
+        this.cancelTokenSource.Dispose();
     }
 }
