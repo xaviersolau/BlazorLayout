@@ -38,13 +38,11 @@ namespace SoloX.BlazorLayout.UTests.Services
         {
             var callbackMock = new Mock<IScrollCallback>();
 
-            var service = SetupScrollObserverService(out var jsObjectReferenceMock);
-
-            await using var _ = service.ConfigureAwait(false);
+            await using var service = SetupScrollObserverService(out var jsObjectReferenceMock);
 
             var eltRef = new ElementReference("id");
 
-            var disposable = await service.RegisterScrollCallbackAsync(callbackMock.Object, eltRef).ConfigureAwait(false);
+            var disposable = await service.RegisterScrollCallbackAsync(callbackMock.Object, eltRef, CancellationToken.None);
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
@@ -57,7 +55,7 @@ namespace SoloX.BlazorLayout.UTests.Services
                     It.IsAny<CancellationToken>(), It.IsAny<object?[]?>()),
                 Times.Never);
 
-            await disposable.DisposeAsync().ConfigureAwait(false);
+            await disposable.DisposeAsync();
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<object>(
@@ -72,13 +70,11 @@ namespace SoloX.BlazorLayout.UTests.Services
         {
             var left = 333;
             var top = 444;
-            var service = SetupScrollObserverService(out var jsObjectReferenceMock);
-
-            await using var _ = service.ConfigureAwait(false);
+            await using var service = SetupScrollObserverService(out var jsObjectReferenceMock);
 
             var eltRef = new ElementReference("id");
 
-            await service.ScrollToAsync(eltRef, left, top).ConfigureAwait(false);
+            await service.ScrollToAsync(eltRef, left, top, CancellationToken.None);
 
             jsObjectReferenceMock.Verify(
                 r => r.InvokeAsync<IJSVoidResult>(
@@ -111,7 +107,7 @@ namespace SoloX.BlazorLayout.UTests.Services
 
             proxy.ScrollCallback.Should().BeSameAs(callbackMock.Object);
 
-            await proxy.ScrollAsync(1, 2, 3, 4, 5, 6).ConfigureAwait(false);
+            await proxy.ScrollAsync(1, 2, 3, 4, 5, 6);
 
             callbackMock.Verify(
                 cb => cb.ScrollAsync(It.Is<ScrollInfo>(si => si.Width == 1 && si.Left == 2 && si.ViewWidth == 3 && si.Height == 4 && si.Top == 5 && si.ViewHeight == 6)),
@@ -155,29 +151,6 @@ namespace SoloX.BlazorLayout.UTests.Services
 
             return false;
         }
-
-        //private static bool MatchMutationObserverRegister(object?[]? args, ElementReference expectedEltRef)
-        //{
-        //    if (args != null && args.Length == 2
-        //        && args[0] is string id
-        //        && args[1] is ElementReference eltRef)
-        //    {
-        //        return expectedEltRef.Id == eltRef.Id
-        //            && id == expectedEltRef.Id;
-        //    }
-
-        //    return false;
-        //}
-
-        //private static bool MatchProcessCallback(object?[]? args)
-        //{
-        //    if (args != null && args.Length == 0)
-        //    {
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
 
         private static bool MatchUnRegister(object?[]? args, ElementReference expectedEltRef)
         {

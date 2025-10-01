@@ -51,16 +51,25 @@
     private int scrollViewHeight;
     private double scrollPercent;
 
-    private IAsyncDisposable callbackDisposable;
+    private IAsyncDisposable? callbackDisposable;
+
+    private readonly CancellationTokenSource cancelTokenSource = new();
 
     [Inject]
-    public IResponsiveLayoutService ResponsiveLayoutService { get; set; }
+    public IResponsiveLayoutService ResponsiveLayoutService { get; set; } = default!;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && !this.cancelTokenSource.IsCancellationRequested)
         {
-            callbackDisposable = await scrollObserverService.RegisterScrollCallbackAsync(this, ContainerReference.ElementReference);
+            try
+            {
+                callbackDisposable = await scrollObserverService.RegisterScrollCallbackAsync(this, ContainerReference.ElementReference, this.cancelTokenSource.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected if component is disposed early
+            }
         }
 
         await base.OnAfterRenderAsync(firstRender);
@@ -86,11 +95,20 @@
 
     private async Task GoToTheTop()
     {
-        await scrollObserverService.ScrollToAsync(ContainerReference.ElementReference, null, 0);
+        try
+        {
+            await scrollObserverService.ScrollToAsync(ContainerReference.ElementReference, null, 0, this.cancelTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            // Expected if component is disposed early
+        }
     }
 
     public async ValueTask DisposeAsync()
     {
+        await this.cancelTokenSource.CancelAsync().ConfigureAwait(false);
+
         ResponsiveLayoutService.HideHeader(false);
         ResponsiveLayoutService.HideFooter(false);
 
@@ -99,5 +117,7 @@
             await callbackDisposable.DisposeAsync();
             this.callbackDisposable = null;
         }
+
+        this.cancelTokenSource.Dispose();
     }
 }

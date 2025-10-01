@@ -32,15 +32,15 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="SkiaSharp" Version="2.88.8" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.8" />
-    <PackageReference Include="SoloX.CodeQuality.Playwright" Version="2.3.1" />
-    <PackageReference Include="SoloX.CodeQuality.Test.Helpers" Version="2.3.1" />
-    <PackageReference Include="SoloX.CodeQuality.Test.Helpers.XUnit" Version="2.3.1" />
+    <PackageReference Include="SoloX.CodeQuality.Playwright" Version="2.3.6" />
+    <PackageReference Include="SoloX.CodeQuality.Test.Helpers" Version="2.3.6" />
+    <PackageReference Include="SoloX.CodeQuality.Test.Helpers.XUnit" Version="2.3.6" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="SoloX.CodeQuality.Test" Version="2.3.1">
+    <PackageReference Include="SoloX.CodeQuality.Test" Version="2.3.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

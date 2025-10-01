@@ -6,11 +6,12 @@
 // </copyright>
 // ----------------------------------------------------------------------
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using SoloX.BlazorLayout.Core;
 using SoloX.BlazorLayout.Services;
-using System;
-using System.Threading.Tasks;
 
 namespace SoloX.BlazorLayout.Layouts
 {
@@ -198,6 +199,8 @@ namespace SoloX.BlazorLayout.Layouts
         private string ClassHideFooter
             => HideFooter ? "footer hide-footer" : "footer";
 
+        private readonly CancellationTokenSource cancelTokenSource = new();
+
         private class ResizeCallback : IResizeCallback
         {
             private readonly Func<int, int, ValueTask> handler;
@@ -288,12 +291,27 @@ namespace SoloX.BlazorLayout.Layouts
         /// <inheritdoc/>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (firstRender)
+            if (firstRender && !this.cancelTokenSource.IsCancellationRequested)
             {
-                this.rootCallbackDisposable = await ResizeObserverService.RegisterResizeCallbackAsync(new ResizeCallback(SetScreenSizeAsync), ElementReference).ConfigureAwait(false);
-                this.headerCallbackDisposable = await ResizeObserverService.RegisterResizeCallbackAsync(new ResizeCallback(SetHeaderHeightAsync), HeaderElementReference).ConfigureAwait(false);
-                this.footerCallbackDisposable = await ResizeObserverService.RegisterResizeCallbackAsync(new ResizeCallback(SetFooterHeightAsync), FooterElementReference).ConfigureAwait(false);
-                this.rootScrollCallbackDisposable = await ScrollObserverService.RegisterScrollCallbackAsync(new ScrollCallback(SetScrollAsync), ElementReference).ConfigureAwait(false);
+                try
+                {
+                    this.rootCallbackDisposable = await ResizeObserverService
+                        .RegisterResizeCallbackAsync(new ResizeCallback(SetScreenSizeAsync), ElementReference, this.cancelTokenSource.Token)
+                        .ConfigureAwait(false);
+                    this.headerCallbackDisposable = await ResizeObserverService
+                        .RegisterResizeCallbackAsync(new ResizeCallback(SetHeaderHeightAsync), HeaderElementReference, this.cancelTokenSource.Token)
+                        .ConfigureAwait(false);
+                    this.footerCallbackDisposable = await ResizeObserverService
+                        .RegisterResizeCallbackAsync(new ResizeCallback(SetFooterHeightAsync), FooterElementReference, this.cancelTokenSource.Token)
+                        .ConfigureAwait(false);
+                    this.rootScrollCallbackDisposable = await ScrollObserverService
+                        .RegisterScrollCallbackAsync(new ScrollCallback(SetScrollAsync), ElementReference, this.cancelTokenSource.Token)
+                        .ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    // Expected if component is disposed early
+                }
             }
 
             await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
@@ -332,6 +350,12 @@ namespace SoloX.BlazorLayout.Layouts
         {
             GC.SuppressFinalize(this);
 
+#if NET8_0_OR_GREATER
+            await this.cancelTokenSource.CancelAsync().ConfigureAwait(false);
+#else
+            this.cancelTokenSource.Cancel();
+#endif
+
             ResponsiveLayoutServiceInternal.RequestReceivedEvent -= OnRequestReceivedAsync;
 
             if (this.rootCallbackDisposable != null)
@@ -339,6 +363,26 @@ namespace SoloX.BlazorLayout.Layouts
                 await this.rootCallbackDisposable.DisposeAsync().ConfigureAwait(false);
                 this.rootCallbackDisposable = null;
             }
+
+            if (this.headerCallbackDisposable != null)
+            {
+                await this.headerCallbackDisposable.DisposeAsync().ConfigureAwait(false);
+                this.headerCallbackDisposable = null;
+            }
+
+            if (this.footerCallbackDisposable != null)
+            {
+                await this.footerCallbackDisposable.DisposeAsync().ConfigureAwait(false);
+                this.footerCallbackDisposable = null;
+            }
+
+            if (this.rootScrollCallbackDisposable != null)
+            {
+                await this.rootScrollCallbackDisposable.DisposeAsync().ConfigureAwait(false);
+                this.rootScrollCallbackDisposable = null;
+            }
+
+            this.cancelTokenSource.Dispose();
         }
     }
 }

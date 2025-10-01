@@ -18,6 +18,8 @@ using SoloX.BlazorLayout.Services;
 using SoloX.BlazorLayout.UTests.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace SoloX.BlazorLayout.UTests.Layouts
@@ -227,7 +229,7 @@ namespace SoloX.BlazorLayout.UTests.Layouts
         }
 
         [Fact]
-        public async void ItShouldUpdateScreenSize()
+        public async Task ItShouldUpdateScreenSize()
         {
             // Arrange
             var resizeObserverServiceMock = SetupResizeObserverServiceMock(out var cbMap);
@@ -239,7 +241,7 @@ namespace SoloX.BlazorLayout.UTests.Layouts
             var screenSizeBefore = cut.Instance.ScreenSize;
 
             // Simulate resize on component.
-            await cbMap[cut.Instance.ElementReference.Id].ResizeAsync(100, 200).ConfigureAwait(false);
+            await cbMap[cut.Instance.ElementReference.Id].ResizeAsync(100, 200);
 
             // Assert
             screenSizeBefore.Height.Should().Be(0);
@@ -251,7 +253,7 @@ namespace SoloX.BlazorLayout.UTests.Layouts
         }
 
         [Fact]
-        public async void ItShouldUpdateScrollInfo()
+        public async Task ItShouldUpdateScrollInfo()
         {
             // Arrange
             var scrollObserverServiceMock = SetupScrollObserverServiceMock(out var cbMap);
@@ -267,7 +269,7 @@ namespace SoloX.BlazorLayout.UTests.Layouts
             {
                 Left = 100,
                 Top = 200,
-            }).ConfigureAwait(false);
+            });
 
             // Assert
             scrollInfoBefore.Left.Should().Be(0);
@@ -281,7 +283,7 @@ namespace SoloX.BlazorLayout.UTests.Layouts
         [Theory]
         [InlineData(ResponsiveLayout.HeaderPanelId)]
         [InlineData(ResponsiveLayout.FooterPanelId)]
-        public async void ItShouldRenderHeaderOrFooterWithHeightVariableInStyle(string id)
+        public async Task ItShouldRenderHeaderOrFooterWithHeightVariableInStyle(string id)
         {
             // Arrange
             var resizeObserverServiceMock = SetupResizeObserverServiceMock(out var cbMap);
@@ -299,7 +301,7 @@ namespace SoloX.BlazorLayout.UTests.Layouts
             };
 
             // Simulate resize on component.
-            await cbMap[eltRefId].ResizeAsync(100, 200).ConfigureAwait(false);
+            await cbMap[eltRefId].ResizeAsync(100, 200);
 
             cut.Render();
 
@@ -318,7 +320,7 @@ namespace SoloX.BlazorLayout.UTests.Layouts
             var map = new Dictionary<string, IScrollCallback>();
 
             scrollObserverServiceMock
-                .Setup(s => s.RegisterScrollCallbackAsync(It.IsAny<IScrollCallback>(), It.IsAny<ElementReference>()))
+                .Setup(s => s.RegisterScrollCallbackAsync(It.IsAny<IScrollCallback>(), It.IsAny<ElementReference>(), It.IsAny<CancellationToken>()))
                 .Callback(new InvocationAction((invocation) =>
                 {
                     var cb = (IScrollCallback)invocation.Arguments[0];
@@ -339,7 +341,7 @@ namespace SoloX.BlazorLayout.UTests.Layouts
             var map = new Dictionary<string, IResizeCallback>();
 
             resizeObserverServiceMock
-                .Setup(s => s.RegisterResizeCallbackAsync(It.IsAny<IResizeCallback>(), It.IsAny<ElementReference>()))
+                .Setup(s => s.RegisterResizeCallbackAsync(It.IsAny<IResizeCallback>(), It.IsAny<ElementReference>(), It.IsAny<CancellationToken>()))
                 .Callback(new InvocationAction((invocation) =>
                 {
                     var cb = (IResizeCallback)invocation.Arguments[0];

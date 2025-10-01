@@ -6,14 +6,15 @@
 // </copyright>
 // ----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SoloX.BlazorLayout.Services.Impl
 {
@@ -76,7 +77,9 @@ namespace SoloX.BlazorLayout.Services.Impl
 
         ///<inheritdoc/>
         public async ValueTask<IAsyncDisposable> RegisterResizeCallbackAsync(
-            IResizeCallback sizeCallback, ElementReference elementReference)
+            IResizeCallback sizeCallback,
+            ElementReference elementReference,
+            CancellationToken cancellationToken)
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
@@ -119,7 +122,7 @@ namespace SoloX.BlazorLayout.Services.Impl
 
         ///<inheritdoc/>
         public async ValueTask<IAsyncDisposable> RegisterMutationObserverAsync(
-            ElementReference elementReference)
+            ElementReference elementReference, CancellationToken cancellationToken)
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
@@ -157,7 +160,7 @@ namespace SoloX.BlazorLayout.Services.Impl
         }
 
         ///<inheritdoc/>
-        public async ValueTask TriggerCallbackAsync()
+        public async ValueTask TriggerCallbackAsync(CancellationToken cancellationToken)
         {
             var module = await this.moduleTask.Value.ConfigureAwait(false);
 
@@ -167,6 +170,8 @@ namespace SoloX.BlazorLayout.Services.Impl
         ///<inheritdoc/>
         public async ValueTask DisposeAsync()
         {
+            GC.SuppressFinalize(this);
+
             foreach (var item in this.disposables.Values.ToArray())
             {
                 await item.DisposeAsync().ConfigureAwait(false);
@@ -195,10 +200,6 @@ namespace SoloX.BlazorLayout.Services.Impl
                     this.logger.LogDebug(e.Message);
                 }
             }
-
-#pragma warning disable CA1816 // Les méthodes Dispose doivent appeler SuppressFinalize
-            GC.SuppressFinalize(this);
-#pragma warning restore CA1816 // Les méthodes Dispose doivent appeler SuppressFinalize
         }
 
         internal class ResizeCallbackProxy
