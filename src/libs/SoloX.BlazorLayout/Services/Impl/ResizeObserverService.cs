@@ -76,6 +76,12 @@ namespace SoloX.BlazorLayout.Services.Impl
         }
 
         ///<inheritdoc/>
+        public ValueTask<IAsyncDisposable> RegisterResizeCallbackAsync(IResizeCallback sizeCallback, ElementReference elementReference)
+        {
+            return RegisterResizeCallbackAsync(sizeCallback, elementReference, CancellationToken.None);
+        }
+
+        ///<inheritdoc/>
         public async ValueTask<IAsyncDisposable> RegisterResizeCallbackAsync(
             IResizeCallback sizeCallback,
             ElementReference elementReference,
@@ -121,6 +127,12 @@ namespace SoloX.BlazorLayout.Services.Impl
         }
 
         ///<inheritdoc/>
+        public ValueTask<IAsyncDisposable> RegisterMutationObserverAsync(ElementReference elementReference)
+        {
+            return RegisterMutationObserverAsync(elementReference, CancellationToken.None);
+        }
+
+        ///<inheritdoc/>
         public async ValueTask<IAsyncDisposable> RegisterMutationObserverAsync(
             ElementReference elementReference, CancellationToken cancellationToken)
         {
@@ -157,6 +169,12 @@ namespace SoloX.BlazorLayout.Services.Impl
 
             this.disposables.Add(id, disposable);
             return disposable;
+        }
+
+        ///<inheritdoc/>
+        public ValueTask TriggerCallbackAsync()
+        {
+            return TriggerCallbackAsync(CancellationToken.None);
         }
 
         ///<inheritdoc/>
