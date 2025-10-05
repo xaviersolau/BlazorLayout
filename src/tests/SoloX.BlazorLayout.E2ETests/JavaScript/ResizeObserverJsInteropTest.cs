@@ -92,7 +92,7 @@ namespace SoloX.BlazorLayout.E2ETests.JavaScript
                     await page.SetViewportSizeAsync(1200, 100).ConfigureAwait(false);
 
                     // Wait a few in order to give time to the scroll listener to be processed.
-                    await Task.Delay(100).ConfigureAwait(false);
+                    await Task.Delay(1000).ConfigureAwait(false);
 
                     var res2 = await page.EvaluateAsync(@"() => {
 
