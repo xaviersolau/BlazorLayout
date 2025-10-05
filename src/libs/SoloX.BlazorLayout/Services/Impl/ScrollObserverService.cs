@@ -75,6 +75,12 @@ namespace SoloX.BlazorLayout.Services.Impl
         }
 
         ///<inheritdoc/>
+        public ValueTask<IAsyncDisposable> RegisterScrollCallbackAsync(IScrollCallback scrollCallback, ElementReference elementReference)
+        {
+            return RegisterScrollCallbackAsync(scrollCallback, elementReference, CancellationToken.None);
+        }
+
+        ///<inheritdoc/>
         public async ValueTask<IAsyncDisposable> RegisterScrollCallbackAsync(
             IScrollCallback scrollCallback,
             ElementReference elementReference,
@@ -117,6 +123,12 @@ namespace SoloX.BlazorLayout.Services.Impl
 
             this.disposables.Add(id, disposable);
             return disposable;
+        }
+
+        ///<inheritdoc/>
+        public ValueTask ScrollToAsync(ElementReference elementReference, int? scrollLeft, int? scrollTop)
+        {
+            return ScrollToAsync(elementReference, scrollLeft, scrollTop, CancellationToken.None);
         }
 
         /// <inheritdoc/>

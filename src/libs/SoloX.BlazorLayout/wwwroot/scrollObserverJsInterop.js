@@ -25,6 +25,16 @@ class ScrollManager {
   }
 
   registerScrollCallback(callbackObjetReference, elementReferenceId, element) {
+    if (element == null) {
+
+      this.#consoleLog("registerScrollCallback with no element",
+        {
+          elementReferenceId: elementReferenceId
+        });
+
+      return;
+    }
+
     this.#consoleLog("registerScrollCallback",
     {
       elementReferenceId: elementReferenceId
@@ -67,6 +77,13 @@ class ScrollManager {
   }
 
   scrollTo(element, left, top) {
+    if (element == null) {
+
+      this.#consoleLog("scrollTo with no element");
+
+      return;
+    }
+
     this.#consoleLog("scrollTo",
     {
       left: left,

@@ -23,12 +23,30 @@ namespace SoloX.BlazorLayout.Services
         /// </summary>
         /// <param name="sizeCallback">The resize callback to trigger on size changed.</param>
         /// <param name="elementReference">The element reference to look after.</param>
+        /// <returns>The asynchronous disposable that will unregister the callback once disposed.</returns>
+        ValueTask<IAsyncDisposable> RegisterResizeCallbackAsync(
+            IResizeCallback sizeCallback,
+            ElementReference elementReference);
+
+        /// <summary>
+        /// Register a resize callback for the given element reference.
+        /// </summary>
+        /// <param name="sizeCallback">The resize callback to trigger on size changed.</param>
+        /// <param name="elementReference">The element reference to look after.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The asynchronous disposable that will unregister the callback once disposed.</returns>
         ValueTask<IAsyncDisposable> RegisterResizeCallbackAsync(
             IResizeCallback sizeCallback,
             ElementReference elementReference,
             CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Register a mutation observer on the given mutable element reference.
+        /// </summary>
+        /// <param name="elementReference">The reference of the element subject to change layout sizing.</param>
+        /// <returns>The asynchronous disposable that will unregister the observer once disposed.</returns>
+        ValueTask<IAsyncDisposable> RegisterMutationObserverAsync(
+            ElementReference elementReference);
 
         /// <summary>
         /// Register a mutation observer on the given mutable element reference.
@@ -43,8 +61,15 @@ namespace SoloX.BlazorLayout.Services
         /// <summary>
         /// Manually trigger the registered callbacks.
         /// </summary>
+        /// <returns>The asynchronous value task.</returns>
+        ValueTask TriggerCallbackAsync();
+
+        /// <summary>
+        /// Manually trigger the registered callbacks.
+        /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The asynchronous value task.</returns>
-        ValueTask TriggerCallbackAsync(CancellationToken cancellationToken);
+        ValueTask TriggerCallbackAsync(
+            CancellationToken cancellationToken);
     }
 }

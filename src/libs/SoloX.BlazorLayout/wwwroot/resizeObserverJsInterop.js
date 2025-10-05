@@ -27,6 +27,16 @@ class ResizeManager {
   }
 
   registerResizeCallback(callbackObjetReference, elementReferenceId, element) {
+    if (element == null) {
+
+      this.#consoleLog("registerResizeCallback with no element",
+        {
+          elementReferenceId: elementReferenceId
+        });
+
+      return;
+    }
+
     this.#consoleLog("registerResizeCallback",
     {
       elementReferenceId: elementReferenceId
@@ -62,6 +72,16 @@ class ResizeManager {
   }
 
   registerMutationObserver(elementReferenceId, element) {
+    if (element == null) {
+
+      this.#consoleLog("registerMutationObserver with no element",
+        {
+          elementReferenceId: elementReferenceId
+        });
+
+      return;
+    }
+
     this.#consoleLog("registerMutationObserver",
     {
       elementReferenceId: elementReferenceId
